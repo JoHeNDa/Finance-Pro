@@ -973,3 +973,9 @@ button.btn-primary:hover {
 .layout-nav-menu > .nav-section-title:first-child {
   padding-top: 0;
 }
+
+/* Ensure background is dark while theme loads */
+html, body {
+  background-color: #0f0f1a; /* matches dark mode bg-primary */
+  transition: background-color 0.3s ease;
+}
