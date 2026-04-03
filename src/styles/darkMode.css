@@ -1,0 +1,110 @@
+.dark-mode {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border-color: #334155;
+  --card-bg: #1e293b;
+  --hover-bg: #334155;
+  --input-bg: #0f172a;
+}
+
+.dark-mode body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.dark-mode .dashboard-page,
+.dark-mode .add-transaction-page,
+.dark-mode .view-records-page,
+.dark-mode .reports-page,
+.dark-mode .analytics-page,
+.dark-mode .budgets-page,
+.dark-mode .org-settings-page,
+.dark-mode .user-profile-page {
+  background: var(--bg-primary);
+}
+
+.dark-mode .summary-card,
+.dark-mode .stat-card,
+.dark-mode .form-card,
+.dark-mode .filter-card,
+.dark-mode .chart-card,
+.dark-mode .budget-card,
+.dark-mode .settings-card {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.dark-mode .input-icon input,
+.dark-mode .input-icon textarea,
+.dark-mode .input-icon select,
+.dark-mode .form-group input,
+.dark-mode .form-group select,
+.dark-mode .form-group textarea {
+  background: var(--input-bg);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.dark-mode .records-table th {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+.dark-mode .records-table td {
+  border-bottom-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.dark-mode .page-number,
+.dark-mode .page-btn {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.dark-mode .page-number.active {
+  background: #2e7d32;
+  color: white;
+}
+
+.dark-mode .kpi-card {
+  background: var(--card-bg);
+}
+
+.dark-mode .modal-content {
+  background: var(--card-bg);
+}
+
+.dark-mode .top-bar {
+  background: var(--card-bg);
+}
+
+.dark-mode .btn-secondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.dark-mode .notification.success {
+  background: #1b5e20;
+  color: white;
+}
+
+.dark-mode .notification.error {
+  background: #c62828;
+  color: white;
+}
+
+.dark-mode .sidebar {
+  background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+}
+
+.dark-mode .stat-badge {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+.dark-mode .transaction-card {
+  background: var(--card-bg);
+}
