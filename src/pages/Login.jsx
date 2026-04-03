@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useOrganization } from '../context/OrganizationContext';
 import '../styles/login.css';
 
 export default function Login() {
@@ -10,7 +9,6 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { signIn } = useAuth();
-  const { organization } = useOrganization();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -28,8 +26,8 @@ export default function Login() {
   };
 
   const currentYear = new Date().getFullYear();
-  const appName = organization?.name || 'Finance Pro';
-  const appLogo = organization?.logo_url || null;
+  const appName = 'Finance Pro';  // ✅ Fixed app name
+  const appLogo = null;           // ✅ Use a default icon instead of DB logo
 
   return (
     <div className="lp-container">
