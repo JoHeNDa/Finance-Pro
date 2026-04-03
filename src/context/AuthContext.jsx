@@ -10,26 +10,21 @@ export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
 
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
     });
 
-    // Listen for auth changes
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
     });
 
-    return () => {
-      listener?.subscription.unsubscribe();
-    };
+    return () => listener?.subscription.unsubscribe();
   }, []);
 
-  // Load user profile whenever the user changes
   useEffect(() => {
     async function loadProfile() {
       if (user) {
@@ -52,72 +47,24 @@ export function AuthProvider({ children }) {
   }, [user]);
 
   const signUp = async (email, password, name, organizationName, logoUrl, primaryColor, secondaryColor, vatRate, currencySymbol, currencyCode) => {
-    // Step 1: Try to sign up
+    // 1. Prevent duplicate emails
+    const { data: existingUser } = await supabase
+      .from('users')
+      .select('id')
+      .eq('email', email)
+      .maybeSingle();
+    if (existingUser) {
+      throw new Error('An account with this email already exists. Please sign in.');
+    }
+
+    // 2. Create auth user
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
     });
+    if (authError) throw authError;
 
-    if (authError) {
-      // If user already exists, attempt to sign in
-      if (authError.message.includes('already registered')) {
-        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-        if (signInError) {
-          throw new Error('This email is already registered, but the password is incorrect. Please sign in.');
-        }
-
-        // Sign in succeeded – check if profile exists
-        const { data: profile, error: profileError } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', signInData.user.id)
-          .single();
-
-        if (profileError && profileError.code !== 'PGRST116') {
-          throw profileError;
-        }
-
-        if (!profile) {
-          // Create organization and user record for this existing auth user
-          const { data: orgData, error: orgError } = await supabase
-            .from('organizations')
-            .insert({ 
-              name: organizationName,
-              logo_url: logoUrl || null,
-              theme: {
-                primaryColor: primaryColor || '#2e7d32',
-                secondaryColor: secondaryColor || '#ffd700',
-                accentColor: primaryColor === '#2e7d32' ? '#4caf50' : primaryColor,
-                fontFamily: 'Inter'
-              },
-              vat_rate: vatRate || 20,
-              currency_symbol: currencySymbol || '£',
-              currency_code: currencyCode || 'GBP'
-            })
-            .select()
-            .single();
-          if (orgError) throw orgError;
-
-          const { error: userError } = await supabase
-            .from('users')
-            .insert({
-              id: signInData.user.id,
-              email: email,
-              name: name,
-              organization_id: orgData.id,
-              role: 'owner',
-            });
-          if (userError) throw userError;
-        }
-
-        return signInData;
-      }
-
-      // Other errors
-      throw authError;
-    }
-
-    // Step 2: New user – wait for auth user to be ready
+    // 3. Wait for auth user to be ready
     let userReady = false;
     for (let i = 0; i < 5; i++) {
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -129,20 +76,75 @@ export function AuthProvider({ children }) {
     }
     if (!userReady) throw new Error('Auth user not ready after signup');
 
-    // Step 3: Call the database function to create organization and user record with customization
-    const { data: rpcData, error: rpcError } = await supabase.rpc('create_organization_and_user', {
-      org_name: organizationName,
-      user_id: authData.user.id,
-      user_email: email,
-      user_name: name,
-      org_logo_url: logoUrl || null,
-      org_primary_color: primaryColor || '#2e7d32',
-      org_secondary_color: secondaryColor || '#ffd700',
-      org_vat_rate: vatRate || 20,
-      org_currency_symbol: currencySymbol || '£',
-      org_currency_code: currencyCode || 'GBP',
-    });
-    if (rpcError) throw rpcError;
+    // 4. Create organization and user record (RPC with fallback)
+    let orgId = null;
+    try {
+      const { data: rpcData, error: rpcError } = await supabase.rpc('create_organization_and_user', {
+        org_name: organizationName,
+        user_id: authData.user.id,
+        user_email: email,
+        user_name: name,
+        org_logo_url: logoUrl || null,
+        org_primary_color: primaryColor || '#2e7d32',
+        org_secondary_color: secondaryColor || '#ffd700',
+        org_vat_rate: vatRate || 20,
+        org_currency_symbol: currencySymbol || '£',
+        org_currency_code: currencyCode || 'GBP',
+      });
+      if (rpcError) throw rpcError;
+      orgId = rpcData?.organization_id;
+    } catch (rpcErr) {
+      console.error('RPC failed, falling back to manual creation:', rpcErr);
+      const { data: orgData, error: orgError } = await supabase
+        .from('organizations')
+        .insert({
+          name: organizationName,
+          logo_url: logoUrl || null,
+          theme: {
+            primaryColor: primaryColor || '#2e7d32',
+            secondaryColor: secondaryColor || '#ffd700',
+            accentColor: primaryColor === '#2e7d32' ? '#4caf50' : primaryColor,
+            fontFamily: 'Inter'
+          },
+          vat_rate: vatRate || 20,
+          currency_symbol: currencySymbol || '£',
+          currency_code: currencyCode || 'GBP',
+        })
+        .select()
+        .single();
+      if (orgError) throw orgError;
+      orgId = orgData.id;
+
+      const { error: userError } = await supabase
+        .from('users')
+        .insert({
+          id: authData.user.id,
+          email: email,
+          name: name,
+          organization_id: orgId,
+          role: 'owner',
+        });
+      if (userError) throw userError;
+    }
+
+    // 5. Poll until userProfile is loaded and update state
+    let profileLoaded = false;
+    for (let i = 0; i < 10; i++) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      const { data: profile } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', authData.user.id)
+        .single();
+      if (profile && profile.organization_id) {
+        setUserProfile(profile);
+        profileLoaded = true;
+        break;
+      }
+    }
+    if (!profileLoaded) {
+      console.warn('User profile not found after signup');
+    }
 
     return authData;
   };

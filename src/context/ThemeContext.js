@@ -29,7 +29,6 @@ const themes = {
     '--sidebar-border': '#e5e7eb',
     '--sidebar-footer-bg': '#f9fafb',
     '--sidebar-icon-color': '#2e7d32',
-    // Primary is theme-defined, not from organization
     '--primary': '#2e7d32',
     '--primary-dark': '#1b5e20',
     '--primary-rgb': '46, 125, 50',
@@ -85,13 +84,13 @@ export function ThemeProvider({ children }) {
 
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('app-theme');
-    return saved && themes[saved] ? saved : 'light';
+    // ✅ DEFAULT IS NOW 'dark'
+    return saved && themes[saved] ? saved : 'dark';
   });
 
   useEffect(() => {
     const root = document.documentElement;
 
-    // Apply theme variables (includes primary colors)
     const themeVars = themes[theme];
     Object.entries(themeVars).forEach(([key, value]) => {
       root.style.setProperty(key, value);
@@ -99,13 +98,11 @@ export function ThemeProvider({ children }) {
 
     document.body.setAttribute('data-theme', theme);
 
-    // Organization settings: ONLY secondary color is applied (never primary)
     if (organization && organization.theme) {
       const secondary = organization.theme.secondaryColor || '#ffd700';
       root.style.setProperty('--secondary', secondary);
       root.style.setProperty('--secondary-rgb', hexToRgb(secondary));
     } else {
-      // Fallback secondary color if no organization
       root.style.setProperty('--secondary', '#ffd700');
       root.style.setProperty('--secondary-rgb', '255, 215, 0');
     }
