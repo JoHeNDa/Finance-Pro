@@ -80,6 +80,7 @@ export default function Layout() {
   const userName = userProfile?.name || user?.email?.split('@')[0] || 'Admin';
   const userRole = userProfile?.role || 'Financial Manager';
   const isAdmin = userProfile?.role === 'owner' || userProfile?.role === 'admin';
+  const userAvatar = userProfile?.avatar_url || null;
 
   const navItems = [
     { path: '/dashboard', icon: 'home', label: 'Dashboard' },
@@ -104,7 +105,7 @@ export default function Layout() {
                   style={{ width: '3rem', height: '3rem', objectFit: 'contain' }}
                 />
               ) : (
-                <i className="fas fa-chart-line" style={{ fontSize: '1.5rem', color: 'var(--secondary' }}></i>
+                <i className="fas fa-chart-line" style={{ fontSize: '1.5rem', color: 'var(--secondary)' }}></i>
               )}
             </div>
             <span className="layout-logo-text">{appName}</span>
@@ -167,7 +168,22 @@ export default function Layout() {
 
         <div className="layout-sidebar-footer">
           <div className="layout-user-info">
-            <i className="fas fa-user-circle"></i>
+            {userAvatar ? (
+              <img
+                src={userAvatar}
+                alt={userName}
+                className="layout-user-avatar"
+                style={{
+                  width: '2rem',
+                  height: '2rem',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '1px solid var(--sidebar-border)'
+                }}
+              />
+            ) : (
+              <i className="fas fa-user-circle"></i>
+            )}
             <div className="layout-user-details">
               <span className="layout-user-name">{userName}</span>
               <span className="layout-user-role">{userRole}</span>

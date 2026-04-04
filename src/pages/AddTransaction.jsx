@@ -423,8 +423,9 @@ export default function AddTransaction() {
                     <i className="fas fa-undo"></i> Reset
                   </button>
                   <button type="submit" className="tx-btn-primary" disabled={submitting || uploading}>
-                    {uploading ? `Uploading... ${uploadProgress}%` : (submitting ? 'Saving...' : 'Save')}
-                  </button>
+  <i className="fas fa-save"></i>
+  {uploading ? ` Uploading... ${uploadProgress}%` : (submitting ? ' Saving...' : ' Save')}
+</button>
                 </div>
               </div>
             </div>

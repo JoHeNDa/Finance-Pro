@@ -532,70 +532,7 @@
   .an-export-btn { flex: 1; justify-content: center; }
 }
 
-@media (max-width: 480px) {
-  .an-page { padding: 10px; }
-  .an-header h2 { font-size: 1.1rem; }
-  .an-header p { font-size: 0.7rem; }
-  .an-filter-card { padding: 0.6rem 0.8rem; margin-bottom: 18px; }
-  .an-filter-header h3 { font-size: 0.8rem; }
-  .an-preset-btn { padding: 3px 8px; font-size: 0.6rem; }
-  .an-date-picker { padding: 5px 8px; font-size: 0.7rem; }
-  .an-apply-btn { padding: 5px 12px; font-size: 0.7rem; }
-  
-  .an-kpi-grid { gap: 8px; margin-bottom: 18px; margin-top: 2px; }
-  .an-kpi-card {
-    flex-direction: column;
-    text-align: center;
-    gap: 0.5rem;
-    padding: 0.7rem 0.4rem;
-  }
-  .an-kpi-icon {
-    width: 2rem;
-    height: 2rem;
-    font-size: 0.9rem;
-  }
-  .an-kpi-content {
-    text-align: center;
-  }
-  .an-kpi-value {
-    font-size: 0.95rem;
-    text-align: center;
-  }
-  .an-kpi-trend {
-    justify-content: center;
-  }
-  .an-kpi-label {
-    font-size: 0.5rem;
-  }
-  
-  .an-charts-grid { gap: 10px; margin-bottom: 18px; }
-  .an-chart-card { padding: 0.5rem; }
-  .an-chart-header {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 8px;
-  }
-  .an-chart-header h4 { font-size: 0.7rem; }
-  .an-chart-legend { gap: 8px; font-size: 0.55rem; }
-  .an-chart-container { height: 130px !important; }
-  
-  .an-insight-item {
-    flex-direction: column;
-    gap: 8px;
-    padding: 10px;
-  }
-  .an-insight-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 0.9rem;
-  }
-  .an-insight-title { font-size: 0.7rem; }
-  .an-insight-description { font-size: 0.6rem; }
-  .an-insight-value { font-size: 0.7rem; }
-  
-  .an-export-title { font-size: 0.7rem; }
-  .an-export-btn { padding: 3px 10px; font-size: 0.6rem; }
-}
+
 
 /* Print Styles */
 @media print {

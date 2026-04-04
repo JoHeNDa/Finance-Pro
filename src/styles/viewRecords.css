@@ -900,66 +900,8 @@ html {
 }
 
 /* ===== RESPONSIVE FONT ADJUSTMENTS ===== */
-@media (max-width: 768px) {
-  .records-table td {
-    font-size: 0.7rem;
-  }
-  .records-table th {
-    font-size: 0.65rem;
-  }
-  .records-table td:nth-child(4),
-  .records-table td:nth-child(9) {
-    min-width: 8rem;
-  }
-  .transaction-card {
-    padding: 0.75rem;
-  }
-  .card-particular {
-    font-size: 0.9rem;
-  }
-  .card-amount {
-    font-size: 1rem;
-  }
-  .action-btn {
-    width: 1.8rem;
-    height: 1.8rem;
-    font-size: 0.8rem;
-  }
-}
-@media (max-width: 480px) {
-  .records-table {
-    min-width: 40rem;
-  }
-  .records-table td {
-    font-size: 0.65rem;
-  }
-  .records-table th {
-    font-size: 0.6rem;
-  }
-  .transaction-card {
-    padding: 0.5rem;
-  }
-  .card-particular {
-    font-size: 0.85rem;
-  }
-  .card-amount {
-    font-size: 0.9rem;
-  }
-  .pagination-info {
-    font-size: 0.65rem;
-  }
-  .page-btn,
-  .page-number {
-    width: 1.75rem;
-    height: 1.75rem;
-    font-size: 0.65rem;
-  }
-  .action-btn {
-    width: 1.6rem;
-    height: 1.6rem;
-    font-size: 0.7rem;
-  }
-}
+
+
 
 /* ===== ANIMATIONS ===== */
 @keyframes fadeIn {

@@ -12,7 +12,7 @@
 /* ===== FILTER CARD – non‑sticky ===== */
 .rp-filter-card {
   background: var(--card-bg);
-  border-radius: 24px;
+  border-radius: 1rem;
   padding: 20px 24px;
   margin-bottom: 28px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
@@ -112,12 +112,12 @@
 }
 .rp-kpi-card {
   background: var(--card-bg);
-  border-radius: 20px;
+  border-radius: 1rem;
   padding: 14px 12px;
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.07);
   transition: all 0.3s;
   border: 1px solid var(--border-color);
   position: relative;
@@ -129,8 +129,8 @@
   box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 .rp-kpi-icon {
-  width: 44px;
-  height: 44px;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 30px;
   display: flex;
   align-items: center;
@@ -174,21 +174,21 @@
   gap: 2px;
 }
 .rp-kpi-label {
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 500;
 }
 .rp-kpi-value {
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   font-weight: 700;
   line-height: 1.2;
   color: var(--text-primary);
   word-break: break-word;
 }
 .rp-kpi-trend {
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
   display: flex;
   align-items: center;
@@ -205,7 +205,7 @@
 .rp-kpi-grid-secondary .rp-kpi-card {
   padding: 10px 10px;
   gap: 10px;
-  border-radius: 16px;
+  border-radius: 1rem;
 }
 .rp-kpi-grid-secondary .rp-kpi-icon {
   width: 36px;
@@ -219,10 +219,10 @@
   font-size: 0.6rem;
 }
 .rp-kpi-grid-secondary .rp-kpi-value {
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 .rp-kpi-grid-secondary .rp-kpi-trend {
-  font-size: 0.55rem;
+  font-size: 0.6rem;
 }
 
 /* ===== STATS ROW ===== */
@@ -234,7 +234,7 @@
 }
 .rp-stat-card {
   background: var(--card-bg);
-  border-radius: 16px;
+  border-radius: 0.6rem;
   padding: 10px 14px;
   display: flex;
   align-items: center;
@@ -242,8 +242,8 @@
   border: 1px solid var(--border-color);
 }
 .rp-stat-icon {
-  width: 36px;
-  height: 36px;
+  width: 2rem;
+  height: 2rem;
   border-radius: 10px;
   background: var(--hover-bg);
   display: flex;
@@ -262,14 +262,14 @@
   flex-wrap: wrap;
 }
 .rp-stat-label {
-  font-size: 0.6rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
-  text-transform: uppercase;
+  
   font-weight: 500;
   white-space: nowrap;
 }
 .rp-stat-number {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--text-primary);
   white-space: nowrap;
@@ -415,73 +415,6 @@
 .rp-expense-text { color: #c62828; font-weight: 600; }
 
 /* ========== MEDIA QUERIES ========== */
-@media (max-width: 1024px) {
-  .rp-page { padding: 16px 12px; }
-  .rp-filter-card { padding: 16px 20px; margin-bottom: 24px; }
-  .rp-kpi-grid-primary { gap: 14px; margin-bottom: 20px; }
-  .rp-kpi-card { padding: 12px 10px; gap: 10px; }
-  .rp-kpi-icon { width: 38px; height: 38px; font-size: 1rem; }
-  .rp-kpi-value { font-size: 1rem; }
-  .rp-kpi-label { font-size: 0.6rem; }
-  .rp-kpi-trend { font-size: 0.55rem; }
 
-  .rp-kpi-grid-secondary { gap: 12px; margin-bottom: 20px; }
-  .rp-kpi-grid-secondary .rp-kpi-card { padding: 8px 8px; }
-  .rp-kpi-grid-secondary .rp-kpi-icon { width: 32px; height: 32px; font-size: 0.9rem; }
-  .rp-kpi-grid-secondary .rp-kpi-value { font-size: 0.9rem; }
 
-  .rp-stats-grid { gap: 12px; margin-bottom: 20px; }
-  .rp-stat-card { padding: 8px 12px; }
-  .rp-stat-icon { width: 32px; height: 32px; font-size: 0.9rem; }
-  .rp-stat-label { font-size: 0.55rem; }
-  .rp-stat-number { font-size: 0.9rem; }
 
-  .rp-charts-grid { gap: 16px; margin-bottom: 20px; }
-  .rp-chart-card { padding: 12px; }
-  .rp-chart-container { height: 160px; }
-
-  .rp-transactions-card .rp-card-header { padding: 12px 14px 0 14px; }
-  .rp-table-responsive { padding: 0 14px 14px 14px; }
-  .rp-data-table thead th { padding: 6px 8px; font-size: 0.6rem; }
-  .rp-data-table td { padding: 6px 8px; font-size: 0.65rem; }
-}
-
-@media (max-width: 768px) {
-  .rp-page { padding: 12px; }
-  .rp-filter-header { flex-direction: column; align-items: flex-start; }
-  .rp-filter-body { flex-direction: column; align-items: stretch; }
-  .rp-apply-btn { width: 100%; justify-content: center; }
-  .rp-kpi-card { flex-direction: row; text-align: left; }
-  .rp-kpi-content { text-align: left; }
-  .rp-kpi-trend { justify-content: flex-start; }
-  .rp-kpi-icon { width: 34px; height: 34px; font-size: 0.9rem; }
-  .rp-kpi-value { font-size: 0.9rem; }
-  .rp-kpi-label { font-size: 0.55rem; }
-  .rp-chart-container { height: 150px; }
-}
-
-@media (max-width: 480px) {
-  .rp-page { padding: 8px; }
-  .rp-filter-card { padding: 12px 14px; }
-  .rp-filter-header h3 { font-size: 0.9rem; }
-  .rp-preset-btn { padding: 3px 8px; font-size: 0.6rem; }
-  .rp-date-picker { padding: 5px 6px; font-size: 0.7rem; }
-  .rp-apply-btn { padding: 5px 12px; font-size: 0.7rem; }
-
-  .rp-kpi-grid-primary { gap: 10px; }
-  .rp-kpi-card { padding: 8px 8px; gap: 8px; }
-  .rp-kpi-icon { width: 28px; height: 28px; font-size: 0.8rem; }
-  .rp-kpi-value { font-size: 0.85rem; }
-  .rp-kpi-label { font-size: 0.5rem; }
-  .rp-kpi-trend { font-size: 0.5rem; }
-
-  .rp-kpi-grid-secondary .rp-kpi-icon { width: 26px; height: 26px; font-size: 0.75rem; }
-  .rp-kpi-grid-secondary .rp-kpi-value { font-size: 0.8rem; }
-
-  .rp-stats-grid .rp-stat-icon { width: 28px; height: 28px; font-size: 0.8rem; }
-  .rp-stat-label { font-size: 0.5rem; }
-  .rp-stat-number { font-size: 0.8rem; }
-
-  .rp-chart-container { height: 130px; }
-  .rp-data-table { min-width: 500px; }
-}

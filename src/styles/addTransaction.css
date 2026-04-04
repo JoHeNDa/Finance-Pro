@@ -2,10 +2,10 @@
 .tx-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px 20px;
+  padding: 1rem 0.5rem;
   animation: tx-fadeSlideUp 0.4s ease;
-  height: calc(100vh - var(--header-height));
-  overflow-y: auto;
+  
+  
 }
 @keyframes tx-fadeSlideUp {
   from { opacity: 0; transform: translateY(20px); }
@@ -22,29 +22,17 @@
   flex-wrap: wrap;
   gap: 12px;
 }
-.tx-header-content h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 4px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.tx-header-content h1 i {
-  color: var(--secondary);
-  font-size: inherit;
-}
+
 .tx-subtitle {
   color: var(--text-muted);
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 .tx-header-stats .tx-stat-badge {
   background: var(--hover-bg);
   padding: 6px 16px;
   border-radius: 40px;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--text-primary);
   display: flex;
   align-items: center;
@@ -53,7 +41,7 @@
 }
 .tx-stat-badge i {
   color: var(--secondary);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
 
 /* ========== TWO‑COLUMN LAYOUT (equal height) ========== */
@@ -90,7 +78,7 @@
 /* Cards – base styles (shared) */
 .tx-card {
   background: var(--card-bg);
-  border-radius: 12px;
+  border-radius: 1rem;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   border: 1px solid var(--border-color);
   overflow: hidden;
@@ -102,7 +90,7 @@
 }
 .tx-card-header h3 {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--text-primary);
   display: flex;
@@ -111,6 +99,7 @@
 }
 .tx-card-header h3 i {
   color: var(--secondary);
+  font-size: 1.1rem;
 }
 
 /* Form card (left) */
@@ -131,7 +120,7 @@
   gap: 4px;
 }
 .tx-input-group label {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -156,9 +145,9 @@
   padding: 8px 12px 8px 34px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   background: var(--input-bg);
-  color: var(--text-primary);
+  color: var(--text-secondary);
   font-family: inherit;
 }
 .tx-input-icon input:focus,
@@ -184,7 +173,7 @@
   gap: 6px;
   padding: 8px;
   border: 1px solid var(--border-color);
-  border-radius: 30px;
+  border-radius: 0.8rem;
   background: var(--card-bg);
   color: var(--text-secondary);
   font-weight: 500;
@@ -312,7 +301,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.8rem;
+  font-size: 1rem;
   gap: 12px;
 }
 .tx-summary-item span {
@@ -334,32 +323,45 @@
   margin-top: 12px;
 }
 
-/* ===== BUTTONS – fully theme‑aware, blend with main content ===== */
-.tx-btn-primary,
-.tx-btn-secondary {
+/* ===== BUTTONS – fully theme‑aware ===== */
+.tx-btn-primary{
+  flex: 1.2;
+  padding: 0.2rem 0.2rem;
+  border-radius: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
 
-  flex: 1;
+
+.tx-btn-secondary {
+  flex: 0.9;
   padding: 8px 16px;
-  border-radius: 30px;
+  border-radius: 0.8rem;
   font-weight: 600;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-size: 0.8rem;
+  font-size: 1rem;
   transition: all 0.2s;
+  
 }
 
 /* Primary button – subtle tint of theme primary */
 .tx-btn-primary {
-  
   background: rgba(var(--primary-rgb), 0.12);
-  color: var(--primary);
+  color: var(--text-primary);
   border: 1px solid rgba(var(--primary-rgb), 0.2);
 }
 .tx-btn-primary:hover:not(:disabled) {
-  background: rgba(var(--primary-rgb), 0.2);
+  background: rgba(var(--primary-rgb), 0.4);
   border-color: rgba(var(--primary-rgb), 0.4);
   transform: translateY(-1px);
 }
@@ -372,42 +374,16 @@
   transform: none;
 }
 
-/* Secondary button – subtle tint of theme secondary (gold) */
+/* Secondary button – subtle tint of theme secondary */
 .tx-btn-secondary {
   background: rgba(var(--secondary-rgb), 0.12);
-  color: #b45309;
+  color: var(--secondary);
   border: 1px solid rgba(var(--secondary-rgb), 0.2);
 }
 .tx-btn-secondary:hover:not(:disabled) {
   background: rgba(var(--secondary-rgb), 0.2);
   border-color: rgba(var(--secondary-rgb), 0.4);
   transform: translateY(-1px);
-}
-
-/* ===== DARK MODE – bright borders for visibility ===== */
-[data-theme="dark"] .tx-btn-primary {
-  background: rgba(var(--primary-rgb), 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.3);   /* near‑white border */
-  color: var(--primary);
-}
-[data-theme="dark"] .tx-btn-primary:hover {
-  background: rgba(var(--primary-rgb), 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
-}
-
-[data-theme="dark"] .tx-btn-secondary {
-  background: rgba(var(--secondary-rgb), 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.3);   /* near‑white border */
-  color: #fbbf24;
-}
-[data-theme="dark"] .tx-btn-secondary:hover {
-  background: rgba(var(--secondary-rgb), 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
-}
-
-/* Green mode – keep original style (no white border) */
-[data-theme="green"] .tx-btn-secondary {
-  color: #b45309;
 }
 
 .tx-notification {
@@ -443,21 +419,7 @@
   .tx-right-col {
     gap: 24px;
   }
-  .tx-page { padding: 18px 18px; }
-  .tx-header-content h1 { font-size: 1.4rem; }
-  .tx-subtitle { font-size: 0.8rem; }
-  .tx-stat-badge { font-size: 0.85rem; padding: 5px 14px; }
-  .tx-stat-badge i { font-size: 0.95rem; }
-  .tx-card-header h3 { font-size: 0.75rem; }
-  .tx-form-grid { gap: 18px; padding: 18px; }
-  .tx-input-group label { font-size: 0.68rem; }
-  .tx-input-icon input, .tx-input-icon textarea, .tx-input-icon select { font-size: 0.82rem; padding: 7px 10px 7px 32px; }
-  .tx-type-option { font-size: 0.78rem; padding: 7px; }
-  .tx-amount-vat-row { gap: 18px; }
-  .tx-file-area { margin: 18px; }
-  .tx-summary { padding: 14px 18px; margin: 18px; }
-  .tx-summary-item { font-size: 0.75rem; }
-  .tx-btn-primary, .tx-btn-secondary { padding: 7px 14px; font-size: 0.75rem; }
+ 
 }
 
 @media (max-width: 768px) {
@@ -477,54 +439,9 @@
   .tx-right-col {
     gap: 16px;
   }
-  .tx-page { padding: 12px; height: auto; }
-  .tx-header { flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 16px; }
-  .tx-header-content h1 { font-size: 1.3rem; }
-  .tx-subtitle { font-size: 0.75rem; }
-  .tx-stat-badge { font-size: 0.8rem; padding: 4px 12px; }
-  .tx-stat-badge i { font-size: 0.9rem; }
-  .tx-card-header h3 { font-size: 0.72rem; }
+  
   .tx-form-grid { grid-template-columns: 1fr; gap: 14px; padding: 14px; }
-  .tx-form-column { gap: 12px; }
-  .tx-input-group label { font-size: 0.63rem; }
-  .tx-input-icon input, .tx-input-icon textarea, .tx-input-icon select { padding: 6px 10px 6px 30px; font-size: 0.78rem; }
-  .tx-type-option { font-size: 0.7rem; padding: 6px; gap: 4px; }
-  .tx-amount-vat-row { grid-template-columns: 1fr; gap: 14px; padding: 0 14px 14px; }
-  .tx-vat-calculator { padding: 0 14px 14px; }
-  .tx-file-area { margin: 14px; min-height: 90px; }
-  .tx-file-content i { font-size: 1.4rem; }
-  .tx-summary { padding: 12px 14px; margin: 14px; gap: 10px; }
-  .tx-summary-item { font-size: 0.7rem; }
-  .tx-summary-item strong { font-size: 0.7rem; padding: 3px 10px; }
-  .tx-actions { margin-top: 10px; }
-}
-
-@media (max-width: 480px) {
-  .tx-page { padding: 10px; }
-  .tx-right-col {
-    gap: 14px;
-  }
-  .tx-header-content h1 { font-size: 1.1rem; }
-  .tx-header-content h1 i { font-size: inherit; }
-  .tx-subtitle { font-size: 0.7rem; }
-  .tx-stat-badge { font-size: 0.7rem; padding: 3px 10px; }
-  .tx-stat-badge i { font-size: 0.8rem; }
-  .tx-card-header h3 { font-size: 0.68rem; }
-  .tx-form-grid { gap: 12px; padding: 12px; }
-  .tx-form-column { gap: 10px; }
-  .tx-input-group label { font-size: 0.6rem; }
-  .tx-input-icon input, .tx-input-icon textarea, .tx-input-icon select { padding: 5px 8px 5px 28px; font-size: 0.75rem; }
-  .tx-type-option { font-size: 0.65rem; padding: 5px; }
-  .tx-amount-vat-row { gap: 12px; padding: 0 12px 12px; }
-  .tx-vat-calculator { padding: 0 12px 12px; }
-  .tx-file-area { margin: 12px; min-height: 80px; }
-  .tx-file-content i { font-size: 1.2rem; }
-  .tx-file-preview { padding: 4px 10px; }
-  .tx-file-name { font-size: 0.7rem; }
-  .tx-summary { padding: 10px 12px; margin: 12px; gap: 8px; }
-  .tx-summary-item { font-size: 0.65rem; }
-  .tx-summary-item strong { font-size: 0.65rem; padding: 2px 8px; }
-  .tx-btn-primary, .tx-btn-secondary { padding: 5px 12px; font-size: 0.7rem; }
+  
 }
 
 /* ========== RECENT TRANSACTIONS TABLE ========== */
@@ -545,7 +462,7 @@
 }
 .tx-recent-card .tx-card-header h3 {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-primary);
   display: flex;
@@ -558,7 +475,7 @@
 .tx-view-all-link {
   color: var(--primary);
   text-decoration: none;
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -566,19 +483,21 @@
   transition: all 0.2s;
 }
 .tx-view-all-link:hover {
-  text-decoration: underline;
-  transform: translateX(2px);
+  padding: 0.3rem 0.3rem;
+  transform: translateX(0.1rem);
+  background-color: rgba(var(--primary-rgb), 0.2);
+  border-radius: 1rem;
 }
 .tx-recent-table-wrapper {
   overflow-x: auto;
-  padding: 0 10px 20px 20px;
+  padding:  10px 5px 1px;
 }
 .tx-recent-table {
   width: 100%;
   border-collapse: collapse;
 }
 .tx-recent-table th {
-  padding: 8px 12px;
+  padding: 5px 10px;
   text-align: left;
   border-bottom: 1px solid var(--border-color);
   background: transparent;
@@ -599,47 +518,14 @@
 .tx-recent-table tr:last-child td {
   border-bottom: none;
 }
-.tx-income-text {
-  color: #2e7d32;
+
+/* FIXED: Income/expense text colours – higher specificity to override td rule */
+.tx-recent-table td.tx-income-text {
+  color: var(--primary);
   font-weight: 600;
 }
-.tx-expense-text {
-  color: #c62828;
+.tx-recent-table td.tx-expense-text {
+  color: var(--danger);
   font-weight: 600;
 }
 
-/* Dark mode adjustments for semantic colors (remain readable) */
-[data-theme="dark"] .tx-income-text {
-  color: #66bb6a;
-}
-[data-theme="dark"] .tx-expense-text {
-  color: #ef5350;
-}
-
-/* Responsive adjustments for recent table */
-@media (max-width: 768px) {
-  .tx-recent-table-wrapper {
-    padding: 0 14px 14px 14px;
-  }
-  .tx-recent-table th,
-  .tx-recent-table td {
-    padding: 6px 8px;
-    font-size: 0.7rem;
-  }
-  .tx-view-all-link {
-    font-size: 0.65rem;
-  }
-}
-@media (max-width: 480px) {
-  .tx-recent-table-wrapper {
-    padding: 0 12px 12px 12px;
-  }
-  .tx-recent-table th,
-  .tx-recent-table td {
-    padding: 5px 6px;
-    font-size: 0.65rem;
-  }
-  .tx-view-all-link {
-    font-size: 0.6rem;
-  }
-}
