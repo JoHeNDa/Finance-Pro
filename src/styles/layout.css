@@ -107,7 +107,7 @@ html, body {
   padding: 20px 12px;
   list-style: none;
   flex: 1;
-  overflow-y: auto;      /* was hidden – fixed */
+  overflow-y: hidden;      /* was hidden – fixed */
   scrollbar-gutter: stable;
 }
 
@@ -201,7 +201,7 @@ html, body {
 }
 
 .layout-user-name {
-  font-weight: 600;
+  font-weight: 300;
   font-size: 14px;
   color: var(--sidebar-text);
 }
