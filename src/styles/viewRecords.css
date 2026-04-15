@@ -1,4 +1,4 @@
-/* ===== VIEW RECORDS – final unified ===== */
+/* ===== VIEW RECORDS – final unified (px font sizes only) ===== */
 * {
   margin: 0;
   padding: 0;
@@ -48,19 +48,10 @@
   --transition: all 0.3s ease;
 }
 
-html {
-  font-size: 16px;
-}
-@media (max-width: 1200px) { html { font-size: 15px; } }
-@media (max-width: 992px) { html { font-size: 14px; } }
-@media (max-width: 768px) { html { font-size: 13px; } }
-@media (max-width: 576px) { html { font-size: 12px; } }
-@media (max-width: 480px) { html { font-size: 11px; } }
-
 .view-records-page {
   animation: fadeIn 0.5s ease;
   font-family: 'Inter', sans-serif;
-  padding: 0.75rem;
+  padding: 12px;              /* was 0.75rem → 12px */
   width: 100%;
   overflow-x: hidden;
 }
@@ -68,16 +59,16 @@ html {
 /* ===== HEADER & STATS ===== */
 .records-header {
   background: var(--card-bg);
-  border-radius: 1.25rem;
-  padding: 1rem 1.25rem;
-  margin-bottom: 1.25rem;
-  box-shadow: 0 0.25rem 1.25rem rgba(0,0,0,0.05);
+  border-radius: 20px;        /* was 1.25rem → 20px */
+  padding: 16px 20px;         /* was 1rem 1.25rem → 16px 20px */
+  margin-bottom: 20px;        /* was 1.25rem → 20px */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
 @media (min-width: 1024px) {
   .records-header {
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: 1.5rem;
+    gap: 24px;                /* was 1.5rem → 24px */
     align-items: start;
   }
 }
@@ -85,33 +76,33 @@ html {
 .records-stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 12px;                  /* was 0.75rem → 12px */
 }
 .stat-badge {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  gap: 8px;                   /* was 0.5rem → 8px */
+  padding: 8px 16px;          /* was 0.5rem 1rem → 8px 16px */
   background: var(--hover-bg);
-  border-radius: 2.5rem;
+  border-radius: 40px;        /* was 2.5rem → 40px */
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 14px;            /* was 0.85rem → 14px */
   font-weight: 500;
-  box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   white-space: nowrap;
 }
 .stat-badge i {
   color: var(--secondary);
-  font-size: 0.9rem;
+  font-size: 14px;            /* was 0.9rem → 14px */
 }
 
-/* ===== FILTER SECTION ===== */
+/* ===== FILTER SECTION – responsive ===== */
 .filter-section {
   background: var(--card-bg);
-  border-radius: 1.25rem;
-  padding: 0.75rem 1rem;
+  border-radius: 20px;
+  padding: 12px 16px;
   border: 1px solid var(--border-color);
-  margin-top: 0.75rem;
+  margin-top: 12px;
 }
 @media (min-width: 1024px) {
   .filter-section {
@@ -124,11 +115,12 @@ html {
 
 .filter-row-1,
 .filter-row-2,
-.filter-row-3 {
+.filter-row-3,
+.filter-row-4 {
   width: 100%;
-  margin-bottom: 0.75rem;
+  margin-bottom: 12px;
 }
-.filter-row-3 {
+.filter-row-4 {
   margin-bottom: 0;
 }
 
@@ -138,47 +130,47 @@ html {
 }
 .search-input {
   width: 100%;
-  padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+  padding: 8px 12px 8px 40px;
   border: 1px solid var(--border-color);
-  border-radius: 2rem;
-  font-size: 0.85rem;
+  border-radius: 32px;
+  font-size: 14px;
   background: var(--input-bg);
   color: var(--text-primary);
 }
 .search-box i {
   position: absolute;
-  left: 0.75rem;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-muted);
-  font-size: 0.85rem;
+  font-size: 14px;
 }
 
 .date-range {
   display: flex;
-  gap: 0.5rem;
+  gap: 8px;
   align-items: center;
   background: var(--hover-bg);
-  padding: 0.25rem 0.75rem;
-  border-radius: 2rem;
+  padding: 4px 12px;
+  border-radius: 32px;
   flex: 1;
 }
 .date-input {
-  padding: 0.4rem 0.5rem;
+  padding: 6px 8px;
   border: 1px solid var(--border-color);
-  border-radius: 1rem;
-  font-size: 0.8rem;
+  border-radius: 16px;
+  font-size: 13px;
   width: 100%;
   background: var(--input-bg);
   color: var(--text-primary);
 }
 .btn-filter {
-  padding: 0.4rem 1rem;
+  padding: 6px 16px;
   background: rgba(var(--primary-rgb), 0.15);
   color: var(--primary);
   border: none;
-  border-radius: 2rem;
-  font-size: 0.8rem;
+  border-radius: 32px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
@@ -191,39 +183,33 @@ html {
 }
 
 .filter-select {
-  padding: 0.4rem 0.8rem;
+  padding: 6px 13px;
   border: 1px solid var(--border-color);
-  border-radius: 2rem;
+  border-radius: 32px;
   background: var(--input-bg);
-  font-size: 0.75rem;
+  font-size: 12px;
   font-weight: 500;
   cursor: pointer;
   flex: 1;
   min-width: 0;
   color: var(--text-primary);
 }
-.filter-actions {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  flex-shrink: 0;
-}
 .view-options {
   display: flex;
-  gap: 0.25rem;
+  gap: 4px;
   background: var(--hover-bg);
-  padding: 0.25rem;
-  border-radius: 2rem;
+  padding: 4px;
+  border-radius: 32px;
   flex-shrink: 0;
 }
 .view-btn {
-  padding: 0.35rem 0.7rem;
+  padding: 6px 11px;
   border: none;
   background: transparent;
-  border-radius: 2rem;
+  border-radius: 32px;
   color: var(--text-muted);
   cursor: pointer;
-  font-size: 0.75rem;
+  font-size: 12px;
 }
 .view-btn.active {
   background: var(--card-bg);
@@ -234,13 +220,13 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.35rem 0.8rem;
+  gap: 8px;
+  padding: 6px 13px;
   background: rgba(var(--primary-rgb), 0.15);
   color: var(--primary);
   border: none;
-  border-radius: 2rem;
-  font-size: 0.75rem;
+  border-radius: 32px;
+  font-size: 12px;
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
@@ -256,164 +242,143 @@ html {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* Mobile filter toggle (for ≤480px) */
 .mobile-filter-toggle {
   display: none;
   width: 100%;
   background: rgba(var(--primary-rgb), 0.15);
   color: var(--primary);
   border: none;
-  border-radius: 2rem;
-  padding: 0.5rem;
-  font-size: 0.8rem;
+  border-radius: 32px;
+  padding: 8px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  margin-bottom: 0.75rem;
+  margin-bottom: 12px;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 8px;
   transition: all 0.2s;
 }
 .mobile-filter-toggle:hover {
   background: rgba(var(--primary-rgb), 0.25);
 }
-.mobile-filters {
-  display: contents;
-}
 
-/* ===== DESKTOP/TABLET (≥768px) – single horizontal row ===== */
-@media (min-width: 768px) {
+/* ===== SCREENS ≥481px – one row, wraps ===== */
+@media (min-width: 481px) {
   .filter-section {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.75rem;
+    gap: 12px;
   }
+  .filter-row-1,
+  .filter-row-2,
+  .filter-row-3,
+  .filter-row-4 {
+    display: contents;
+    margin-bottom: 0;
+  }
+  .search-box {
+    flex: 2 1 200px;
+    min-width: 160px;
+  }
+  .date-range {
+    flex: 1 1 240px;
+    background: var(--hover-bg);
+    padding: 4px 12px;
+    border-radius: 32px;
+  }
+  .filter-select {
+    flex: 1 1 140px;
+    min-width: 120px;
+  }
+  .view-options {
+    flex: 0 0 auto;
+  }
+  .btn-filter,
+  .btn-export {
+    flex: 0 0 auto;
+  }
+}
+
+/* ===== VERY SMALL SCREENS (≤480px) – toggle + four rows ===== */
+@media (max-width: 480px) {
+  
+  .records-stats {
+  margin-bottom: 8px;
+}
+  .filter-section {
+    display: none;
+  }
+
+  .mobile-filter-toggle {
+  display: flex;
+  margin-top: 8px; /* or 12px */
+}
+  .filter-section.show {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  /* Flatten all rows so their children become direct grid items */
   .filter-row-1,
   .filter-row-2,
   .filter-row-3 {
     display: contents;
   }
+  /* Now place each child into the desired grid cells */
   .search-box {
-    flex: 2 1 14rem;
-    min-width: 12rem;
+    grid-column: 1 / -1;  /* full width, row 1 */
+    grid-row: 1;
   }
   .date-range {
-    flex: 0 0 auto;
-    background: var(--hover-bg);
-    padding: 0.25rem 0.75rem;
-  }
-  .btn-filter {
-    flex: 0 0 auto;
+    grid-column: 1 / -1;  /* full width, row 2 */
+    grid-row: 2;
   }
   .filter-select {
-    flex: 0 0 auto;
-    min-width: 8rem;
-    width: auto;
+    grid-column: 1 / 2;   /* left column, row 3 */
+    grid-row: 3;
   }
-  .filter-actions {
-    flex: 0 0 auto;
+  .view-options {
+    grid-column: 2 / 3;   /* right column, row 3 */
+    grid-row: 3;
+    justify-self: end;
   }
-  .btn-export {
-    flex: 0 0 auto;
-  }
-}
-
-/* ===== MOBILE (≤767px) – keep three‑row layout ===== */
-@media (max-width: 767px) {
-  .records-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .filter-section {
-    flex-direction: column;
-  }
-  .filter-row-1,
-  .filter-row-2,
-  .filter-row-3 {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-  .filter-row-2 {
-    flex-direction: row;
-    align-items: center;
-  }
-  .filter-row-3 {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .filter-row-3 .filter-select,
-  .filter-row-3 .filter-actions,
-  .filter-row-3 .btn-export {
-    width: 100%;
-  }
-  .filter-row-3 .filter-actions {
-    justify-content: center;
-  }
-  .filter-row-3 .view-options {
-    width: 100%;
-    justify-content: center;
-    background: none;
+  .btn-filter {
+    grid-column: 1 / 2;   /* left column, row 4 */
+    grid-row: 4;
   }
   .btn-export {
-    width: 100%;
+    grid-column: 2 / 3;   /* right column, row 4 */
+    grid-row: 4;
+    justify-self: end;
+  }
+  /* Hide the original apply button inside row2? Actually it's the same element, so it's fine. */
+  /* Ensure no extra margins */
+ 
+  /* Adjust styling for consistency */
+  .date-range {
+    background: var(--hover-bg);
+    padding: 4px 12px;
+    border-radius: 32px;
+    box-sizing: border-box;
+  }
+  .btn-filter, .btn-export {
     justify-content: center;
-  }
-}
-
-/* ===== VERY SMALL SCREENS (≤480px) – toggle ===== */
-@media (max-width: 480px) {
-  .filter-section {
-    display: none;
-  }
-  .filter-section.show {
-    display: flex;
+    text-align: center;
   }
   .mobile-filter-toggle {
     display: flex;
   }
-  .mobile-filters {
-    display: none;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .mobile-filters.active {
-    display: flex;
-  }
-  .mobile-filters .filter-row-2,
-  .mobile-filters .filter-row-3 {
-    flex-direction: column;
-  }
-  .mobile-filters .date-range {
-    background: transparent;
-    padding: 0;
-  }
-  .mobile-filters .date-input {
-    width: 100%;
-  }
-  .mobile-filters .btn-filter,
-  .mobile-filters .filter-select,
-  .mobile-filters .btn-export {
-    width: 100%;
-    justify-content: center;
-  }
-  .mobile-filters .filter-actions {
-    justify-content: center;
-  }
-  .mobile-filters .view-options {
-    width: 100%;
-    justify-content: center;
-    background: none;
-  }
 }
+
 
 /* ===== TABLE ===== */
 .table-card {
   background: var(--card-bg);
-  border-radius: 1.25rem;
-  padding: 0.75rem;
-  box-shadow: 0 0.25rem 1.25rem rgba(0,0,0,0.05);
+  border-radius: 20px;        /* was 1.25rem → 20px */
+  padding: 12px;              /* was 0.75rem → 12px */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
   overflow: hidden;
 }
 .table-responsive {
@@ -423,77 +388,68 @@ html {
 .records-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 48rem;
+  min-width: 768px;           /* was 48rem → 768px */
 }
 .records-table th {
-   padding: 0.6rem 0.5rem;
+  padding: 10px 8px;          /* was 0.6rem 0.5rem → 10px 8px */
   text-align: left;
-
 }
-
 .records-table td {
-  padding: 0.3rem 0.5rem;
+  padding: 5px 8px;           /* was 0.3rem 0.5rem → 5px 8px */
   text-align: left;
 }
 .records-table th {
   background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-  font-size: 0.75rem;
+  font-size: 12px;            /* was 0.75rem → 12px */
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--text-muted);
   cursor: pointer;
   white-space: nowrap;
-  border-bottom: none; /* transparent bottom border for header */
+  border-bottom: none;
 }
-/* Override for Type column header – normal case */
 .records-table th:nth-child(2) {
   text-transform: none;
 }
 .records-table th i {
-  margin-left: 0.25rem;
-  font-size: 0.65rem;
+  margin-left: 4px;           /* was 0.25rem → 4px */
+  font-size: 10px;            /* was 0.65rem → 10px */
   opacity: 0.6;
 }
 .records-table td {
   white-space: nowrap;
-  font-size: 0.8rem;
+  font-size: 13px;            /* was 0.8rem → 13px */
   color: var(--text-primary);
-  border-bottom: 1px solid var(--border-color); /* visible border for data rows */
+  border-bottom: 1px solid var(--border-color);
 }
-/* Remove bottom border from the last row */
 .records-table tr:last-child td {
   border-bottom: none;
 }
-/* Type column – same font size as others */
 .records-table th:nth-child(2),
 .records-table td:nth-child(2) {
-  font-size: 0.8rem;
+  font-size: 13px;            /* was 0.8rem → 13px */
 }
-/* Type column badge */
 .records-table td:nth-child(2) .badge-income,
 .records-table td:nth-child(2) .badge-expense {
-  font-size: 0.7rem;
-  padding: 0.2rem 0.6rem;
+  font-size: 11px;            /* was 0.7rem → 11px */
+  padding: 3px 10px;          /* was 0.2rem 0.6rem → 3px 10px */
 }
-/* Particular column – bold */
 .records-table td:nth-child(3) {
   font-weight: 600;
   color: var(--text-primary);
 }
-/* Description (4th) and Recorded By (9th) wrap */
 .records-table td:nth-child(4),
 .records-table td:nth-child(9) {
   white-space: normal;
   word-break: break-word;
-  min-width: 10rem;
+  min-width: 160px;           /* was 10rem → 160px */
 }
 
-/* Badges & amount colors – no uppercase */
 .badge-income, .badge-expense {
-  padding: 0.2rem 0.6rem;
-  border-radius: 1rem;
-  font-size: 0.7rem;
+  padding: 3px 10px;          /* was 0.2rem 0.6rem → 3px 10px */
+  border-radius: 16px;        /* was 1rem → 16px */
+  font-size: 11px;            /* was 0.7rem → 11px */
   font-weight: 600;
   display: inline-block;
   white-space: nowrap;
@@ -503,7 +459,6 @@ html {
 .income-text { color: #2e7d32 !important; font-weight: 600; }
 .expense-text { color: #c62828 !important; font-weight: 600; }
 
-/* VAT & Gross – to be applied via JS */
 .vat-income, .gross-income {
   color: #2e7d32 !important;
   font-weight: 600;
@@ -516,13 +471,13 @@ html {
 /* ===== CARD VIEW ===== */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(288px, 1fr)); /* was 18rem → 288px */
+  gap: 16px;                /* was 1rem → 16px */
 }
 .transaction-card {
   background: var(--card-bg);
-  border-radius: 1rem;
-  padding: 1rem;
+  border-radius: 16px;      /* was 1rem → 16px */
+  padding: 16px;            /* was 1rem → 16px */
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   border: 1px solid var(--border-color);
   transition: all 0.2s;
@@ -545,70 +500,70 @@ html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.5rem;
+  margin-bottom: 12px;      /* was 0.75rem → 12px */
+  padding-bottom: 8px;      /* was 0.5rem → 8px */
   border-bottom: 1px solid var(--border-color);
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 8px;                 /* was 0.5rem → 8px */
 }
 .card-type {
-  padding: 0.2rem 0.6rem;
-  border-radius: 1rem;
-  font-size: 0.7rem;
+  padding: 3px 10px;        /* was 0.2rem 0.6rem → 3px 10px */
+  border-radius: 16px;      /* was 1rem → 16px */
+  font-size: 11px;          /* was 0.7rem → 11px */
   font-weight: 600;
 }
 .card-type.income { background: rgba(76,175,80,0.12); color: #2e7d32; }
 .card-type.expense { background: rgba(244,67,54,0.12); color: #c62828; }
 .card-date {
-  font-size: 0.65rem;
+  font-size: 10px;          /* was 0.65rem → 10px */
   color: var(--text-muted);
 }
 .card-particular {
-  font-size: 1rem;
+  font-size: 16px;          /* was 1rem → 16px */
   font-weight: 600;
-  margin-bottom: 0.25rem;
+  margin-bottom: 4px;       /* was 0.25rem → 4px */
   color: var(--text-primary);
 }
 .card-description {
-  font-size: 0.7rem;
+  font-size: 11px;          /* was 0.7rem → 11px */
   color: var(--text-muted);
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;       /* was 0.5rem → 8px */
   line-height: 1.4;
 }
 .card-amount {
-  font-size: 1.1rem;
+  font-size: 18px;          /* was 1.1rem → 18px */
   font-weight: 700;
-  margin-bottom: 0.25rem;
+  margin-bottom: 4px;       /* was 0.25rem → 4px */
   color: var(--text-primary);
 }
 .card-vat {
-  font-size: 0.65rem;
+  font-size: 10px;          /* was 0.65rem → 10px */
   color: var(--text-muted);
 }
 .card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 0.75rem;
-  padding-top: 0.5rem;
+  margin-top: 12px;         /* was 0.75rem → 12px */
+  padding-top: 8px;         /* was 0.5rem → 8px */
   border-top: 1px solid var(--border-color);
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 8px;                 /* was 0.5rem → 8px */
 }
 .card-payment {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  font-size: 0.65rem;
+  gap: 4px;                 /* was 0.25rem → 4px */
+  font-size: 10px;          /* was 0.65rem → 10px */
   color: var(--text-muted);
 }
 .card-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 8px;                 /* was 0.5rem → 8px */
 }
 .card-action-btn {
-  width: 1.8rem;
-  height: 1.8rem;
+  width: 29px;              /* was 1.8rem → 29px */
+  height: 29px;
   border: none;
   border-radius: 50%;
   background: var(--hover-bg);
@@ -629,12 +584,12 @@ html {
 .receipt-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.2rem 0.6rem;
+  gap: 4px;                 /* was 0.25rem → 4px */
+  padding: 3px 10px;        /* was 0.2rem 0.6rem → 3px 10px */
   background: rgba(2,136,209,0.1);
   color: #0288d1;
-  border-radius: 1rem;
-  font-size: 0.65rem;
+  border-radius: 16px;      /* was 1rem → 16px */
+  font-size: 10px;          /* was 0.65rem → 10px */
   text-decoration: none;
 }
 .receipt-link:hover {
@@ -645,31 +600,31 @@ html {
 /* ===== PAGINATION ===== */
 .table-footer {
   background: var(--card-bg);
-  border-radius: 1rem;
-  padding: 0.75rem 1rem;
-  margin-top: 1rem;
+  border-radius: 16px;      /* was 1rem → 16px */
+  padding: 12px 16px;       /* was 0.75rem 1rem → 12px 16px */
+  margin-top: 16px;         /* was 1rem → 16px */
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 12px;                /* was 0.75rem → 12px */
   border: 1px solid var(--border-color);
 }
 .pagination-info {
-  font-size: 0.75rem;
+  font-size: 12px;          /* was 0.75rem → 12px */
   color: var(--text-muted);
 }
 .pagination-controls {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;                 /* was 0.5rem → 8px */
   flex-wrap: wrap;
 }
 .page-btn {
-  width: 2rem;
-  height: 2rem;
+  width: 32px;              /* was 2rem → 32px */
+  height: 32px;
   border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
+  border-radius: 8px;       /* was 0.5rem → 8px */
   background: rgba(var(--primary-rgb), 0.1);
   color: var(--primary);
   cursor: pointer;
@@ -685,15 +640,15 @@ html {
 }
 .page-numbers {
   display: flex;
-  gap: 0.25rem;
+  gap: 4px;                 /* was 0.25rem → 4px */
 }
 .page-number {
-  min-width: 2rem;
-  height: 2rem;
+  min-width: 32px;          /* was 2rem → 32px */
+  height: 32px;
   border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
+  border-radius: 8px;       /* was 0.5rem → 8px */
   background: var(--card-bg);
-  font-size: 0.7rem;
+  font-size: 11px;          /* was 0.7rem → 11px */
   cursor: pointer;
   color: var(--text-primary);
   transition: all 0.2s;
@@ -719,50 +674,50 @@ html {
   align-items: center;
   justify-content: center;
   z-index: 2000;
-  padding: 0.75rem;
+  padding: 12px;            /* was 0.75rem → 12px */
 }
 .modal-content {
   background: var(--card-bg);
-  border-radius: 1.25rem;
+  border-radius: 20px;      /* was 1.25rem → 20px */
   width: 100%;
-  max-width: 28rem;
+  max-width: 448px;         /* was 28rem → 448px */
   max-height: 90vh;
   overflow-y: auto;
 }
 .modal-header {
   background: rgba(var(--danger-rgb), 0.15);
   color: var(--danger);
-  padding: 1rem;
+  padding: 16px;            /* was 1rem → 16px */
   text-align: center;
   border-bottom: 1px solid var(--border-color);
 }
 .modal-header i {
-  font-size: 1.8rem;
-  margin-bottom: 0.25rem;
+  font-size: 29px;          /* was 1.8rem → 29px */
+  margin-bottom: 4px;
 }
 .modal-body {
-  padding: 1rem;
+  padding: 16px;            /* was 1rem → 16px */
   text-align: center;
   color: var(--text-primary);
 }
 .text-warning {
   color: var(--danger);
-  font-size: 0.7rem;
-  margin-top: 0.5rem;
+  font-size: 11px;          /* was 0.7rem → 11px */
+  margin-top: 8px;
 }
 .modal-footer {
-  padding: 0.75rem;
+  padding: 12px;            /* was 0.75rem → 12px */
   display: flex;
-  gap: 0.75rem;
+  gap: 12px;                /* was 0.75rem → 12px */
   justify-content: flex-end;
   border-top: 1px solid var(--border-color);
 }
 .btn-danger,
 .btn-secondary,
 .btn-primary {
-  padding: 0.4rem 1rem;
-  border-radius: 2rem;
-  font-size: 0.75rem;
+  padding: 6px 16px;        /* was 0.4rem 1rem → 6px 16px */
+  border-radius: 32px;      /* was 2rem → 32px */
+  font-size: 12px;          /* was 0.75rem → 12px */
   font-weight: 500;
   cursor: pointer;
   border: none;
@@ -796,31 +751,31 @@ html {
 
 /* Edit modal specifics */
 .modal-content[style*="max-width: 700px"] {
-  max-width: 44rem;
+  max-width: 704px;         /* was 44rem → 704px */
 }
 #editForm .form-group {
-  margin-bottom: 0.75rem;
+  margin-bottom: 12px;      /* was 0.75rem → 12px */
 }
 #editForm label {
   display: block;
-  font-size: 0.7rem;
+  font-size: 11px;          /* was 0.7rem → 11px */
   font-weight: 600;
-  margin-bottom: 0.25rem;
+  margin-bottom: 4px;
   color: var(--text-secondary);
 }
 #editForm .form-control {
   width: 100%;
-  padding: 0.5rem;
+  padding: 8px;             /* was 0.5rem → 8px */
   border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
-  font-size: 0.85rem;
+  border-radius: 8px;       /* was 0.5rem → 8px */
+  font-size: 14px;          /* was 0.85rem → 14px */
   background: var(--input-bg);
   color: var(--text-primary);
 }
 .file-upload-area {
-  min-height: 5rem;
+  min-height: 80px;         /* was 5rem → 80px */
   border: 1px dashed var(--border-color);
-  border-radius: 1rem;
+  border-radius: 16px;      /* was 1rem → 16px */
   background: var(--hover-bg);
   display: flex;
   align-items: center;
@@ -829,29 +784,29 @@ html {
 }
 .file-upload-content {
   text-align: center;
-  padding: 1rem;
+  padding: 16px;            /* was 1rem → 16px */
 }
 .file-upload-content i {
-  font-size: 1.2rem;
+  font-size: 19px;          /* was 1.2rem → 19px */
   color: var(--primary);
 }
 .file-upload-content p {
-  font-size: 0.7rem;
-  margin: 0.25rem 0;
+  font-size: 11px;          /* was 0.7rem → 11px */
+  margin: 4px 0;
   color: var(--text-secondary);
 }
 .file-preview {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;                 /* was 0.5rem → 8px */
   background: var(--card-bg);
-  padding: 0.5rem;
-  border-radius: 2rem;
-  margin: 0.5rem;
+  padding: 8px;             /* was 0.5rem → 8px */
+  border-radius: 32px;      /* was 2rem → 32px */
+  margin: 8px;              /* was 0.5rem → 8px */
 }
 .file-preview .file-name {
   flex: 1;
-  font-size: 0.7rem;
+  font-size: 11px;          /* was 0.7rem → 11px */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -864,15 +819,15 @@ html {
   cursor: pointer;
 }
 
-/* ===== ACTION BUTTONS (Table) – gray default, colored on hover ===== */
+/* ===== ACTION BUTTONS (Table) ===== */
 .action-buttons {
   display: flex;
-  gap: 0.5rem;
+  gap: 8px;                 /* was 0.5rem → 8px */
   justify-content: center;
 }
 .action-btn {
-  width: 2rem;
-  height: 2rem;
+  width: 32px;              /* was 2rem → 32px */
+  height: 32px;
   border: none;
   border-radius: 50%;
   background: var(--hover-bg);
@@ -882,7 +837,7 @@ html {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
+  font-size: 14px;          /* was 0.9rem → 14px */
 }
 .action-btn.edit:hover {
   background: rgba(var(--primary-rgb), 0.2);
@@ -899,9 +854,68 @@ html {
   transform: scale(1.05);
 }
 
-/* ===== RESPONSIVE FONT ADJUSTMENTS ===== */
+/* ===== RESPONSIVE FONT ADJUSTMENTS (mobile larger) ===== */
+@media (max-width: 768px) {
+  .view-records-page {
+    padding: 10px;
+  }
+  .records-table th {
+    font-size: 11px;
+    padding: 8px 6px;
+  }
+  .records-table td {
+    font-size: 13px;
+    padding: 6px 6px;
+  }
+  .stat-badge {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+  .btn-filter, .filter-select, .btn-export {
+    font-size: 12px;
+  }
+  .card-particular {
+    font-size: 15px;
+  }
+  .card-amount {
+    font-size: 17px;
+  }
+}
 
-
+@media (max-width: 480px) {
+  .view-records-page {
+    padding: 8px;
+  }
+  .records-header {
+    padding: 12px 16px;
+  }
+  .stat-badge {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+  .records-table th {
+    font-size: 10px;
+    padding: 6px 4px;
+  }
+  .records-table td {
+    font-size: 12px;
+    padding: 5px 4px;
+  }
+  .records-table td:nth-child(2) .badge-income,
+  .records-table td:nth-child(2) .badge-expense {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+  .card-particular {
+    font-size: 14px;
+  }
+  .card-amount {
+    font-size: 16px;
+  }
+  .btn-filter, .filter-select, .btn-export {
+    font-size: 11px;
+  }
+}
 
 /* ===== ANIMATIONS ===== */
 @keyframes fadeIn {
@@ -909,20 +923,16 @@ html {
   to { opacity: 1; }
 }
 
-/* Add this at the end of your existing viewRecords.css file */
-
 /* Dark Mode Specific Overrides - Only for table header */
 [data-theme="dark"] .records-table thead th {
   background: var(--hover-bg);
   color: var(--text-muted);
   border-bottom-color: var(--border-color);
 }
-
 [data-theme="dark"] .records-table thead th:hover {
   color: var(--secondary);
   background: var(--hover-bg);
 }
-
 [data-theme="dark"] .records-table thead th i {
   color: var(--text-muted);
 }

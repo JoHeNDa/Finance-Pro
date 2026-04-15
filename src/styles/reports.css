@@ -2,6 +2,7 @@
 .rp-page {
   animation: rp-fadeIn 0.5s ease;
   padding: 20px 16px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
 }
 
 @keyframes rp-fadeIn {
@@ -9,7 +10,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== FILTER CARD – non‑sticky ===== */
+/* ===== FILTER CARD ===== */
 .rp-filter-card {
   background: var(--card-bg);
   border-radius: 1rem;
@@ -27,7 +28,7 @@
   gap: 12px;
 }
 .rp-filter-header h3 {
-  font-size: 1.25rem;
+  font-size: 20px;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
@@ -45,7 +46,7 @@
   border: 1px solid var(--border-color);
   background: var(--card-bg);
   border-radius: 40px;
-  font-size: 0.75rem;
+  font-size: 12px;
   font-weight: 500;
   cursor: pointer;
   color: var(--text-secondary);
@@ -79,7 +80,7 @@
   padding: 10px 12px 8px 12px;
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  font-size: 0.9rem;
+  font-size: 14px;
   background: var(--input-bg);
   color: var(--text-primary);
 }
@@ -90,7 +91,7 @@
   border: none;
   border-radius: 40px;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 14px;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s;
@@ -135,7 +136,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: 19px;
   color: white;
   flex-shrink: 0;
 }
@@ -174,21 +175,21 @@
   gap: 2px;
 }
 .rp-kpi-label {
-  font-size: 0.7rem;
+  font-size: 11px;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 500;
 }
 .rp-kpi-value {
-  font-size: 1.6rem;
+  font-size: 26px;
   font-weight: 700;
   line-height: 1.2;
   color: var(--text-primary);
   word-break: break-word;
 }
 .rp-kpi-trend {
-  font-size: 0.7rem;
+  font-size: 11px;
   color: var(--text-muted);
   display: flex;
   align-items: center;
@@ -210,19 +211,19 @@
 .rp-kpi-grid-secondary .rp-kpi-icon {
   width: 36px;
   height: 36px;
-  font-size: 1rem;
+  font-size: 16px;
 }
 .rp-kpi-grid-secondary .rp-kpi-content {
   gap: 1px;
 }
 .rp-kpi-grid-secondary .rp-kpi-label {
-  font-size: 0.6rem;
+  font-size: 10px;
 }
 .rp-kpi-grid-secondary .rp-kpi-value {
-  font-size: 1.1rem;
+  font-size: 18px;
 }
 .rp-kpi-grid-secondary .rp-kpi-trend {
-  font-size: 0.6rem;
+  font-size: 10px;
 }
 
 /* ===== STATS ROW ===== */
@@ -249,7 +250,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 16px;
   color: var(--primary);
   flex-shrink: 0;
 }
@@ -262,14 +263,13 @@
   flex-wrap: wrap;
 }
 .rp-stat-label {
-  font-size: 0.8rem;
+  font-size: 13px;
   color: var(--text-muted);
-  
   font-weight: 500;
   white-space: nowrap;
 }
 .rp-stat-number {
-  font-size: 1.1rem;
+  font-size: 18px;
   font-weight: 700;
   color: var(--text-primary);
   white-space: nowrap;
@@ -289,7 +289,7 @@
   border: 1px solid var(--border-color);
 }
 .rp-export-title {
-  font-size: 0.85rem;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-secondary);
 }
@@ -305,7 +305,7 @@
   padding: 5px 14px;
   border: none;
   border-radius: 40px;
-  font-size: 0.7rem;
+  font-size: 11px;
   font-weight: 500;
   cursor: pointer;
   display: inline-flex;
@@ -338,7 +338,7 @@
   border-bottom: 1px solid var(--border-color);
 }
 .rp-chart-header h4 {
-  font-size: 0.8rem;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-secondary);
   margin: 0;
@@ -368,7 +368,7 @@
   gap: 8px;
 }
 .rp-card-header h4 {
-  font-size: 0.85rem;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
@@ -380,7 +380,7 @@
   background: var(--hover-bg);
   padding: 3px 8px;
   border-radius: 40px;
-  font-size: 0.65rem;
+  font-size: 10px;
   font-weight: 500;
   color: var(--text-muted);
 }
@@ -396,7 +396,7 @@
 .rp-data-table thead th {
   background: var(--hover-bg);
   padding: 8px 10px;
-  font-size: 0.65rem;
+  font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -406,7 +406,7 @@
 }
 .rp-data-table td {
   padding: 8px 10px;
-  font-size: 0.7rem;
+  font-size: 11px;
   border-bottom: 1px solid var(--border-color);
   text-align: left;
   color: var(--text-primary);
@@ -414,7 +414,164 @@
 .rp-income-text { color: #2e7d32; font-weight: 600; }
 .rp-expense-text { color: #c62828; font-weight: 600; }
 
-/* ========== MEDIA QUERIES ========== */
+/* ========== RESPONSIVE BREAKPOINTS (matching dashboard) ========== */
 
+/* Tablet (481px – 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .rp-kpi-grid-primary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .rp-kpi-grid-secondary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .rp-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .rp-charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .rp-kpi-value {
+    font-size: 22px;
+  }
+  .rp-stat-number {
+    font-size: 16px;
+  }
+}
 
+/* Mobile (≤480px) – 2 columns for KPI cards, 1 column for stats/charts */
+@media (max-width: 480px) {
+  .rp-page {
+    padding: 12px 10px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
 
+  /* Filter card – stack everything */
+  .rp-filter-card {
+    padding: 16px;
+  }
+  .rp-filter-header h3 {
+    font-size: 18px;
+  }
+  .rp-preset-btn {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+  .rp-date-inputs {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .rp-date-group {
+    min-width: auto;
+  }
+  .rp-date-picker {
+    font-size: 13px;
+  }
+  .rp-apply-btn {
+    width: 100%;
+    font-size: 13px;
+    padding: 8px;
+    text-align: center;
+  }
+
+  /* Primary KPI – 2 columns */
+  .rp-kpi-grid-primary {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .rp-kpi-card {
+    padding: 10px 8px;
+  }
+  .rp-kpi-icon {
+    width: 2rem;
+    height: 2rem;
+    font-size: 14px;
+  }
+  .rp-kpi-value {
+    font-size: 18px;
+  }
+  .rp-kpi-label {
+    font-size: 9px;
+  }
+  .rp-kpi-trend {
+    font-size: 9px;
+  }
+
+  /* Secondary KPI – 2 columns */
+  .rp-kpi-grid-secondary {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .rp-kpi-grid-secondary .rp-kpi-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+  .rp-kpi-grid-secondary .rp-kpi-value {
+    font-size: 15px;
+  }
+  .rp-kpi-grid-secondary .rp-kpi-label {
+    font-size: 9px;
+  }
+
+  /* Stats row – single column (like dashboard) */
+  .rp-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .rp-stat-card {
+    padding: 8px 12px;
+  }
+  .rp-stat-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 14px;
+  }
+  .rp-stat-number {
+    font-size: 15px;
+  }
+  .rp-stat-label {
+    font-size: 12px;
+  }
+
+  /* Charts – full width */
+  .rp-charts-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .rp-chart-card {
+    padding: 10px;
+  }
+  .rp-chart-header h4 {
+    font-size: 12px;
+  }
+  .rp-chart-container {
+    height: 160px;
+  }
+
+  /* Export toolbar – stack */
+  .rp-export-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .rp-export-buttons {
+    justify-content: center;
+  }
+  .rp-export-btn {
+    font-size: 10px;
+    padding: 4px 10px;
+  }
+
+  /* Transaction table */
+  .rp-card-header h4 {
+    font-size: 13px;
+  }
+  .rp-data-table thead th {
+    font-size: 9px;
+    padding: 6px 8px;
+  }
+  .rp-data-table td {
+    font-size: 10px;
+    padding: 6px 8px;
+  }
+}

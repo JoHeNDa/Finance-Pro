@@ -13,8 +13,18 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarEle
 
 export default function Reports() {
   const { userProfile } = useAuth();
-  const [startDate, setStartDate] = useState(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
-  const [endDate, setEndDate] = useState(new Date());
+
+  // Local state for UI date pickers (changes immediately, no fetch)
+  const [localStartDate, setLocalStartDate] = useState(() => {
+    const d = new Date();
+    return new Date(d.getFullYear(), d.getMonth(), 1);
+  });
+  const [localEndDate, setLocalEndDate] = useState(() => new Date());
+
+  // Applied state for actual data fetching (only changes on Apply / preset)
+  const [appliedStartDate, setAppliedStartDate] = useState(localStartDate);
+  const [appliedEndDate, setAppliedEndDate] = useState(localEndDate);
+
   const [loading, setLoading] = useState(false);
   const [summary, setSummary] = useState({
     totalGrossRevenue: 0,
@@ -30,11 +40,19 @@ export default function Reports() {
   const [categoryChartData, setCategoryChartData] = useState({ labels: [], datasets: [] });
   const [paymentChartData, setPaymentChartData] = useState({ labels: [], datasets: [] });
 
+  // Fetch only when applied dates change
+  useEffect(() => {
+    if (!userProfile?.organization_id) return;
+    fetchReportData();
+  }, [userProfile, appliedStartDate, appliedEndDate]);
+
   const setPresetDateRange = (range) => {
     const today = new Date();
     let start, end;
     switch (range) {
-      case 'today': start = end = today; break;
+      case 'today':
+        start = end = today;
+        break;
       case 'week':
         start = new Date(today);
         start.setDate(today.getDate() - today.getDay());
@@ -52,18 +70,27 @@ export default function Reports() {
         start = new Date(2000, 0, 1);
         end = new Date(2100, 0, 1);
         break;
-      default: return;
+      default:
+        return;
     }
-    setStartDate(start);
-    setEndDate(end);
+    // Update both local and applied states immediately
+    setLocalStartDate(start);
+    setLocalEndDate(end);
+    setAppliedStartDate(start);
+    setAppliedEndDate(end);
+  };
+
+  const handleApply = () => {
+    setAppliedStartDate(localStartDate);
+    setAppliedEndDate(localEndDate);
   };
 
   const fetchReportData = async () => {
     if (!userProfile?.organization_id) return;
     setLoading(true);
 
-    const start = startDate.toISOString().split('T')[0];
-    const end = endDate.toISOString().split('T')[0];
+    const start = appliedStartDate.toISOString().split('T')[0];
+    const end = appliedEndDate.toISOString().split('T')[0];
 
     const { data: txData, error: txError } = await supabase
       .from('transactions')
@@ -134,10 +161,6 @@ export default function Reports() {
     setLoading(false);
   };
 
-  useEffect(() => {
-    fetchReportData();
-  }, [userProfile, startDate, endDate]);
-
   const exportToCSV = () => {
     const headers = ['Date', 'Type', 'Particular', 'Description', 'Net Amount', 'VAT', 'Gross Amount', 'Payment Mode'];
     const rows = transactions.map(tx => {
@@ -158,7 +181,7 @@ export default function Reports() {
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.href = url;
-    link.download = `report_${startDate.toISOString().split('T')[0]}_to_${endDate.toISOString().split('T')[0]}.csv`;
+    link.download = `report_${appliedStartDate.toISOString().split('T')[0]}_to_${appliedEndDate.toISOString().split('T')[0]}.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -168,7 +191,7 @@ export default function Reports() {
   const exportToExcel = () => {
     const wsData = [
       ['IUS Finances - Financial Report'],
-      [`Period: ${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`],
+      [`Period: ${appliedStartDate.toLocaleDateString()} - ${appliedEndDate.toLocaleDateString()}`],
       [`Generated: ${new Date().toLocaleString()}`],
       [],
       ['SUMMARY'],
@@ -199,7 +222,7 @@ export default function Reports() {
     const ws = XLSX.utils.aoa_to_sheet(wsData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Report');
-    XLSX.writeFile(wb, `report_${startDate.toISOString().split('T')[0]}_to_${endDate.toISOString().split('T')[0]}.xlsx`);
+    XLSX.writeFile(wb, `report_${appliedStartDate.toISOString().split('T')[0]}_to_${appliedEndDate.toISOString().split('T')[0]}.xlsx`);
   };
 
   const exportToPDF = () => {
@@ -213,7 +236,7 @@ export default function Reports() {
     doc.setFontSize(10).setFont('helvetica','normal').text('Financial Performance Report',20,25);
     doc.setTextColor(0,0,0);
     doc.setFontSize(9);
-    doc.text(`Period: ${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`, pageWidth-20,15, { align: 'right' });
+    doc.text(`Period: ${appliedStartDate.toLocaleDateString()} - ${appliedEndDate.toLocaleDateString()}`, pageWidth-20,15, { align: 'right' });
     doc.text(`Generated: ${new Date().toLocaleString()}`, pageWidth-20,22, { align: 'right' });
 
     let y = 45;
@@ -275,7 +298,7 @@ export default function Reports() {
       margin: { left: 10, right: 10 },
     });
 
-    doc.save(`report_${startDate.toISOString().split('T')[0]}_to_${endDate.toISOString().split('T')[0]}.pdf`);
+    doc.save(`report_${appliedStartDate.toISOString().split('T')[0]}_to_${appliedEndDate.toISOString().split('T')[0]}.pdf`);
   };
 
   const printReport = () => {
@@ -301,7 +324,7 @@ export default function Reports() {
       </head>
       <body>
         <h1>IUS Finances</h1>
-        <div class="period">Period: ${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}<br>Generated: ${new Date().toLocaleString()}</div>
+        <div class="period">Period: ${appliedStartDate.toLocaleDateString()} - ${appliedEndDate.toLocaleDateString()}<br>Generated: ${new Date().toLocaleString()}</div>
         <h3>Financial Summary</h3>
         <div class="summary-grid">
           <div class="summary-item"><span class="label">Gross Revenue</span><span class="value">${formatCurrency(summary.totalGrossRevenue)}</span></div>
@@ -356,16 +379,29 @@ export default function Reports() {
         <div className="rp-filter-body">
           <div className="rp-date-inputs">
             <div className="rp-date-group">
-              <input type="date" className="rp-date-picker" value={startDate.toISOString().split('T')[0]} onChange={(e) => setStartDate(new Date(e.target.value))} />
+              <input
+                type="date"
+                className="rp-date-picker"
+                value={localStartDate.toISOString().split('T')[0]}
+                onChange={(e) => setLocalStartDate(new Date(e.target.value))}
+              />
             </div>
             <div className="rp-date-group">
-              <input type="date" className="rp-date-picker" value={endDate.toISOString().split('T')[0]} onChange={(e) => setEndDate(new Date(e.target.value))} />
+              <input
+                type="date"
+                className="rp-date-picker"
+                value={localEndDate.toISOString().split('T')[0]}
+                onChange={(e) => setLocalEndDate(new Date(e.target.value))}
+              />
             </div>
           </div>
-          <button className="rp-apply-btn" onClick={fetchReportData}><i className="fas fa-filter"></i> Filter</button>
+          <button className="rp-apply-btn" onClick={handleApply}>
+            <i className="fas fa-filter"></i> Filter
+          </button>
         </div>
       </div>
 
+      {/* Rest of the JSX remains exactly the same, only use appliedStartDate / appliedEndDate where needed */}
       <div className="rp-kpi-grid-primary">
         <div className="rp-kpi-card rp-gross-card">
           <div className="rp-kpi-icon"><i className="fas fa-coins"></i></div>
@@ -534,7 +570,7 @@ export default function Reports() {
                 <th>VAT</th>
                 <th>Gross</th>
                 <th>Payment Mode</th>
-               </tr>
+              </tr>
             </thead>
             <tbody>
               {transactions.map(tx => {
