@@ -27,12 +27,13 @@ html, body {
   font-family: 'Inter', sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
-  height: 100vh;
+  height: 100vh;      /* fallback */
+  height: 100dvh;     /* modern dynamic viewport */
   width: 100vw;
   overflow: hidden;
 }
 
-/* Custom Scrollbar – subtle and modern (like macOS) */
+/* Custom Scrollbar – subtle and modern */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -47,7 +48,6 @@ html, body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0,0,0,0.4);
 }
-/* For Firefox */
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(0,0,0,0.2) transparent;
@@ -56,22 +56,24 @@ html, body {
 /* ==================== LAYOUT ==================== */
 .layout-app {
   display: flex;
-  height: 100vh;
+  height: 100vh;      /* fallback */
+  height: 100dvh;     /* modern */
   overflow: hidden;
 }
 
-/* ==================== SIDEBAR (flex column, footer always visible) ==================== */
+/* ==================== SIDEBAR ==================== */
 .layout-sidebar {
   width: var(--sidebar-width);
   background: var(--sidebar-bg);
-  height: 100vh;
+  height: 99.8vh;      /* fallback */
+  height: 99.8dvh;     /* modern */
   display: flex;
   flex-direction: column;
   box-shadow: 4px 0 20px rgba(0,0,0,0.15);
   z-index: 1000;
   transition: transform 0.3s ease, width 0.3s ease, background 0.3s ease;
   flex-shrink: 0;
-  overflow: hidden;  /* prevent double scrollbar */
+  overflow: hidden;
   border-bottom-right-radius: 24px;
 }
 
@@ -100,12 +102,12 @@ html, body {
   font-size: 1.3rem;
 }
 
-/* Navigation menu – scrollable, takes remaining space */
+/* Navigation menu – scrollable */
 .layout-nav-menu {
   padding: 20px 12px;
   list-style: none;
   flex: 1;
-  overflow-y: auto;
+  overflow-y: hidden;
   scrollbar-gutter: stable;
 }
 
@@ -163,9 +165,10 @@ html, body {
   border-radius: 0 4px 4px 0;
 }
 
-/* Sidebar Footer – always at bottom, never scrolls away */
+/* Sidebar Footer – always at bottom, with safe area */
 .layout-sidebar-footer {
   padding: 16px;
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
   border-top: 1px solid var(--sidebar-border);
   background: var(--sidebar-footer-bg);
   flex-shrink: 0;
@@ -233,7 +236,7 @@ html, body {
   background: var(--sidebar-hover-bg);
 }
 
-/* Sidebar Collapse Button (desktop only) */
+/* Sidebar Collapse Button (desktop) */
 .layout-sidebar-collapse-btn {
   background: transparent;
   border: none;
@@ -260,7 +263,8 @@ html, body {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh;      /* fallback */
+  height: 100dvh;     /* modern */
   overflow: hidden;
 }
 
@@ -361,9 +365,10 @@ html, body {
   color: var(--secondary);
 }
 
-/* Content Area – scrolls independently */
+/* Content Area – scrolls independently, with safe area bottom */
 .layout-content-area {
   padding: 24px;
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
   flex: 1;
   overflow-y: auto;
   scroll-behavior: smooth;
@@ -502,7 +507,7 @@ html, body {
 
 /* ========== RESPONSIVE BREAKPOINTS ========== */
 
-/* Desktop (≥769px) – sidebar always visible */
+/* Desktop (≥769px) */
 @media (min-width: 769px) {
   .layout-sidebar {
     transform: translateX(0) !important;
@@ -515,7 +520,7 @@ html, body {
   }
 }
 
-/* Mobile (≤768px) – hamburger menu */
+/* Mobile (≤768px) */
 @media (max-width: 768px) {
   :root {
     --header-height: 60px;
@@ -553,6 +558,7 @@ html, body {
   }
   .layout-content-area {
     padding: 16px;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
   }
 
   /* Bigger touch targets */
@@ -585,6 +591,7 @@ html, body {
   }
   .layout-content-area {
     padding: 12px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
   .layout-notification {
     top: 10px;
@@ -607,6 +614,7 @@ body.layout-login-mode .layout-main-content {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  min-height: 100dvh;
   background: linear-gradient(135deg, var(--bg-primary) 0%, var(--gray-200) 100%);
 }
 
@@ -618,4 +626,3 @@ body.layout-login-mode .layout-content-area {
   background: transparent;
   box-shadow: none;
 }
-
