@@ -1,310 +1,408 @@
-/* ==================== USER PROFILE – unified (text sizes in px) ==================== */
-.user-profile-page {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 24px;
+/* ==================== DASHBOARD – db- PREFIX ==================== */
+.db-page {
+  animation: db-fadeIn 0.5s ease;
+  padding: 20px 16px;
 }
-.profile-header {
-  margin-bottom: 32px;
+
+@keyframes db-fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-.profile-header h1 {
-  margin: 0 0 8px;
-  font-size: 24px;           /* compact desktop */
+
+/* ---------- Summary Cards Grid (base: desktop) ---------- */
+.db-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.db-summary-card {
+  background: var(--card-bg);
+  border-radius: 14px;
+  padding: 16px 12px;
   display: flex;
   align-items: center;
   gap: 12px;
-  color: var(--text-primary);
-}
-.profile-header p {
-  color: var(--text-muted);
-  margin: 0;
-  font-size: 14px;           /* compact desktop */
-}
-.profile-grid {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 32px;
-}
-.profile-avatar-section {
-  background: var(--card-bg);
-  border-radius: 20px;
-  padding: 32px;
-  text-align: center;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-  height: fit-content;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
   border: 1px solid var(--border-color);
 }
-.avatar-container {
-  position: relative;
-  margin-bottom: 24px;
+.db-summary-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
 }
-.avatar-preview {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--sidebar-icon-color);
+.db-summary-card.db-gross-revenue::before { background: linear-gradient(180deg, #ff9800, #f57c00); }
+.db-summary-card.db-net-revenue::before { background: linear-gradient(180deg, #4caf50, #2e7d32); }
+.db-summary-card.db-vat::before { background: linear-gradient(180deg, #9c27b0, #6a1b9a); }
+.db-summary-card.db-expense::before { background: linear-gradient(180deg, #f44336, #c62828); }
+.db-summary-card.db-profit::before { background: linear-gradient(180deg, #2196f3, #1565c0); }
+.db-summary-card.db-margin::before { background: linear-gradient(180deg, #ff9800, #f57c00); }
+.db-summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
 }
-.avatar-placeholder {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
+
+.db-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto;
-  background: linear-gradient(135deg, var(--sidebar-icon-color), var(--secondary));
-}
-.avatar-placeholder i {
-  font-size: 4rem;
-  color: white;
-}
-.avatar-upload {
-  margin-top: 12px;
-}
-.avatar-upload-btn {
-  background: var(--card-bg);
-  padding: 8px 16px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 13px;           /* compact desktop */
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid var(--border-color);
-  color: var(--text-secondary);
-}
-.avatar-upload-btn:hover {
+  font-size: 22px;
   background: var(--hover-bg);
+  color: var(--primary);
+  flex-shrink: 0;
 }
-.org-info h3 {
-  margin: 0 0 4px;
-  font-size: 15px;           /* compact desktop */
-  color: var(--text-primary);
+.db-card-content {
+  flex: 1;
+  min-width: 0;
 }
-.org-role {
-  color: var(--secondary);
-  font-weight: 600;
-  margin: 0;
-  font-size: 13px;           /* compact desktop */
-}
-.profile-form-section {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-.form-card {
-  background: var(--card-bg);
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-  border: 1px solid var(--border-color);
-}
-.form-card h2 {
-  margin: 0 0 24px;
-  font-size: 18px;           /* compact desktop */
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--text-primary);
-}
-.form-card h2 i {
-  color: var(--secondary);
-}
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-.form-group {
-  margin-bottom: 20px;
-}
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  font-size: 13px;           /* compact desktop */
-  color: var(--text-secondary);
-}
-.form-group input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  font-size: 14px;           /* compact desktop */
-  background: var(--input-bg);
-  color: var(--text-primary);
-}
-.form-group input:focus {
-  outline: none;
-  border-color: var(--secondary);
-  box-shadow: 0 0 0 3px rgba(var(--secondary-rgb), 0.1);
-}
-.disabled-input {
-  background: var(--hover-bg);
-  color: var(--text-muted);
-}
-.checkbox-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  color: var(--text-primary);
-  font-size: 14px;           /* compact desktop */
-}
-.checkbox-label input {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  accent-color: var(--secondary);
-}
-.form-actions {
-  margin-top: 8px;
-  text-align: right;
-}
-.btn-primary {
-  padding: 12px 32px;
-  background: rgba(var(--primary-rgb), 0.6);
-  color: var(--secondary);
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 14px;           /* compact desktop */
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.btn-primary:hover:not(:disabled) {
-  background: rgba(var(--primary-rgb), 0.7);
-  transform: translateY(-1px);
-}
-.btn-primary:disabled {
-  opacity: 0.9;
-  cursor: not-allowed;
-}
-.uploading-text {
+.db-card-label {
   font-size: 12px;
   color: var(--text-muted);
-  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  margin-bottom: 4px;
 }
-.notification {
-  padding: 12px 20px;
+.db-card-value {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 2px 0;
+  line-height: 1.2;
+}
+.db-card-trend {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+}
+.db-card-trend.db-positive { color: #2e7d32; }
+.db-card-trend.db-negative { color: #c62828; }
+
+/* ---------- Stats Row ---------- */
+.db-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.db-stat-item {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border: 1px solid var(--border-color);
+}
+.db-stat-item i {
+  font-size: 24px;
+  color: var(--primary);
+  background: rgba(46,125,50,0.08);
+  padding: 8px;
   border-radius: 10px;
-  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+.db-stat-item > div {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.db-stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+}
+.db-stat-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- Charts Grid ---------- */
+.db-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.db-chart-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid var(--border-color);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.db-chart-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+.db-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.db-chart-header h3 {
   font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
 }
-.notification.success {
-  background: rgba(var(--secondary-rgb), 0.1);
+.db-chart-header h3 i {
   color: var(--secondary);
-  border-left: 4px solid var(--secondary);
 }
-.notification.error {
-  background: rgba(var(--danger-rgb), 0.1);
-  color: var(--danger);
-  border-left: 4px solid var(--danger);
+.db-chart-legend {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+}
+.db-legend-income i, .db-legend-expense i {
+  font-size: 11px;
+}
+.db-legend-income i { color: #4caf50; }
+.db-legend-expense i { color: #f44336; }
+.db-chart-container {
+  height: 220px !important;
+  position: relative;
 }
 
-/* ========== RESPONSIVE – LARGER FIXED PX FOR MOBILE ========== */
+/* ---------- Recent Transactions ---------- */
+.db-recent-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  max-height: 280px;
+  border: 1px solid var(--border-color);
+}
+.db-recent-card .db-card-header {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+.db-recent-card .db-card-header h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-primary);
+}
+.db-recent-card .db-card-header h3 i {
+  color: var(--secondary);
+}
+.db-view-all-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+}
+.db-table-responsive {
+  overflow-x: auto;
+  overflow-y: auto;
+  flex: 1;
+}
+.db-transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.db-transactions-table th,
+.db-transactions-table td {
+  padding: 10px 8px;
+  text-align: left;
+}
+.db-transactions-table th {
+  background: var(--hover-bg);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-bottom: 1px solid var(--border-color);
+}
+.db-transactions-table td {
+  font-size: 12px;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+.db-transactions-table tr:last-child td {
+  border-bottom: none;
+}
+.db-badge {
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  display: inline-block;
+}
+.db-badge-income {
+  background: rgba(76, 175, 80, 0.12);
+  color: #2e7d32;
+}
+.db-badge-expense {
+  background: rgba(244, 67, 54, 0.12);
+  color: #c62828;
+}
+.db-income-text, .db-expense-text {
+  font-weight: 600;
+}
+.db-income-text { color: #2e7d32; }
+.db-expense-text { color: #c62828; }
 
-/* Tablet & Mobile (≤768px) – layout changes + much larger px fonts */
-@media (max-width: 768px) {
-  /* Layout rules (unchanged from your original) */
-  .profile-grid {
-    grid-template-columns: 1fr;
-  }
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-  .user-profile-page {
-    padding: 16px;
-  }
-  .profile-avatar-section {
-    padding: 24px;
-  }
+/* ========== RESPONSIVE BREAKPOINTS ========== */
 
-  /* LARGE PIXEL FONTS – clearly visible on any mobile */
-  .profile-header h1 {
-    font-size: 32px;
+/* Tablet (481px – 768px) – slightly larger fonts, 2–3 cards */
+@media (min-width: 481px) and (max-width: 768px) {
+  .db-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
   }
-  .profile-header p {
+  .db-card-value {
     font-size: 18px;
   }
-  .avatar-upload-btn {
-    font-size: 16px;
-    padding: 10px 20px;
+  .db-stat-value {
+    font-size: 15px;
   }
-  .org-info h3 {
+  .db-chart-container {
+    height: 200px !important;
+  }
+  .db-transactions-table th {
+    font-size: 10px;
+  }
+  .db-transactions-table td {
+    font-size: 11px;
+  }
+}
+
+/* Mobile (≤480px) – 2 cards per row, bigger fonts, taller charts */
+@media (max-width: 480px) {
+  .db-page {
+    padding: 12px 10px;
+  }
+
+  /* Summary cards – force 2 columns, increase font sizes */
+  .db-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .db-summary-card {
+    padding: 12px 10px;
+    gap: 10px;
+  }
+  .db-card-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+  .db-card-label {
+    font-size: 10px;
+  }
+  .db-card-value {
+    font-size: 16px;
+  }
+  .db-card-trend {
+    font-size: 9px;
+  }
+
+  /* Stats row – single column (or auto-fit) */
+  .db-stats-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .db-stat-item {
+    padding: 10px;
+  }
+  .db-stat-item i {
     font-size: 20px;
+    padding: 6px;
   }
-  .org-role {
-    font-size: 16px;
+  .db-stat-label {
+    font-size: 11px;
   }
-  .form-card h2 {
-    font-size: 24px;
-  }
-  .form-group label {
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-  .form-group input {
-    font-size: 18px;
-    padding: 14px;
-  }
-  .checkbox-label {
-    font-size: 16px;
-  }
-  .btn-primary {
-    font-size: 18px;
-    padding: 14px 28px;
-  }
-  .uploading-text {
+  .db-stat-value {
     font-size: 14px;
   }
-  .notification {
-    font-size: 16px;
-    padding: 14px 20px;
-  }
-}
 
-/* Small mobile (≤480px) – optionally keep same or slightly adjust */
-@media (max-width: 480px) {
-  .profile-header h1 {
-    font-size: 28px;
+  /* Charts – full width, taller containers */
+  .db-charts-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
-  .profile-header p {
-    font-size: 16px;
-  }
-  .avatar-upload-btn {
-    font-size: 15px;
-  }
-  .org-info h3 {
-    font-size: 18px;
-  }
-  .org-role {
-    font-size: 15px;
-  }
-  .form-card h2 {
-    font-size: 22px;
-  }
-  .form-group label {
-    font-size: 15px;
-  }
-  .form-group input {
-    font-size: 16px;
+  .db-chart-card {
     padding: 12px;
   }
-  .checkbox-label {
-    font-size: 15px;
+  .db-chart-header h3 {
+    font-size: 13px;
   }
-  .btn-primary {
-    font-size: 16px;
-    padding: 12px 24px;
+  .db-chart-legend {
+    font-size: 10px;
+    gap: 10px;
   }
-  .notification {
-    font-size: 15px;
+  .db-chart-container {
+    height: 200px !important;
+  }
+
+  /* Recent transactions – more row height, bigger text */
+  .db-recent-card {
+    max-height: 320px;
+    padding: 12px;
+  }
+  .db-recent-card .db-card-header h3 {
+    font-size: 13px;
+  }
+  .db-view-all-link {
+    font-size: 11px;
+  }
+  .db-transactions-table th {
+    font-size: 9px;
+    padding: 8px 6px;
+  }
+  .db-transactions-table td {
+    font-size: 11px;
+    padding: 8px 6px;
+  }
+  .db-badge {
+    font-size: 9px;
+    padding: 3px 6px;
   }
 }
