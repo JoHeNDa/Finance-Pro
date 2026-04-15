@@ -531,7 +531,7 @@ html, body {
     transform: translateX(-100%);
     transition: transform 0.3s ease;
     z-index: 1000;
-    border-bottom-right-radius: 0;
+    
   }
   .layout-sidebar.layout-active {
     transform: translateX(0);
