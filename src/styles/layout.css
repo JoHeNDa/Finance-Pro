@@ -27,13 +27,13 @@ html, body {
   font-family: 'Inter', sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
-  height: 100vh;      /* fallback */
-  height: 100dvh;     /* modern dynamic viewport */
+  height: 100vh;
+  height: 100dvh;
   width: 100vw;
   overflow: hidden;
 }
 
-/* Custom Scrollbar – subtle and modern */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -56,8 +56,8 @@ html, body {
 /* ==================== LAYOUT ==================== */
 .layout-app {
   display: flex;
-  height: 100vh;      /* fallback */
-  height: 100dvh;     /* modern */
+  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -74,7 +74,7 @@ html, body {
   transition: transform 0.3s ease, width 0.3s ease, background 0.3s ease;
   flex-shrink: 0;
   overflow: hidden;
-  border-bottom-right-radius: 10px;   /* consistent radius */
+  border-bottom-right-radius: 10px;
 }
 
 .layout-sidebar-header {
@@ -90,7 +90,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 1.2rem;
+  font-size: 19px;          /* was 1.2rem -> 19px (compact desktop) */
   font-weight: 600;
   color: var(--secondary);
   text-decoration: none;
@@ -99,15 +99,15 @@ html, body {
 .layout-logo-text {
   color: var(--sidebar-text);
   font-weight: 700;
-  font-size: 1.6rem;
+  font-size: 26px;          /* was 1.6rem -> 26px */
 }
 
-/* Navigation menu – scrollable */
+/* Navigation menu */
 .layout-nav-menu {
   padding: 20px 12px;
   list-style: none;
   flex: 1;
-  overflow-y: hidden;      /* was hidden – fixed */
+  overflow-y: auto;         /* changed from hidden to auto */
   scrollbar-gutter: stable;
 }
 
@@ -131,7 +131,7 @@ html, body {
 
 .layout-nav-item a i {
   width: 22px;
-  font-size: 1rem;
+  font-size: 16px;          /* was 1rem -> 16px */
   color: var(--sidebar-icon-color);
 }
 
@@ -165,14 +165,13 @@ html, body {
   border-radius: 0 4px 4px 0;
 }
 
-/* Sidebar Footer – always at bottom, with safe area */
+/* Sidebar Footer */
 .layout-sidebar-footer {
   padding: 16px;
   padding-bottom: max(16px, env(safe-area-inset-bottom));
   border-top: 1px solid var(--sidebar-border);
   background: var(--sidebar-footer-bg);
   flex-shrink: 0;
-  /* no border-radius – sidebar handles the bottom-right corner */
 }
 
 .layout-user-info {
@@ -202,12 +201,12 @@ html, body {
 
 .layout-user-name {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 14px;          /* desktop compact */
   color: var(--sidebar-text);
 }
 
 .layout-user-role {
-  font-size: 12px;
+  font-size: 12px;          /* desktop compact */
   opacity: 0.8;
   color: var(--sidebar-text-secondary);
 }
@@ -225,7 +224,7 @@ html, body {
   gap: 8px;
   transition: all 0.3s ease;
   justify-content: center;
-  font-size: 13px;
+  font-size: 13px;          /* desktop compact */
 }
 
 .layout-logout-btn i {
@@ -285,7 +284,7 @@ html, body {
 }
 
 .layout-page-title {
-  font-size: 22px;
+  font-size: 22px;          /* desktop compact */
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -305,7 +304,7 @@ html, body {
   background: var(--hover-bg);
   padding: 6px 12px;
   border-radius: 24px;
-  font-size: 13px;
+  font-size: 13px;          /* desktop compact */
   color: var(--text-muted);
   display: flex;
   align-items: center;
@@ -365,7 +364,7 @@ html, body {
   color: var(--secondary);
 }
 
-/* Content Area – scrolls independently, with safe area bottom */
+/* Content Area */
 .layout-content-area {
   padding: 24px;
   padding-bottom: max(24px, env(safe-area-inset-bottom));
@@ -465,7 +464,7 @@ html, body {
   z-index: 9999;
   animation: layout-slideIn 0.3s ease;
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  font-size: 14px;
+  font-size: 14px;          /* desktop compact */
 }
 
 .layout-notification.layout-success {
@@ -484,7 +483,7 @@ html, body {
 /* Section titles in sidebar */
 .nav-section-title {
   padding: 12px 12px 4px 12px;
-  font-size: 11px;
+  font-size: 11px;          /* desktop compact */
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -507,7 +506,7 @@ html, body {
 
 /* ========== RESPONSIVE BREAKPOINTS ========== */
 
-/* Desktop (≥769px) – sidebar always visible */
+/* Desktop (≥769px) */
 @media (min-width: 769px) {
   .layout-sidebar {
     transform: translateX(0) !important;
@@ -520,7 +519,7 @@ html, body {
   }
 }
 
-/* Mobile (≤768px) – hamburger menu, sidebar retains its bottom-right radius */
+/* Mobile (≤768px) – moderate font sizes (scaled up from desktop) */
 @media (max-width: 768px) {
   :root {
     --header-height: 60px;
@@ -531,7 +530,6 @@ html, body {
     transform: translateX(-100%);
     transition: transform 0.3s ease;
     z-index: 1000;
-    /* border-bottom-right-radius remains 10px – not overridden */
   }
   .layout-sidebar.layout-active {
     transform: translateX(0);
@@ -550,47 +548,56 @@ html, body {
     padding: 0 16px;
   }
   .layout-page-title {
-    font-size: 18px;
+    font-size: 20px;        /* slightly larger than desktop */
   }
   .layout-date-display {
-    font-size: 11px;
+    font-size: 12px;
     padding: 4px 8px;
   }
   .layout-content-area {
-    padding: 6px;
+    padding: 16px;
     padding-bottom: max(16px, env(safe-area-inset-bottom));
   }
 
-  /* Bigger touch targets */
+  /* Sidebar text – larger for touch */
   .layout-nav-item a {
     padding: 12px 12px;
-    font-size: 14px;
+    font-size: 15px;        /* was 14px */
   }
   .layout-user-name {
-    font-size: 12px;
+    font-size: 14px;
   }
   .layout-user-role {
-    font-size: 11px;
+    font-size: 12px;
   }
   .layout-logout-btn {
-    font-size: 11px;
+    font-size: 13px;
     padding: 8px 12px;
+  }
+  .layout-logo-text {
+    font-size: 24px;
+  }
+  .layout-logo {
+    font-size: 18px;
+  }
+  .nav-section-title {
+    font-size: 12px;
   }
 }
 
-/* Small mobile (≤480px) */
+/* Small mobile (≤480px) – moderate but clear */
 @media (max-width: 480px) {
   .layout-top-bar {
     padding: 0 12px;
   }
   .layout-page-title {
-    font-size: 16px;
+    font-size: 18px;
   }
   .layout-date-display {
     display: none;
   }
   .layout-content-area {
-    padding: 10px;
+    padding: 12px;
     padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
   .layout-notification {
@@ -598,10 +605,27 @@ html, body {
     right: 10px;
     left: 10px;
     text-align: center;
+    font-size: 13px;
+  }
+  /* Sidebar further adjustments */
+  .layout-nav-item a {
+    font-size: 14px;
+  }
+  .layout-user-name {
+    font-size: 13px;
+  }
+  .layout-user-role {
+    font-size: 11px;
+  }
+  .layout-logout-btn {
+    font-size: 12px;
+  }
+  .layout-logo-text {
+    font-size: 22px;
   }
 }
 
-/* Login Mode */
+/* Login Mode – unchanged except text sizes in px */
 body.layout-login-mode .layout-sidebar,
 body.layout-login-mode .layout-top-bar {
   display: none;
