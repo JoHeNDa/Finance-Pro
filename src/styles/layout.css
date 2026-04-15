@@ -618,3 +618,34 @@ body.layout-login-mode .layout-content-area {
   background: transparent;
   box-shadow: none;
 }
+
+/* On mobile, make the whole page scrollable */
+@media (max-width: 768px) {
+  .layout-app {
+    flex-direction: column;
+    overflow-y: auto;
+    height: auto;
+    min-height: 100vh;
+  }
+  .layout-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    transform: none !important;
+    border-bottom-right-radius: 0;
+  }
+  .layout-main-content {
+    height: auto;
+    overflow: visible;
+  }
+  .layout-content-area {
+    overflow: visible;
+    padding-bottom: 24px;
+  }
+  .layout-menu-toggle {
+    display: none !important; /* hamburger not needed as sidebar is always visible */
+  }
+  .layout-sidebar-overlay {
+    display: none;
+  }
+}
