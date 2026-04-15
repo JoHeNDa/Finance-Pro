@@ -74,7 +74,7 @@ html, body {
   transition: transform 0.3s ease, width 0.3s ease, background 0.3s ease;
   flex-shrink: 0;
   overflow: hidden;
-  border-bottom-right-radius: 24px;
+  border-bottom-right-radius: 10px;
 }
 
 .layout-sidebar-header {
@@ -172,7 +172,7 @@ html, body {
   border-top: 1px solid var(--sidebar-border);
   background: var(--sidebar-footer-bg);
   flex-shrink: 0;
-  border-bottom-right-radius: 24px;
+  border-bottom-right-radius: 10px;
 }
 
 .layout-user-info {
