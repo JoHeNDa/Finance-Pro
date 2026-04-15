@@ -165,7 +165,7 @@
 }
 .btn-primary {
   padding: 12px 32px;
-  background: rgba(var(--secondary-rgb), 0.15);
+  background: rgba(var(--primary-rgb), 0.6);
   color: var(--secondary);
   border: none;
   border-radius: 10px;
@@ -174,11 +174,11 @@
   transition: all 0.2s;
 }
 .btn-primary:hover:not(:disabled) {
-  background: rgba(var(--secondary-rgb), 0.25);
+  background: rgba(var(--primary-rgb), 0.7);
   transform: translateY(-1px);
 }
 .btn-primary:disabled {
-  opacity: 0.6;
+  opacity: 0.9;
   cursor: not-allowed;
 }
 .uploading-text {
