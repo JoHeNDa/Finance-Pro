@@ -32,21 +32,25 @@ html, body {
   overflow: hidden;
 }
 
-/* Custom Scrollbar – subtle and modern */
+/* Custom Scrollbar – subtle and modern (like macOS) */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--gray-200);
-  border-radius: 4px;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--gray-500);
+  background: rgba(0,0,0,0.2);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--gray-700);
+  background: rgba(0,0,0,0.4);
+}
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.2) transparent;
 }
 
 /* ==================== LAYOUT ==================== */
@@ -56,20 +60,19 @@ html, body {
   overflow: hidden;
 }
 
-/* ==================== SIDEBAR (flex column, no absolute footer) ==================== */
+/* ==================== SIDEBAR (flex column, footer always visible) ==================== */
 .layout-sidebar {
   width: var(--sidebar-width);
   background: var(--sidebar-bg);
-  position: relative;
   height: 100vh;
   display: flex;
-  flex-direction: column;      /* key: footer naturally at bottom */
-  overflow-y: auto;
+  flex-direction: column;
   box-shadow: 4px 0 20px rgba(0,0,0,0.15);
   z-index: 1000;
   transition: transform 0.3s ease, width 0.3s ease, background 0.3s ease;
   flex-shrink: 0;
-  border-bottom-right-radius: 24px;  /* elegant rounded corner */
+  overflow: hidden;  /* prevent double scrollbar */
+  border-bottom-right-radius: 24px;
 }
 
 .layout-sidebar-header {
@@ -97,12 +100,13 @@ html, body {
   font-size: 1.3rem;
 }
 
-/* Navigation – scrollable if needed */
+/* Navigation menu – scrollable, takes remaining space */
 .layout-nav-menu {
   padding: 20px 12px;
   list-style: none;
   flex: 1;
   overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 
 .layout-nav-item {
@@ -159,13 +163,13 @@ html, body {
   border-radius: 0 4px 4px 0;
 }
 
-/* Sidebar Footer – now part of flex flow, no absolute positioning */
+/* Sidebar Footer – always at bottom, never scrolls away */
 .layout-sidebar-footer {
   padding: 16px;
   border-top: 1px solid var(--sidebar-border);
   background: var(--sidebar-footer-bg);
   flex-shrink: 0;
-  border-bottom-right-radius: 24px; /* matches parent */
+  border-bottom-right-radius: 24px;
 }
 
 .layout-user-info {
@@ -257,7 +261,7 @@ html, body {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  overflow: hidden;  /* prevents double scrollbar, content area handles scroll */
+  overflow: hidden;
 }
 
 /* Top Bar */
@@ -357,7 +361,7 @@ html, body {
   color: var(--secondary);
 }
 
-/* Content Area – this is where the main scroll happens */
+/* Content Area – scrolls independently */
 .layout-content-area {
   padding: 24px;
   flex: 1;
@@ -498,7 +502,7 @@ html, body {
 
 /* ========== RESPONSIVE BREAKPOINTS ========== */
 
-/* Tablet and Desktop (≥769px) – sidebar always visible, no toggle */
+/* Desktop (≥769px) – sidebar always visible */
 @media (min-width: 769px) {
   .layout-sidebar {
     transform: translateX(0) !important;
@@ -511,7 +515,7 @@ html, body {
   }
 }
 
-/* Mobile (≤768px) – hamburger menu, larger fonts, bigger tap areas */
+/* Mobile (≤768px) – hamburger menu */
 @media (max-width: 768px) {
   :root {
     --header-height: 60px;
@@ -522,7 +526,7 @@ html, body {
     transform: translateX(-100%);
     transition: transform 0.3s ease;
     z-index: 1000;
-    border-bottom-right-radius: 0;  /* optional: flat bottom on mobile */
+    border-bottom-right-radius: 0;
   }
   .layout-sidebar.layout-active {
     transform: translateX(0);
@@ -543,23 +547,15 @@ html, body {
   .layout-page-title {
     font-size: 18px;
   }
-  .layout-page-title i {
-    font-size: 18px;
-  }
   .layout-date-display {
     font-size: 11px;
     padding: 4px 8px;
-  }
-  .layout-refresh-btn,
-  .layout-menu-toggle {
-    width: 36px;
-    height: 36px;
   }
   .layout-content-area {
     padding: 16px;
   }
 
-  /* Sidebar fonts slightly larger for touch */
+  /* Bigger touch targets */
   .layout-nav-item a {
     padding: 12px 12px;
     font-size: 14px;
@@ -576,7 +572,7 @@ html, body {
   }
 }
 
-/* Small mobile (≤480px) – even more breathing room */
+/* Small mobile (≤480px) */
 @media (max-width: 480px) {
   .layout-top-bar {
     padding: 0 12px;
@@ -585,7 +581,7 @@ html, body {
     font-size: 16px;
   }
   .layout-date-display {
-    display: none; /* save space */
+    display: none;
   }
   .layout-content-area {
     padding: 12px;
@@ -598,7 +594,7 @@ html, body {
   }
 }
 
-/* Login Mode – fullscreen centered */
+/* Login Mode */
 body.layout-login-mode .layout-sidebar,
 body.layout-login-mode .layout-top-bar {
   display: none;
