@@ -9,7 +9,7 @@
 }
 .profile-header h1 {
   margin: 0 0 8px;
-  font-size: 24px;           /* compact desktop */
+  font-size: 24px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -18,7 +18,7 @@
 .profile-header p {
   color: var(--text-muted);
   margin: 0;
-  font-size: 14px;           /* compact desktop */
+  font-size: 14px;
 }
 .profile-grid {
   display: grid;
@@ -67,7 +67,7 @@
   padding: 8px 16px;
   border-radius: 20px;
   cursor: pointer;
-  font-size: 13px;           /* compact desktop */
+  font-size: 13px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -79,14 +79,14 @@
 }
 .org-info h3 {
   margin: 0 0 4px;
-  font-size: 15px;           /* compact desktop */
+  font-size: 15px;
   color: var(--text-primary);
 }
 .org-role {
   color: var(--secondary);
   font-weight: 600;
   margin: 0;
-  font-size: 13px;           /* compact desktop */
+  font-size: 13px;
 }
 .profile-form-section {
   display: flex;
@@ -102,7 +102,7 @@
 }
 .form-card h2 {
   margin: 0 0 24px;
-  font-size: 18px;           /* compact desktop */
+  font-size: 18px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -123,7 +123,7 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
-  font-size: 13px;           /* compact desktop */
+  font-size: 13px;
   color: var(--text-secondary);
 }
 .form-group input {
@@ -131,7 +131,7 @@
   padding: 10px 12px;
   border: 1px solid var(--border-color);
   border-radius: 10px;
-  font-size: 14px;           /* compact desktop */
+  font-size: 14px;
   background: var(--input-bg);
   color: var(--text-primary);
 }
@@ -155,7 +155,7 @@
   gap: 10px;
   cursor: pointer;
   color: var(--text-primary);
-  font-size: 14px;           /* compact desktop */
+  font-size: 14px;
 }
 .checkbox-label input {
   width: 18px;
@@ -174,7 +174,7 @@
   border: none;
   border-radius: 10px;
   font-weight: 600;
-  font-size: 14px;           /* compact desktop */
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -208,11 +208,9 @@
   border-left: 4px solid var(--danger);
 }
 
-/* ========== RESPONSIVE – LARGER FIXED PX FOR MOBILE ========== */
-
-/* Tablet & Mobile (≤768px) – layout changes + much larger px fonts */
+/* ========== RESPONSIVE: MODERATE MOBILE FONTS (scaled down a little) ========== */
 @media (max-width: 768px) {
-  /* Layout rules (unchanged from your original) */
+  /* Layout overrides (unchanged) */
   .profile-grid {
     grid-template-columns: 1fr;
   }
@@ -226,52 +224,7 @@
     padding: 24px;
   }
 
-  /* LARGE PIXEL FONTS – clearly visible on any mobile */
-  .profile-header h1 {
-    font-size: 32px;
-  }
-  .profile-header p {
-    font-size: 18px;
-  }
-  .avatar-upload-btn {
-    font-size: 16px;
-    padding: 10px 20px;
-  }
-  .org-info h3 {
-    font-size: 20px;
-  }
-  .org-role {
-    font-size: 16px;
-  }
-  .form-card h2 {
-    font-size: 24px;
-  }
-  .form-group label {
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-  .form-group input {
-    font-size: 18px;
-    padding: 14px;
-  }
-  .checkbox-label {
-    font-size: 16px;
-  }
-  .btn-primary {
-    font-size: 18px;
-    padding: 14px 28px;
-  }
-  .uploading-text {
-    font-size: 14px;
-  }
-  .notification {
-    font-size: 16px;
-    padding: 14px 20px;
-  }
-}
-
-/* Small mobile (≤480px) – optionally keep same or slightly adjust */
-@media (max-width: 480px) {
+  /* Moderate mobile font sizes – clearly readable but not oversized */
   .profile-header h1 {
     font-size: 28px;
   }
@@ -279,32 +232,77 @@
     font-size: 16px;
   }
   .avatar-upload-btn {
-    font-size: 15px;
+    font-size: 14px;
+    padding: 8px 16px;
   }
   .org-info h3 {
     font-size: 18px;
   }
   .org-role {
-    font-size: 15px;
+    font-size: 14px;
   }
   .form-card h2 {
-    font-size: 22px;
+    font-size: 20px;
   }
   .form-group label {
-    font-size: 15px;
+    font-size: 14px;
+    margin-bottom: 8px;
   }
   .form-group input {
     font-size: 16px;
     padding: 12px;
   }
   .checkbox-label {
-    font-size: 15px;
+    font-size: 14px;
   }
   .btn-primary {
     font-size: 16px;
     padding: 12px 24px;
   }
+  .uploading-text {
+    font-size: 12px;
+  }
   .notification {
+    font-size: 14px;
+    padding: 12px 16px;
+  }
+}
+
+/* Small mobile (≤480px) – slightly smaller but still clear */
+@media (max-width: 480px) {
+  .profile-header h1 {
+    font-size: 26px;
+  }
+  .profile-header p {
     font-size: 15px;
+  }
+  .avatar-upload-btn {
+    font-size: 13px;
+  }
+  .org-info h3 {
+    font-size: 20px;
+  }
+  .org-role {
+    font-size: 13px;
+  }
+  .form-card h2 {
+    font-size: 19px;
+  }
+  .form-group label {
+    font-size: 13px;
+  }
+  .form-group input {
+    font-size: 15px;
+    padding: 10px;
+  }
+  .checkbox-label {
+    font-size: 13px;
+  }
+  .btn-primary {
+    font-size: 15px;
+    padding: 10px 20px;
+  }
+  .notification {
+    font-size: 13px;
   }
 }
