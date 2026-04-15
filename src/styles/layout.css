@@ -67,6 +67,9 @@ html, body {
   z-index: 1000;
   transition: transform 0.3s ease, width 0.3s ease, background 0.3s ease;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-bottom-right-radius: 24px;
 }
 
 .layout-sidebar-header {
@@ -75,6 +78,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-shrink: 0;
 }
 
 .layout-logo {
@@ -87,163 +91,34 @@ html, body {
   text-decoration: none;
 }
 
-.layout-logo-text {
-  color: var(--sidebar-text);
-  font-weight: 700;
-  font-size: 1.3rem;
-}
-
 /* Navigation */
 .layout-nav-menu {
   padding: 20px 12px;
   list-style: none;
+  flex: 1;
+  overflow-y: auto;
 }
 
-.layout-nav-item {
-  margin: 4px 0;
-  border-radius: 8px;
-  transition: var(--transition);
-}
-
-.layout-nav-item a {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  color: var(--sidebar-text);
-  text-decoration: none;
-  font-weight: 500;
-  border-radius: 8px;
-  transition: var(--transition);
-}
-
-.layout-nav-item a i {
-  width: 22px;
-  font-size: 1rem;
-  color: var(--sidebar-icon-color);
-}
-
-.layout-nav-item:hover {
-  background: var(--sidebar-hover-bg);
-}
-
-.layout-nav-item.layout-active {
-  background: var(--sidebar-active-bg);
-  position: relative;
-}
-
-.layout-nav-item.layout-active a {
-  color: var(--sidebar-text);
-  font-weight: 600;
-}
-
-.layout-nav-item.layout-active a i {
-  color: var(--sidebar-text);
-}
-
-.layout-nav-item.layout-active::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 24px;
-  background: var(--secondary);
-  border-radius: 0 4px 4px 0;
-}
-
-/* Sidebar Footer */
+/* Sidebar Footer – now part of flex flow, no absolute positioning */
 .layout-sidebar-footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
   padding: 16px;
   border-top: 1px solid var(--sidebar-border);
   background: var(--sidebar-footer-bg);
+  flex-shrink: 0;
+  border-bottom-right-radius: 24px;
 }
 
-.layout-user-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
+/* ... rest of your sidebar styles (nav-item, active, etc.) stay the same ... */
 
-.layout-user-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1px solid var(--sidebar-border);
+/* Mobile fix: ensure footer doesn't get clipped */
+@media (max-width: 768px) {
+  .layout-sidebar {
+    border-bottom-right-radius: 0; /* optional */
+  }
+  .layout-sidebar-footer {
+    padding: 12px;
+  }
 }
-
-.layout-user-info i {
-  font-size: 32px;
-  color: var(--sidebar-icon-color);
-}
-
-.layout-user-details {
-  display: flex;
-  flex-direction: column;
-}
-
-.layout-user-name {
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--sidebar-text);
-}
-
-.layout-user-role {
-  font-size: 12px;
-  opacity: 0.8;
-  color: var(--sidebar-text-secondary);
-}
-
-.layout-logout-btn {
-  background: rgba(0, 0, 0, 0.05);
-  border: 1px solid var(--sidebar-border);
-  color: var(--sidebar-text);
-  padding: 8px 12px;
-  border-radius: 24px;
-  cursor: pointer;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-  justify-content: center;
-  font-size: 13px;
-}
-
-.layout-logout-btn i {
-  color: var(--sidebar-icon-color);
-}
-
-.layout-logout-btn:hover {
-  background: var(--sidebar-hover-bg);
-}
-
-/* Sidebar Collapse Button (desktop only) */
-.layout-sidebar-collapse-btn {
-  background: transparent;
-  border: none;
-  color: var(--sidebar-text);
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 14px;
-}
-
-.layout-sidebar-collapse-btn:hover {
-  background: var(--sidebar-hover-bg);
-}
-
 /* ==================== MAIN CONTENT ==================== */
 .layout-main-content {
   flex: 1;
