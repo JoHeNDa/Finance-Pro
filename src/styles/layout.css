@@ -99,7 +99,7 @@ html, body {
 .layout-logo-text {
   color: var(--sidebar-text);
   font-weight: 700;
-  font-size: 1.3rem;
+  font-size: 1.6rem;
 }
 
 /* Navigation menu – scrollable */
@@ -201,7 +201,7 @@ html, body {
 }
 
 .layout-user-name {
-  font-weight: 300;
+  font-weight: 600;
   font-size: 14px;
   color: var(--sidebar-text);
 }
@@ -557,7 +557,7 @@ html, body {
     padding: 4px 8px;
   }
   .layout-content-area {
-    padding: 16px;
+    padding: 6px;
     padding-bottom: max(16px, env(safe-area-inset-bottom));
   }
 
@@ -567,13 +567,13 @@ html, body {
     font-size: 14px;
   }
   .layout-user-name {
-    font-size: 14px;
-  }
-  .layout-user-role {
     font-size: 12px;
   }
+  .layout-user-role {
+    font-size: 11px;
+  }
   .layout-logout-btn {
-    font-size: 13px;
+    font-size: 11px;
     padding: 8px 12px;
   }
 }
