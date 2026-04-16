@@ -30,7 +30,7 @@ html, body {
   height: 100vh;
   height: 100dvh;
   width: 100vw;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* Custom Scrollbar */
@@ -66,7 +66,7 @@ html, body {
   width: var(--sidebar-width);
   background: var(--sidebar-bg);
   height: 100vh;
-  height: 100dvh;
+  height: 99.91dvh;
   display: flex;
   flex-direction: column;
   box-shadow: 4px 0 20px rgba(0,0,0,0.15);
@@ -118,7 +118,7 @@ html, body {
 }
 
 .layout-nav-item a {
-  font-size: 15px;
+  font-size: 13px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -332,7 +332,7 @@ html, body {
 }
 
 .layout-refresh-btn:hover {
-  background: var(--primary);
+  background: var(--button-bg-hover);
 }
 
 .layout-refresh-btn:hover i {
@@ -358,7 +358,7 @@ html, body {
 }
 
 .layout-menu-toggle:hover {
-  background: var(--primary);
+  background: var(--button-bg-hover);
 }
 
 .layout-menu-toggle:hover i {

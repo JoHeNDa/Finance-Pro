@@ -12,7 +12,7 @@ export default function Signup() {
   const [name, setName] = useState('');
   const [organizationName, setOrganizationName] = useState('');
   const [logoUrl, setLogoUrl] = useState('');
-  const [secondaryColor, setSecondaryColor] = useState('#6366f1');
+  const [secondaryColor, setSecondaryColor] = useState('#ffd700');
   const [vatRate, setVatRate] = useState('20');
   const [currencySymbol, setCurrencySymbol] = useState('£');
   const [currencyCode, setCurrencyCode] = useState('GBP');
@@ -27,6 +27,10 @@ export default function Signup() {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  
+  // Caps lock states
+  const [capsLockOnPassword, setCapsLockOnPassword] = useState(false);
+  const [capsLockOnConfirm, setCapsLockOnConfirm] = useState(false);
   
   const { signUp, user, userProfile } = useAuth();
   const { organization } = useOrganization();
@@ -56,6 +60,15 @@ export default function Signup() {
       return () => clearTimeout(timeout);
     }
   }, [creatingAccount, navigate]);
+
+  // Helper to detect caps lock
+  const handleCapsLock = (e, setter) => {
+    if (e.getModifierState && e.getModifierState('CapsLock')) {
+      setter(true);
+    } else {
+      setter(false);
+    }
+  };
 
   // Password strength calculator
   const calculatePasswordStrength = (pass) => {
@@ -253,11 +266,10 @@ export default function Signup() {
   }
 
   return (
-    <div className="sp-scroll-container">   {/* 👈 NEW: ensures scrolling */}
+    <div className="sp-scroll-container">
       <div className="sp-page">
         <div className="sp-header-section">
           <h1 className="sp-page-title">
-            <i className="fas fa-rocket"></i>
             Get Started
           </h1>
           <p className="sp-page-subtitle">
@@ -452,6 +464,7 @@ export default function Signup() {
                 {touched.email && errors.email && <div className="sp-field-error">{errors.email}</div>}
               </div>
 
+              {/* Password field with caps lock indicator */}
               <div className="sp-group">
                 <label>
                   Password <span className="sp-required">*</span>
@@ -463,6 +476,7 @@ export default function Signup() {
                     value={password}
                     onChange={handlePasswordChange}
                     onBlur={() => handleBlur('password')}
+                    onKeyDown={(e) => handleCapsLock(e, setCapsLockOnPassword)}
                     className={touched.password && errors.password ? 'sp-error-input' : ''}
                   />
                   <button
@@ -473,6 +487,11 @@ export default function Signup() {
                     <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
                   </button>
                 </div>
+                {capsLockOnPassword && (
+                  <div className="sp-caps-warning">
+                    <i className="fas fa-exclamation-triangle"></i> Caps Lock is on
+                  </div>
+                )}
                 {touched.password && errors.password && (
                   <div className="sp-field-error">{errors.password}</div>
                 )}
@@ -494,6 +513,7 @@ export default function Signup() {
                 )}
               </div>
 
+              {/* Confirm Password field with caps lock indicator */}
               <div className="sp-group">
                 <label>
                   Confirm Password <span className="sp-required">*</span>
@@ -516,6 +536,7 @@ export default function Signup() {
                       }
                     }}
                     onBlur={() => handleBlur('confirmPassword')}
+                    onKeyDown={(e) => handleCapsLock(e, setCapsLockOnConfirm)}
                     className={touched.confirmPassword && errors.confirmPassword ? 'sp-error-input' : ''}
                   />
                   <button
@@ -526,6 +547,11 @@ export default function Signup() {
                     <i className={`fas ${showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
                   </button>
                 </div>
+                {capsLockOnConfirm && (
+                  <div className="sp-caps-warning">
+                    <i className="fas fa-exclamation-triangle"></i> Caps Lock is on
+                  </div>
+                )}
                 {touched.confirmPassword && errors.confirmPassword && (
                   <div className="sp-field-error">{errors.confirmPassword}</div>
                 )}

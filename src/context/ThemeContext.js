@@ -29,6 +29,11 @@ const themes = {
     '--sidebar-border': 'rgba(255,255,255,0.1)',
     '--sidebar-footer-bg': 'rgba(0,0,0,0.2)',
     '--sidebar-icon-color': '#ffd700',
+    '--button-text': '#ffd700',
+    '--button-bg': '#2e7d32',
+    '--button-bg-hover': '#2e7d32',
+    '--button-bg-hover-rgb': '46, 125, 50',
+
     '--topbar-icon-color': '#2e7d32',
     '--primary': '#2e7d32',
     '--primary-dark': '#1b5e20',
@@ -53,6 +58,11 @@ const themes = {
     '--sidebar-footer-bg': 'rgba(0,0,0,0.3)',
     '--sidebar-icon-color': '#ffd700',
     '--topbar-icon-color': '#ffd700',
+    '--button-text': '#ffd700',
+    '--button-bg': '#2a312a',
+    '--button-bg-hover': '#221c1c4d',
+    
+    
     '--primary': '#4caf50',
     '--primary-dark': '#388e3c',
     '--primary-rgb': '76, 175, 80',

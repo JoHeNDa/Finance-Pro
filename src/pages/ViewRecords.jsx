@@ -55,7 +55,7 @@ export default function ViewRecords() {
     })}`;
   };
 
-  // Fetch users mapping
+  // Fetch users mapping (unchanged)
   useEffect(() => {
     const fetchUsers = async () => {
       if (!userProfile?.organization_id) return;
@@ -73,7 +73,7 @@ export default function ViewRecords() {
     fetchUsers();
   }, [userProfile]);
 
-  // Fetch transactions
+  // Fetch transactions and stats (unchanged)
   useEffect(() => {
     if (!userProfile?.organization_id) return;
     fetchTransactions();
@@ -343,7 +343,7 @@ export default function ViewRecords() {
   return (
     <>
       <div className="view-records-page">
-        {/* Header with Stats and Filters */}
+        {/* Header with Stats and Filters (unchanged) */}
         <div className="records-header">
           <div className="records-stats">
             <div className="stat-badge">
@@ -360,13 +360,11 @@ export default function ViewRecords() {
             </div>
           </div>
 
-          {/* Filter Section – three rows */}
           <button className="mobile-filter-toggle" onClick={toggleFilters}>
             <i className="fas fa-sliders-h"></i> Filters
           </button>
 
           <div className={`filter-section ${showFilters ? 'show' : ''}`}>
-            {/* Row 1: Search */}
             <div className="filter-row-1">
               <div className="search-box">
                 <i className="fas fa-search"></i>
@@ -380,7 +378,6 @@ export default function ViewRecords() {
               </div>
             </div>
 
-            {/* Row 2: Date range + Apply */}
             <div className="filter-row-2">
               <div className="date-range">
                 <input
@@ -401,7 +398,6 @@ export default function ViewRecords() {
               </button>
             </div>
 
-            {/* Row 3: Type select + View options + Export */}
             <div className="filter-row-3">
               <select
                 className="filter-select"
@@ -475,6 +471,9 @@ export default function ViewRecords() {
                   ) : (
                     transactions.map((tx) => {
                       const gross = tx.type === 'Revenue' ? tx.amount + (tx.vat_amount || 0) : tx.amount;
+                      // FIXED: add conditional classes for VAT and Gross
+                      const vatClass = tx.type === 'Revenue' ? 'vat-income' : 'vat-expense';
+                      const grossClass = tx.type === 'Revenue' ? 'gross-income' : 'gross-expense';
                       return (
                         <tr key={tx.id}>
                           <td>{new Date(tx.date).toLocaleDateString()}</td>
@@ -488,8 +487,10 @@ export default function ViewRecords() {
                           <td className={tx.type === 'Revenue' ? 'income-text' : 'expense-text'}>
                             {formatCurrencyWithSymbol(tx.amount)}
                           </td>
-                          <td>{formatCurrencyWithSymbol(tx.vat_amount || 0)}</td>
-                          <td>{formatCurrencyWithSymbol(gross)}</td>
+                          {/* FIXED: apply vatClass */}
+                          <td className={vatClass}>{formatCurrencyWithSymbol(tx.vat_amount || 0)}</td>
+                          {/* FIXED: apply grossClass */}
+                          <td className={grossClass}>{formatCurrencyWithSymbol(gross)}</td>
                           <td>{tx.payment_mode}</td>
                           <td>{users[tx.user_id] || tx.user_id}</td>
                           <td>
@@ -531,6 +532,9 @@ export default function ViewRecords() {
             ) : (
               transactions.map((tx) => {
                 const gross = tx.type === 'Revenue' ? tx.amount + (tx.vat_amount || 0) : tx.amount;
+                // FIXED: add conditional classes for VAT and Gross in card view
+                const vatClass = tx.type === 'Revenue' ? 'vat-income' : 'vat-expense';
+                const grossClass = tx.type === 'Revenue' ? 'gross-income' : 'gross-expense';
                 return (
                   <div key={tx.id} className={`transaction-card ${tx.type === 'Expense' ? 'expense' : ''}`}>
                     <div className="card-header">
@@ -545,7 +549,10 @@ export default function ViewRecords() {
                     <div className="card-particular">{tx.particular}</div>
                     <div className="card-description">{tx.description || '-'}</div>
                     <div className="card-amount">{formatCurrencyWithSymbol(tx.amount)}</div>
-                    <div className="card-vat">VAT: {formatCurrencyWithSymbol(tx.vat_amount || 0)}</div>
+                    {/* FIXED: applied vatClass */}
+                    <div className={`card-vat ${vatClass}`}>VAT: {formatCurrencyWithSymbol(tx.vat_amount || 0)}</div>
+                    {/* ADDED: show Gross amount with grossClass */}
+                    <div className={`card-gross ${grossClass}`}>Gross: {formatCurrencyWithSymbol(gross)}</div>
                     <div className="card-footer">
                       <div className="card-payment">
                         <i className="fas fa-credit-card"></i> {tx.payment_mode}
@@ -571,7 +578,7 @@ export default function ViewRecords() {
           </div>
         </div>
 
-        {/* Pagination */}
+        {/* Pagination (unchanged) */}
         <div className="table-footer">
           <div className="pagination-info">
             Showing {startIndex} to {endIndex} of {totalCount} entries
@@ -598,7 +605,7 @@ export default function ViewRecords() {
         </div>
       </div>
 
-      {/* Delete Confirmation Modal */}
+      {/* Delete Confirmation Modal (unchanged) */}
       {deleteModalOpen && (
         <div className="modal" style={{ display: 'flex' }}>
           <div className="modal-content">
@@ -618,17 +625,19 @@ export default function ViewRecords() {
         </div>
       )}
 
-      {/* Edit Modal */}
+      {/* Edit Modal – PROFESSIONAL & THEME RESPONSIVE */}
       {editModalOpen && (
         <div className="modal" style={{ display: 'flex' }}>
-          <div className="modal-content" style={{ maxWidth: '700px' }}>
-            <div className="modal-header" style={{ background: 'linear-gradient(135deg, #2e7d32, #1b5e20)' }}>
-              <i className="fas fa-edit"></i>
-              <h3>Edit Transaction</h3>
+          <div className="modal-content modal-content-edit">  {/* Added class for larger width */}
+            {/* FIXED: Neutral header with close button, no green gradient */}
+            <div className="modal-header">
+              <h3><i className="fas fa-edit"></i> Edit Transaction</h3>
+              <button className="close-modal" onClick={closeEditModal}>&times;</button>
             </div>
             <div className="modal-body">
-              <form>
-                <div className="form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+              <form id="editForm">
+                {/* Use CSS grid class instead of inline style */}
+                <div className="edit-form-grid">
                   <div className="form-group">
                     <label>Date</label>
                     <input
@@ -668,11 +677,10 @@ export default function ViewRecords() {
                       className="form-control"
                       value={editFormData.description}
                       onChange={(e) => setEditFormData(prev => ({ ...prev, description: e.target.value }))}
-                      required
                     />
                   </div>
                   <div className="form-group">
-                    <label>Amount</label>
+                    <label>Net Amount</label>
                     <input
                       type="number"
                       className="form-control"
@@ -710,7 +718,7 @@ export default function ViewRecords() {
                     </select>
                   </div>
                   <div className="form-group">
-                    <label>Recorded By</label>
+                    <label>Recorded By (User ID)</label>
                     <input
                       type="text"
                       className="form-control"
@@ -719,41 +727,40 @@ export default function ViewRecords() {
                       required
                     />
                   </div>
-                  <div className="form-group">
-                    <label>Receipt (current)</label>
+                  <div className="form-group full-width">
+                    <label>Current Receipt</label>
                     <div className="edit-receipt-current">
                       {editFormData.receiptUrl ? (
-                        <a href={editFormData.receiptUrl} target="_blank" rel="noopener noreferrer">
-                          View current receipt
+                        <a href={editFormData.receiptUrl} target="_blank" rel="noopener noreferrer" className="receipt-link">
+                          <i className="fas fa-file-alt"></i> View current receipt
                         </a>
                       ) : (
-                        <span style={{ color: '#999' }}>No receipt attached</span>
+                        <span style={{ color: 'var(--text-muted)' }}>No receipt attached</span>
                       )}
                     </div>
                   </div>
                 </div>
 
-                {/* New file upload area */}
-                <div style={{ marginTop: '20px', borderTop: '1px solid #e2e8f0', paddingTop: '20px' }}>
-                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600 }}>Update Receipt (optional)</label>
-                  <div className="file-upload-area" style={{ minHeight: '100px', border: '2px dashed #cbd5e1', borderRadius: '16px', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                {/* File upload area – using CSS classes only */}
+                <div className="file-upload-section">
+                  <label>Update Receipt (optional)</label>
+                  <div className="file-upload-area">
                     <input
                       type="file"
                       accept="image/*,.pdf"
                       className="file-input"
-                      style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer', zIndex: 10 }}
                       onChange={handleReceiptFileChange}
                     />
-                    <div className="file-upload-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '18px 16px', pointerEvents: 'none', zIndex: 5 }}>
-                      <i className="fas fa-cloud-upload-alt" style={{ fontSize: '2rem', color: '#2e7d32', marginBottom: '8px' }}></i>
-                      <p style={{ margin: '0 0 4px', color: '#1e293b', fontWeight: 500, fontSize: '0.9rem' }}>Drag & drop or <span style={{ color: '#2e7d32', fontWeight: 600, textDecoration: 'underline', textDecorationStyle: 'dotted' }}>browse</span> to upload</p>
-                      <small style={{ color: '#64748b', fontSize: '0.75rem' }}>Images, PDF (Max 5MB)</small>
+                    <div className="file-upload-content">
+                      <i className="fas fa-cloud-upload-alt"></i>
+                      <p>Drag & drop or <span>browse</span> to upload</p>
+                      <small>Images, PDF (Max 5MB)</small>
                     </div>
                     {newReceiptFile && (
-                      <div className="file-preview" style={{ display: 'flex', background: 'white', margin: '10px', padding: '10px 16px', borderRadius: '40px', boxShadow: '0 8px 20px rgba(0,0,0,0.06)', border: '1px solid #e2e8f0', width: 'calc(100% - 20px)', alignItems: 'center', gap: '8px' }}>
-                        <i className="fas fa-file-pdf" style={{ color: '#c62828', fontSize: '1.4rem' }}></i>
+                      <div className="file-preview">
+                        <i className="fas fa-file-pdf"></i>
                         <span className="file-name">{newReceiptFile.name}</span>
-                        <button type="button" className="remove-file" onClick={() => setNewReceiptFile(null)} style={{ background: 'none', border: 'none', color: '#c62828', cursor: 'pointer', padding: '6px', borderRadius: '50%', fontSize: '1.1rem', marginLeft: 'auto' }}>
+                        <button type="button" className="remove-file" onClick={() => setNewReceiptFile(null)}>
                           <i className="fas fa-times"></i>
                         </button>
                       </div>
@@ -763,8 +770,10 @@ export default function ViewRecords() {
               </form>
             </div>
             <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={closeEditModal}>Cancel</button>
-              <button className="btn btn-primary" onClick={saveEdit}>Save Changes</button>
+              <button className="btn-secondary" onClick={closeEditModal}>Cancel</button>
+              <button className="ap-invite-btn" onClick={saveEdit} disabled={saving}>
+                {saving ? 'Saving...' : 'Save Changes'}
+              </button>
             </div>
           </div>
         </div>

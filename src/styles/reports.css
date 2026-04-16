@@ -14,7 +14,7 @@
 .rp-filter-card {
   background: var(--card-bg);
   border-radius: 1rem;
-  padding: 20px 24px;
+  padding: 10px 24px;
   margin-bottom: 28px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
   border: 1px solid var(--border-color);
@@ -73,7 +73,7 @@
 .rp-date-group {
   position: relative;
   flex: 1;
-  min-width: 180px;
+  min-width: 50px;
 }
 .rp-date-picker {
   width: 100%;
@@ -113,7 +113,7 @@
 }
 .rp-kpi-card {
   background: var(--card-bg);
-  border-radius: 1rem;
+  border-radius: 0.8rem;
   padding: 14px 12px;
   display: flex;
   align-items: center;
@@ -130,8 +130,8 @@
   box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 .rp-kpi-icon {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.2rem;
+  height: 2.2rem;
   border-radius: 30px;
   display: flex;
   align-items: center;
@@ -175,8 +175,8 @@
   gap: 2px;
 }
 .rp-kpi-label {
-  font-size: 9px;           /* was 11px → scaled down ~15% */
-  color: var(--text-muted);
+  font-size: 11px;           /* was 11px → scaled down ~15% */
+  color: var(--gray-600);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 500;
@@ -190,7 +190,7 @@
 }
 .rp-kpi-trend {
   font-size: 9px;           /* was 11px → scaled down ~15% */
-  color: var(--text-muted);
+  color: var(--gray-600);
   display: flex;
   align-items: center;
   gap: 3px;
@@ -209,8 +209,8 @@
   border-radius: 1rem;
 }
 .rp-kpi-grid-secondary .rp-kpi-icon {
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
   font-size: 14px;          /* was 16px → scaled down ~15% */
 }
 .rp-kpi-grid-secondary .rp-kpi-content {
@@ -218,12 +218,15 @@
 }
 .rp-kpi-grid-secondary .rp-kpi-label {
   font-size: 8px;           /* was 10px → scaled down ~15% */
+
 }
 .rp-kpi-grid-secondary .rp-kpi-value {
   font-size: 15px;          /* was 18px → scaled down ~15% */
 }
 .rp-kpi-grid-secondary .rp-kpi-trend {
-  font-size: 8px;           /* was 10px → scaled down ~15% */
+  font-size: 8px;  
+  color: var(--gray-600);
+           /* was 10px → scaled down ~15% */
 }
 
 
@@ -373,6 +376,7 @@
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
+  padding:  6px 8px;
 }
 .rp-card-header h4 i {
   color: var(--secondary);
@@ -483,15 +487,15 @@
     padding: 10px 8px;
   }
   .rp-kpi-icon {
-    width: 2rem;
-    height: 2rem;
+    width: 25px;
+    height: 25px;
     font-size: 14px;
   }
   .rp-kpi-value {
-    font-size: 18px;
+    font-size: 17px;
   }
   .rp-kpi-label {
-    font-size: 9px;
+    font-size: 8px;
   }
   .rp-kpi-trend {
     font-size: 9px;
@@ -503,15 +507,15 @@
     gap: 10px;
   }
   .rp-kpi-grid-secondary .rp-kpi-icon {
-    width: 30px;
-    height: 30px;
+    width: 22px;
+    height: 22px;
     font-size: 14px;
   }
   .rp-kpi-grid-secondary .rp-kpi-value {
-    font-size: 15px;
+    font-size: 13px;
   }
   .rp-kpi-grid-secondary .rp-kpi-label {
-    font-size: 9px;
+    font-size: 7px;
   }
 
   /* Stats row – single column (like dashboard) */
@@ -520,7 +524,7 @@
     gap: 10px;
   }
   .rp-stat-card {
-    padding: 8px 12px;
+    padding: 4px 12px;
   }
   .rp-stat-icon {
     width: 1.8rem;
@@ -566,6 +570,7 @@
   /* Transaction table */
   .rp-card-header h4 {
     font-size: 13px;
+    padding:  6px 8px;
   }
   .rp-data-table thead th {
     font-size: 9px;

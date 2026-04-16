@@ -249,7 +249,7 @@ export default function AdminPanel() {
 
       <div className="ap-header">
         <div>
-          <h1><i className="fas fa-users-cog"></i> User Management</h1>
+          <h1> User Management</h1>
           <p className="ap-subtitle">Manage team members and their access permissions</p>
         </div>
         <button className="ap-invite-btn" onClick={() => setShowInviteModal(true)}>
@@ -257,44 +257,44 @@ export default function AdminPanel() {
         </button>
       </div>
 
-      <div className="ap-stats-grid">
-        <div className="ap-stat-card">
-          <div className="ap-stat-icon" style={{ background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))' }}>
-            <i className="fas fa-users"></i>
-          </div>
-          <div className="ap-stat-info">
-            <h3>Total Users</h3>
-            <p className="ap-stat-number">{orgStats.totalUsers}</p>
-          </div>
-        </div>
-        <div className="ap-stat-card">
-          <div className="ap-stat-icon" style={{ background: 'linear-gradient(135deg, #1565c0, #2196f3)' }}>
-            <i className="fas fa-exchange-alt"></i>
-          </div>
-          <div className="ap-stat-info">
-            <h3>Transactions</h3>
-            <p className="ap-stat-number">{orgStats.totalTransactions}</p>
-          </div>
-        </div>
-        <div className="ap-stat-card">
-          <div className="ap-stat-icon" style={{ background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))' }}>
-            <i className="fas fa-arrow-down"></i>
-          </div>
-          <div className="ap-stat-info">
-            <h3>Total Revenue</h3>
-            <p className="ap-stat-number">{formatCurrency(orgStats.totalRevenue)}</p>
-          </div>
-        </div>
-        <div className="ap-stat-card">
-          <div className="ap-stat-icon" style={{ background: 'linear-gradient(135deg, var(--danger), #b71c1c)' }}>
-            <i className="fas fa-arrow-up"></i>
-          </div>
-          <div className="ap-stat-info">
-            <h3>Total Expenses</h3>
-            <p className="ap-stat-number">{formatCurrency(orgStats.totalExpenses)}</p>
-          </div>
-        </div>
-      </div>
+     <div className="ap-stats-grid">
+  <div className="ap-stat-card">
+    <div className="ap-stat-icon">
+      <i className="fas fa-users"></i>
+    </div>
+    <div className="ap-stat-info">
+      <h3>Total Users</h3>
+      <p className="ap-stat-number">{orgStats.totalUsers}</p>
+    </div>
+  </div>
+  <div className="ap-stat-card">
+    <div className="ap-stat-icon">
+      <i className="fas fa-exchange-alt"></i>
+    </div>
+    <div className="ap-stat-info">
+      <h3>Transactions</h3>
+      <p className="ap-stat-number">{orgStats.totalTransactions}</p>
+    </div>
+  </div>
+  <div className="ap-stat-card">
+    <div className="ap-stat-icon">
+      <i className="fas fa-arrow-down"></i>
+    </div>
+    <div className="ap-stat-info">
+      <h3>Total Revenue</h3>
+      <p className="ap-stat-number">{formatCurrency(orgStats.totalRevenue)}</p>
+    </div>
+  </div>
+  <div className="ap-stat-card">
+    <div className="ap-stat-icon">
+      <i className="fas fa-arrow-up"></i>
+    </div>
+    <div className="ap-stat-info">
+      <h3>Total Expenses</h3>
+      <p className="ap-stat-number">{formatCurrency(orgStats.totalExpenses)}</p>
+    </div>
+  </div>
+</div>
 
       <div className="ap-users-section">
         <div className="ap-users-header">

@@ -2,7 +2,7 @@
 .tx-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16px 8px;
+  padding: 2px 8px;
   animation: tx-fadeSlideUp 0.4s ease;
 }
 
@@ -473,32 +473,32 @@
     padding: 12px;
   }
   .tx-subtitle {
-    font-size: 14px;        /* was 15px → scaled down */
+    font-size: 12px;        /* was 15px → scaled down */
   }
   .tx-card-header h3 {
-    font-size: 16px;        /* was 18px → scaled down */
+    font-size: 14px;        /* was 18px → scaled down */
   }
   .tx-card-header h3 i {
-    font-size: 16px;
+    font-size: 14px;
   }
   .tx-input-group label {
-    font-size: 13px;        /* was 14px → scaled down */
+    font-size: 12px;        /* was 14px → scaled down */
   }
   .tx-input-icon input,
   .tx-input-icon textarea,
   .tx-input-icon select {
-    font-size: 15px;        /* was 16px → scaled down */
+    font-size: 13px;        /* was 16px → scaled down */
     padding: 10px 12px 10px 34px;
   }
   .tx-type-option {
-    font-size: 14px;        /* was 15px → scaled down */
-    padding: 10px;
+    font-size: 12px;        /* was 15px → scaled down */
+    padding: 8px;
   }
   .tx-summary-item {
-    font-size: 16px;        /* was 18px → scaled down */
+    font-size: 12px;        /* was 18px → scaled down */
   }
   .tx-summary-item strong {
-    font-size: 14px;        /* was 15px → scaled down */
+    font-size: 12px;        /* was 15px → scaled down */
   }
   .tx-btn-primary,
   .tx-btn-secondary {
@@ -527,26 +527,41 @@
     font-size: 13px;        /* was 14px → scaled down */
   }
   .tx-card-header h3 {
-    font-size: 15px;        /* was 16px → scaled down */
+    font-size: 13px;        /* was 16px → scaled down */
   }
   .tx-input-group label {
-    font-size: 12px;        /* was 13px → scaled down */
+    font-size: 11px;        /* was 13px → scaled down */
   }
   .tx-input-icon input,
   .tx-input-icon textarea,
   .tx-input-icon select {
-    font-size: 14px;        /* was 15px → scaled down */
+    font-size: 13px;        /* was 15px → scaled down */
     padding: 8px 10px 8px 32px;
   }
   .tx-type-option {
-    font-size: 13px;        /* was 14px → scaled down */
+    font-size: 11px;        /* was 14px → scaled down */
   }
   .tx-summary-item {
-    font-size: 15px;        /* was 16px → scaled down */
+    font-size: 13px;        /* was 16px → scaled down */
   }
+
+  .tx-summary-item span {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.tx-summary-item strong {
+  background: var(--card-bg);
+  padding: 4px 12px;
+  border-radius: 30px;
+  font-size: 12px;          /* was 13px → scaled down */
+  font-weight: 600;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
   .tx-btn-primary,
   .tx-btn-secondary {
-    font-size: 15px;        /* was 16px → scaled down */
+    font-size: 14px;        /* was 16px → scaled down */
     padding: 8px 16px;
   }
   .tx-notification {
@@ -624,7 +639,7 @@
   border-bottom: 1px solid var(--border-color);
   background: transparent;
   font-weight: 600;
-  font-size: 10px;          /* was 11px → scaled down */
+  font-size: 11px;          /* was 11px → scaled down */
   text-transform: uppercase;
   color: var(--text-muted);
   letter-spacing: 0.5px;
@@ -635,7 +650,7 @@
   text-align: left;
   border-bottom: 1px solid var(--border-color);
   background: transparent;
-  font-size: 11px;          /* was 12px → scaled down */
+  font-size: 12px;          /* was 12px → scaled down */
   color: var(--text-primary);
 }
 

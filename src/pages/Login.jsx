@@ -8,6 +8,8 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [capsLockOn, setCapsLockOn] = useState(false);
   const { signIn } = useAuth();
   const navigate = useNavigate();
 
@@ -25,9 +27,18 @@ export default function Login() {
     }
   };
 
+  // Detect caps lock
+  const handleKeyDown = (e) => {
+    if (e.getModifierState && e.getModifierState('CapsLock')) {
+      setCapsLockOn(true);
+    } else {
+      setCapsLockOn(false);
+    }
+  };
+
   const currentYear = new Date().getFullYear();
-  const appName = 'Finance Pro';  // ✅ Fixed app name
-  const appLogo = null;           // ✅ Use a default icon instead of DB logo
+  const appName = 'Finance Pro';
+  const appLogo = null;
 
   return (
     <div className="lp-container">
@@ -52,15 +63,33 @@ export default function Login() {
               autoComplete="email"
             />
           </div>
+
           <div className="lp-form-group">
             <label>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-            />
+            <div className="lp-password-wrapper">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={handleKeyDown}
+                required
+                autoComplete="current-password"
+              />
+              <button
+                type="button"
+                className="lp-toggle-password"
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex="-1"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+              </button>
+            </div>
+            {capsLockOn && (
+              <div className="lp-caps-warning">
+                <i className="fas fa-exclamation-triangle"></i> Caps Lock is on
+              </div>
+            )}
           </div>
 
           {error && <div className="lp-error">{error}</div>}

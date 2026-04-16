@@ -50,8 +50,8 @@
 }
 
 .db-card-icon {
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   border-radius: 40px;
   display: flex;
   align-items: center;
@@ -66,16 +66,16 @@
   min-width: 0;
 }
 .db-card-label {
-  font-size: 10px;          /* was 12px → scaled down */
-  color: var(--text-muted);
+  font-size: 11px;          /* was 12px → scaled down */
+  color: var(--gray-600);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 500;
-  margin-bottom: 4px;
+  margin-bottom: px;
 }
 .db-card-value {
   display: block;
-  font-size: 16px;          /* was 20px → scaled down */
+  font-size: 20px;          /* was 20px → scaled down */
   font-weight: 700;
   color: var(--text-primary);
   margin: 2px 0;
@@ -126,8 +126,8 @@
   flex-wrap: wrap;
 }
 .db-stat-label {
-  font-size: 10px;          /* was 12px → scaled down */
-  color: var(--text-muted);
+  font-size: 11px;          /* was 12px → scaled down */
+  color: var(--gray-600);
   text-transform: capitalize;
   letter-spacing: 0.3px;
 }
@@ -326,16 +326,16 @@
     gap: 12px;
   }
   .db-summary-card {
-    padding: 12px 10px;
+    padding: 10px 10px;
     gap: 10px;
   }
   .db-card-icon {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     font-size: 18px;
   }
   .db-card-label {
-    font-size: 10px;
+    font-size: 8px;
   }
   .db-card-value {
     font-size: 16px;
@@ -350,7 +350,7 @@
     gap: 10px;
   }
   .db-stat-item {
-    padding: 10px;
+    padding: 5px;
   }
   .db-stat-item i {
     font-size: 20px;

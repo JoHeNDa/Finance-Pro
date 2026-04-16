@@ -363,7 +363,7 @@ export default function OrganizationSettings() {
         </div>
 
         <div className="form-actions">
-          <button type="submit" className="btn-primary" disabled={saving}>
+          <button type="submit" className="ap-invite-btn" disabled={saving}>
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
         </div>

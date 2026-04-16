@@ -292,7 +292,7 @@ export default function UserProfile() {
             </div>
             
             <div className="form-actions">
-              <button type="submit" className="btn-primary" disabled={saving || uploadingAvatar}>
+              <button type="submit" className="ap-invite-btn" disabled={saving || uploadingAvatar}>
                 {saving ? 'Saving...' : 'Save Changes'}
               </button>
             </div>
