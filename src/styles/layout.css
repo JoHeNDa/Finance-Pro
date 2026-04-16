@@ -73,7 +73,7 @@ html, body {
   z-index: 1000;
   transition: transform 0.3s ease, width 0.3s ease, background 0.3s ease;
   flex-shrink: 0;
-  overflow-y: auto;
+  overflow: hidden;
   border-bottom-right-radius: 10px;
 }
 
@@ -107,7 +107,7 @@ html, body {
   padding: 20px 12px;
   list-style: none;
   flex: 1;
-  overflow-y: hidden;
+  overflow-y: auto;
   scrollbar-gutter: stable;
 }
 
