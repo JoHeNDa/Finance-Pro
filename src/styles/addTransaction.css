@@ -2,7 +2,7 @@
 .tx-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16px 8px;        /* was 1rem 0.5rem → 16px 8px */
+  padding: 16px 8px;
   animation: tx-fadeSlideUp 0.4s ease;
 }
 
@@ -25,14 +25,14 @@
 .tx-subtitle {
   color: var(--text-muted);
   margin: 0;
-  font-size: 14px;          /* was 0.9rem → 14px (desktop compact) */
+  font-size: 13px;          /* was 14px → scaled down */
 }
 
 .tx-header-stats .tx-stat-badge {
   background: var(--hover-bg);
   padding: 6px 16px;
   border-radius: 40px;
-  font-size: 16px;          /* was 1rem → 16px */
+  font-size: 14px;          /* was 16px → scaled down */
   color: var(--text-primary);
   display: flex;
   align-items: center;
@@ -42,7 +42,7 @@
 
 .tx-stat-badge i {
   color: var(--secondary);
-  font-size: 19px;          /* was 1.2rem → 19px */
+  font-size: 17px;          /* was 19px → scaled down */
 }
 
 /* ========== TWO‑COLUMN LAYOUT (equal height) ========== */
@@ -79,7 +79,7 @@
 /* Cards – base styles */
 .tx-card {
   background: var(--card-bg);
-  border-radius: 16px;      /* was 1rem → 16px */
+  border-radius: 16px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   border: 1px solid var(--border-color);
   overflow: hidden;
@@ -93,7 +93,7 @@
 
 .tx-card-header h3 {
   margin: 0;
-  font-size: 16px;          /* was 1rem → 16px (desktop compact) */
+  font-size: 14px;          /* was 16px → scaled down */
   font-weight: 600;
   color: var(--text-primary);
   display: flex;
@@ -103,7 +103,7 @@
 
 .tx-card-header h3 i {
   color: var(--secondary);
-  font-size: 18px;          /* was 1.1rem → 18px */
+  font-size: 16px;          /* was 18px → scaled down */
 }
 
 /* Form card (left) */
@@ -127,7 +127,7 @@
 }
 
 .tx-input-group label {
-  font-size: 13px;          /* was 0.8rem → 13px */
+  font-size: 12px;          /* was 13px → scaled down */
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -144,7 +144,7 @@
   position: absolute;
   left: 12px;
   color: var(--text-muted);
-  font-size: 14px;          /* was 0.85rem → 14px */
+  font-size: 12px;          /* was 14px → scaled down */
   pointer-events: none;
 }
 
@@ -155,7 +155,7 @@
   padding: 8px 12px 8px 34px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  font-size: 14px;          /* was 0.9rem → 14px */
+  font-size: 13px;          /* was 14px → scaled down (kept legible) */
   background: var(--input-bg);
   color: var(--text-secondary);
   font-family: inherit;
@@ -187,12 +187,12 @@
   gap: 6px;
   padding: 8px;
   border: 1px solid var(--border-color);
-  border-radius: 13px;      /* was 0.8rem → 13px */
+  border-radius: 13px;
   background: var(--card-bg);
   color: var(--text-secondary);
   font-weight: 500;
   cursor: pointer;
-  font-size: 13px;          /* was 0.8rem → 13px */
+  font-size: 12px;          /* was 13px → scaled down */
   transition: all 0.2s;
 }
 
@@ -232,7 +232,7 @@
 }
 
 .tx-vat-info {
-  font-size: 11px;          /* was 0.7rem → 11px */
+  font-size: 10px;          /* was 11px → scaled down */
   margin: 4px 0 0 20px;
   color: var(--text-muted);
 }
@@ -271,7 +271,7 @@
 }
 
 .tx-file-content i {
-  font-size: 26px;          /* was 1.6rem → 26px */
+  font-size: 24px;          /* was 26px → scaled down */
   color: var(--secondary);
   margin-bottom: 4px;
 }
@@ -289,7 +289,7 @@
 
 .tx-file-name {
   flex: 1;
-  font-size: 12px;          /* was 0.75rem → 12px */
+  font-size: 11px;          /* was 12px → scaled down */
   color: var(--text-primary);
 }
 
@@ -330,7 +330,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 16px;          /* was 1rem → 16px */
+  font-size: 14px;          /* was 16px → scaled down */
   gap: 12px;
 }
 
@@ -343,7 +343,7 @@
   background: var(--card-bg);
   padding: 4px 12px;
   border-radius: 30px;
-  font-size: 13px;          /* was 0.8rem → 13px */
+  font-size: 12px;          /* was 13px → scaled down */
   font-weight: 600;
   color: var(--text-primary);
   border: 1px solid var(--border-color);
@@ -359,14 +359,14 @@
 .tx-btn-primary,
 .tx-btn-secondary {
   padding: 8px 16px;
-  border-radius: 13px;      /* was 0.8rem → 13px */
+  border-radius: 13px;
   font-weight: 700;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-size: 16px;          /* was 1rem → 16px */
+  font-size: 14px;          /* was 16px → scaled down */
   transition: all 0.2s;
 }
 
@@ -413,7 +413,7 @@
   padding: 10px 18px;
   border-radius: 8px;
   font-weight: 500;
-  font-size: 14px;          /* added for consistency */
+  font-size: 13px;          /* added & scaled down from 14px */
   z-index: 10000;
   animation: tx-slideIn 0.3s ease;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -434,7 +434,7 @@
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* ========== RESPONSIVE SCALING (pixel font adjustments) ========== */
+/* ========== RESPONSIVE SCALING (scaled down fonts) ========== */
 @media (max-width: 1024px) {
   .tx-two-columns {
     grid-template-columns: 1fr 320px;
@@ -468,54 +468,54 @@
     padding: 14px;
   }
 
-  /* Mobile font sizes – larger for readability */
+  /* Mobile font sizes – slightly reduced from original */
   .tx-page {
     padding: 12px;
   }
   .tx-subtitle {
-    font-size: 15px;
+    font-size: 14px;        /* was 15px → scaled down */
   }
   .tx-card-header h3 {
-    font-size: 18px;
+    font-size: 16px;        /* was 18px → scaled down */
   }
   .tx-card-header h3 i {
-    font-size: 18px;
+    font-size: 16px;
   }
   .tx-input-group label {
-    font-size: 14px;
+    font-size: 13px;        /* was 14px → scaled down */
   }
   .tx-input-icon input,
   .tx-input-icon textarea,
   .tx-input-icon select {
-    font-size: 16px;
+    font-size: 15px;        /* was 16px → scaled down */
     padding: 10px 12px 10px 34px;
   }
   .tx-type-option {
-    font-size: 15px;
+    font-size: 14px;        /* was 15px → scaled down */
     padding: 10px;
   }
   .tx-summary-item {
-    font-size: 18px;
+    font-size: 16px;        /* was 18px → scaled down */
   }
   .tx-summary-item strong {
-    font-size: 15px;
+    font-size: 14px;        /* was 15px → scaled down */
   }
   .tx-btn-primary,
   .tx-btn-secondary {
-    font-size: 18px;
+    font-size: 16px;        /* was 18px → scaled down */
     padding: 10px 20px;
   }
   .tx-file-content i {
-    font-size: 28px;
+    font-size: 26px;        /* was 28px → scaled down */
   }
   .tx-file-name {
-    font-size: 13px;
+    font-size: 12px;        /* was 13px → scaled down */
   }
   .tx-recent-table th {
-    font-size: 11px;
+    font-size: 10px;        /* was 11px → scaled down */
   }
   .tx-recent-table td {
-    font-size: 14px;
+    font-size: 13px;        /* was 14px → scaled down */
   }
 }
 
@@ -524,33 +524,33 @@
     padding: 8px;
   }
   .tx-subtitle {
-    font-size: 14px;
+    font-size: 13px;        /* was 14px → scaled down */
   }
   .tx-card-header h3 {
-    font-size: 16px;
+    font-size: 15px;        /* was 16px → scaled down */
   }
   .tx-input-group label {
-    font-size: 13px;
+    font-size: 12px;        /* was 13px → scaled down */
   }
   .tx-input-icon input,
   .tx-input-icon textarea,
   .tx-input-icon select {
-    font-size: 15px;
+    font-size: 14px;        /* was 15px → scaled down */
     padding: 8px 10px 8px 32px;
   }
   .tx-type-option {
-    font-size: 14px;
+    font-size: 13px;        /* was 14px → scaled down */
   }
   .tx-summary-item {
-    font-size: 16px;
+    font-size: 15px;        /* was 16px → scaled down */
   }
   .tx-btn-primary,
   .tx-btn-secondary {
-    font-size: 16px;
+    font-size: 15px;        /* was 16px → scaled down */
     padding: 8px 16px;
   }
   .tx-notification {
-    font-size: 13px;
+    font-size: 12px;        /* was 13px → scaled down */
     top: 10px;
     right: 10px;
     left: 10px;
@@ -578,7 +578,7 @@
 
 .tx-recent-card .tx-card-header h3 {
   margin: 0;
-  font-size: 16px;          /* desktop compact */
+  font-size: 14px;          /* was 16px → scaled down */
   font-weight: 600;
   color: var(--text-primary);
   display: flex;
@@ -593,7 +593,7 @@
 .tx-view-all-link {
   color: var(--primary);
   text-decoration: none;
-  font-size: 14px;          /* was 0.9rem → 14px */
+  font-size: 13px;          /* was 14px → scaled down */
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -602,8 +602,8 @@
 }
 
 .tx-view-all-link:hover {
-  padding: 5px 5px;         /* was 0.3rem → 5px */
-  transform: translateX(2px); /* was 0.1rem → 2px */
+  padding: 5px 5px;
+  transform: translateX(2px);
   background-color: rgba(var(--primary-rgb), 0.2);
   border-radius: 16px;
 }
@@ -624,7 +624,7 @@
   border-bottom: 1px solid var(--border-color);
   background: transparent;
   font-weight: 600;
-  font-size: 11px;          /* was 0.7rem → 11px */
+  font-size: 10px;          /* was 11px → scaled down */
   text-transform: uppercase;
   color: var(--text-muted);
   letter-spacing: 0.5px;
@@ -635,7 +635,7 @@
   text-align: left;
   border-bottom: 1px solid var(--border-color);
   background: transparent;
-  font-size: 12px;          /* was 0.75rem → 12px */
+  font-size: 11px;          /* was 12px → scaled down */
   color: var(--text-primary);
 }
 

@@ -136,7 +136,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 19px;
+  font-size: 16px;          /* was 19px → scaled down ~15% */
   color: white;
   flex-shrink: 0;
 }
@@ -175,21 +175,21 @@
   gap: 2px;
 }
 .rp-kpi-label {
-  font-size: 11px;
+  font-size: 9px;           /* was 11px → scaled down ~15% */
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 500;
 }
 .rp-kpi-value {
-  font-size: 26px;
+  font-size: 22px;          /* was 26px → scaled down ~15% */
   font-weight: 700;
   line-height: 1.2;
   color: var(--text-primary);
   word-break: break-word;
 }
 .rp-kpi-trend {
-  font-size: 11px;
+  font-size: 9px;           /* was 11px → scaled down ~15% */
   color: var(--text-muted);
   display: flex;
   align-items: center;
@@ -211,20 +211,21 @@
 .rp-kpi-grid-secondary .rp-kpi-icon {
   width: 36px;
   height: 36px;
-  font-size: 16px;
+  font-size: 14px;          /* was 16px → scaled down ~15% */
 }
 .rp-kpi-grid-secondary .rp-kpi-content {
   gap: 1px;
 }
 .rp-kpi-grid-secondary .rp-kpi-label {
-  font-size: 10px;
+  font-size: 8px;           /* was 10px → scaled down ~15% */
 }
 .rp-kpi-grid-secondary .rp-kpi-value {
-  font-size: 18px;
+  font-size: 15px;          /* was 18px → scaled down ~15% */
 }
 .rp-kpi-grid-secondary .rp-kpi-trend {
-  font-size: 10px;
+  font-size: 8px;           /* was 10px → scaled down ~15% */
 }
+
 
 /* ===== STATS ROW ===== */
 .rp-stats-grid {

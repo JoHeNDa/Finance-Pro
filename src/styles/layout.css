@@ -90,7 +90,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 19px;          /* was 1.2rem -> 19px (compact desktop) */
+  font-size: 20px;          /* was 19px → -15% */
   font-weight: 600;
   color: var(--secondary);
   text-decoration: none;
@@ -99,7 +99,7 @@ html, body {
 .layout-logo-text {
   color: var(--sidebar-text);
   font-weight: 700;
-  font-size: 26px;          /* was 1.6rem -> 26px */
+  font-size: 22px;          /* was 26px → -15% */
 }
 
 /* Navigation menu */
@@ -107,7 +107,7 @@ html, body {
   padding: 20px 12px;
   list-style: none;
   flex: 1;
-  overflow-y: auto;         /* changed from hidden to auto */
+  overflow-y: hidden;
   scrollbar-gutter: stable;
 }
 
@@ -118,6 +118,7 @@ html, body {
 }
 
 .layout-nav-item a {
+  font-size: 15px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -131,7 +132,7 @@ html, body {
 
 .layout-nav-item a i {
   width: 22px;
-  font-size: 16px;          /* was 1rem -> 16px */
+  font-size: 14px;          /* was 16px → -15% */
   color: var(--sidebar-icon-color);
 }
 
@@ -201,12 +202,12 @@ html, body {
 
 .layout-user-name {
   font-weight: 600;
-  font-size: 14px;          /* desktop compact */
+  font-size: 12px;          /* was 14px → -15% */
   color: var(--sidebar-text);
 }
 
 .layout-user-role {
-  font-size: 12px;          /* desktop compact */
+  font-size: 10px;          /* was 12px → -15% */
   opacity: 0.8;
   color: var(--sidebar-text-secondary);
 }
@@ -224,7 +225,7 @@ html, body {
   gap: 8px;
   transition: all 0.3s ease;
   justify-content: center;
-  font-size: 13px;          /* desktop compact */
+  font-size: 11px;          /* was 13px → -15% */
 }
 
 .layout-logout-btn i {
@@ -248,7 +249,7 @@ html, body {
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 14px;
+  font-size: 12px;          /* was 14px → -15% */
 }
 
 .layout-sidebar-collapse-btn:hover {
@@ -284,7 +285,7 @@ html, body {
 }
 
 .layout-page-title {
-  font-size: 22px;          /* desktop compact */
+  font-size: 19px;          /* was 22px → -15% */
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -304,7 +305,7 @@ html, body {
   background: var(--hover-bg);
   padding: 6px 12px;
   border-radius: 24px;
-  font-size: 13px;          /* desktop compact */
+  font-size: 11px;          /* was 13px → -15% */
   color: var(--text-muted);
   display: flex;
   align-items: center;
@@ -464,7 +465,7 @@ html, body {
   z-index: 9999;
   animation: layout-slideIn 0.3s ease;
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  font-size: 14px;          /* desktop compact */
+  font-size: 12px;          /* was 14px → -15% */
 }
 
 .layout-notification.layout-success {
@@ -483,7 +484,7 @@ html, body {
 /* Section titles in sidebar */
 .nav-section-title {
   padding: 12px 12px 4px 12px;
-  font-size: 11px;          /* desktop compact */
+  font-size: 9px;           /* was 11px → -15% */
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -504,7 +505,7 @@ html, body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* ========== RESPONSIVE BREAKPOINTS ========== */
+/* ========== RESPONSIVE BREAKPOINTS (UNCHANGED) ========== */
 
 /* Desktop (≥769px) */
 @media (min-width: 769px) {
@@ -548,7 +549,7 @@ html, body {
     padding: 0 16px;
   }
   .layout-page-title {
-    font-size: 20px;        /* slightly larger than desktop */
+    font-size: 20px;
   }
   .layout-date-display {
     font-size: 12px;
@@ -562,7 +563,7 @@ html, body {
   /* Sidebar text – larger for touch */
   .layout-nav-item a {
     padding: 12px 12px;
-    font-size: 15px;        /* was 14px */
+    font-size: 15px;
   }
   .layout-user-name {
     font-size: 14px;

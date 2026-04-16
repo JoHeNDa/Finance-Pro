@@ -169,7 +169,7 @@ export default function Dashboard() {
         <div className="db-summary-card db-gross-revenue">
           <div className="db-card-icon"><i className="fas fa-coins"></i></div>
           <div className="db-card-content">
-            <span className="db-card-label">Total Gross Revenue</span>
+            <p className="db-card-label">Total Gross Revenue</p>
             <span className="db-card-value">{formatCurrency(summary.totalGrossRevenue)}</span>
             <span className="db-card-trend db-positive"><i className="fas fa-arrow-up"></i> Before VAT</span>
           </div>
@@ -178,7 +178,7 @@ export default function Dashboard() {
         <div className="db-summary-card db-net-revenue">
           <div className="db-card-icon"><i className="fas fa-arrow-down"></i></div>
           <div className="db-card-content">
-            <span className="db-card-label">Total Net Revenue</span>
+            <p className="db-card-label">Total Net Revenue</p>
             <span className="db-card-value">{formatCurrency(summary.totalNetRevenue)}</span>
             <span className="db-card-trend db-positive"><i className="fas fa-arrow-up"></i> After VAT(20%)</span>
           </div>
@@ -196,7 +196,7 @@ export default function Dashboard() {
         <div className="db-summary-card db-expense">
           <div className="db-card-icon"><i className="fas fa-arrow-up"></i></div>
           <div className="db-card-content">
-            <span className="db-card-label">Total Expenses</span>
+            <p className="db-card-label">Total Expenses</p>
             <span className="db-card-value">{formatCurrency(summary.totalExpenses)}</span>
             <span className="db-card-trend db-negative"><i className="fas fa-arrow-down"></i> outflow</span>
           </div>

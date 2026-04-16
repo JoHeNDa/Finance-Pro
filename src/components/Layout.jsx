@@ -102,7 +102,7 @@ export default function Layout() {
                   src={appLogo}
                   alt={appName}
                   className="layout-logo-img"
-                  style={{ width: '3rem', height: '3rem', objectFit: 'contain' }}
+                  style={{ width: '4rem', height: '4rem', objectFit: 'contain' }}
                 />
               ) : (
                 <i className="fas fa-chart-line" style={{ fontSize: '1.5rem', color: 'var(--secondary)' }}></i>

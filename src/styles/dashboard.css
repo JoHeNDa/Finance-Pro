@@ -50,13 +50,13 @@
 }
 
 .db-card-icon {
-  width: 48px;
-  height: 48px;
+  width: 30px;
+  height: 30px;
   border-radius: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 18px;          /* was 22px → scaled down */
   background: var(--hover-bg);
   color: var(--primary);
   flex-shrink: 0;
@@ -66,24 +66,23 @@
   min-width: 0;
 }
 .db-card-label {
-  font-size: 12px;
+  font-size: 10px;          /* was 12px → scaled down */
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 500;
   margin-bottom: 4px;
-  
 }
 .db-card-value {
   display: block;
-  font-size: 20px;
+  font-size: 16px;          /* was 20px → scaled down */
   font-weight: 700;
   color: var(--text-primary);
   margin: 2px 0;
   line-height: 1.2;
 }
 .db-card-trend {
-  font-size: 11px;
+  font-size: 9px;           /* was 11px → scaled down */
   color: var(--text-muted);
   display: flex;
   align-items: center;
@@ -103,7 +102,7 @@
 .db-stat-item {
   background: var(--card-bg);
   border-radius: 12px;
-  padding: 12px;
+  padding: 4px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -111,7 +110,7 @@
   border: 1px solid var(--border-color);
 }
 .db-stat-item i {
-  font-size: 24px;
+  font-size: 19px;          /* was 24px → scaled down */
   color: var(--primary);
   background: rgba(46,125,50,0.08);
   padding: 8px;
@@ -127,13 +126,13 @@
   flex-wrap: wrap;
 }
 .db-stat-label {
-  font-size: 12px;
+  font-size: 10px;          /* was 12px → scaled down */
   color: var(--text-muted);
   text-transform: capitalize;
   letter-spacing: 0.3px;
 }
 .db-stat-value {
-  font-size: 16px;
+  font-size: 13px;          /* was 16px → scaled down */
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
@@ -171,7 +170,7 @@
   gap: 8px;
 }
 .db-chart-header h3 {
-  font-size: 14px;
+  font-size: 13px;          /* was 14px → scaled down */
   font-weight: 600;
   color: var(--text-secondary);
   display: flex;
@@ -185,10 +184,10 @@
 .db-chart-legend {
   display: flex;
   gap: 12px;
-  font-size: 11px;
+  font-size: 10px;           /* was 11px → scaled down */
 }
 .db-legend-income i, .db-legend-expense i {
-  font-size: 11px;
+  font-size: 9px;           /* was 11px → scaled down */
 }
 .db-legend-income i { color: #4caf50; }
 .db-legend-expense i { color: #f44336; }
@@ -218,7 +217,7 @@
   border-bottom: 1px solid var(--border-color);
 }
 .db-recent-card .db-card-header h3 {
-  font-size: 14px;
+  font-size: 12px;          /* was 14px → scaled down */
   font-weight: 600;
   margin: 0;
   display: flex;
@@ -232,7 +231,7 @@
 .db-view-all-link {
   color: var(--primary);
   text-decoration: none;
-  font-size: 12px;
+  font-size: 11px;          /* was 12px → scaled down */
   font-weight: 500;
 }
 .db-table-responsive {
@@ -253,7 +252,7 @@
   background: var(--hover-bg);
   color: var(--text-secondary);
   font-weight: 600;
-  font-size: 11px;
+  font-size: 10px;           /* was 11px → scaled down */
   text-transform: uppercase;
   letter-spacing: 0.5px;
   position: sticky;
@@ -262,7 +261,7 @@
   border-bottom: 1px solid var(--border-color);
 }
 .db-transactions-table td {
-  font-size: 12px;
+  font-size: 11px;          /* was 12px → scaled down */
   color: var(--text-primary);
   border-bottom: 1px solid var(--border-color);
 }
@@ -272,7 +271,7 @@
 .db-badge {
   padding: 4px 8px;
   border-radius: 20px;
-  font-size: 11px;
+  font-size: 9px;           /* was 11px → scaled down */
   font-weight: 500;
   display: inline-block;
 }
@@ -299,7 +298,7 @@
     gap: 14px;
   }
   .db-card-value {
-    font-size: 18px;
+    font-size: 18px;        /* unchanged from original tablet value */
   }
   .db-stat-value {
     font-size: 15px;
@@ -317,8 +316,6 @@
 
 /* Mobile (≤480px) – 2 cards per row, bigger fonts, taller charts */
 @media (max-width: 480px) {
-  
-  
   .db-page {
     padding: 12px 10px;
   }
@@ -338,7 +335,7 @@
     font-size: 18px;
   }
   .db-card-label {
-    font-size: px;
+    font-size: 10px;
   }
   .db-card-value {
     font-size: 16px;
