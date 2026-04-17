@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useOrganization } from '../context/OrganizationContext';
@@ -11,7 +11,6 @@ export default function UserProfile() {
   const { theme, changeTheme } = useTheme();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState({ type: '', text: '' });
   const [formData, setFormData] = useState({
     name: userProfile?.name || '',
     email: user?.email || '',
@@ -26,6 +25,16 @@ export default function UserProfile() {
     },
   });
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [toast, setToast] = useState({ show: false, type: '', message: '' });
+  const toastTimeoutRef = useRef(null);
+
+  const showToast = (type, message) => {
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    setToast({ show: true, type, message });
+    toastTimeoutRef.current = setTimeout(() => {
+      setToast({ show: false, type: '', message: '' });
+    }, 4000);
+  };
 
   useEffect(() => {
     const loadUserProfile = async () => {
@@ -49,22 +58,37 @@ export default function UserProfile() {
           preferences: {
             ...prev.preferences,
             ...(data.preferences || {}),
-            darkMode: data.preferences?.darkMode ?? (theme === 'dark'),
+            darkMode: theme === 'dark',
           },
         }));
       }
     };
     
     loadUserProfile();
-  }, [user, theme]);
+  }, [user]); // ✅ removed theme from dependencies
 
-  const handleDarkModeToggle = (checked) => {
+  const handleDarkModeToggle = async (checked) => {
     const newTheme = checked ? 'dark' : 'light';
     changeTheme(newTheme);
     setFormData(prev => ({
       ...prev,
       preferences: { ...prev.preferences, darkMode: checked },
     }));
+
+    // Persist immediately in the background
+    if (user?.id) {
+      try {
+        await supabase
+          .from('user_profiles')
+          .upsert({
+            id: user.id,
+            preferences: { ...formData.preferences, darkMode: checked },
+            updated_at: new Date().toISOString(),
+          });
+      } catch (err) {
+        console.error('Failed to persist dark mode preference:', err);
+      }
+    }
   };
 
   const handleChange = (e) => {
@@ -90,7 +114,7 @@ export default function UserProfile() {
     if (!file) return;
     
     if (file.size > 2 * 1024 * 1024) {
-      setMessage({ type: 'error', text: 'Avatar must be less than 2MB' });
+      showToast('error', 'Avatar must be less than 2MB');
       return;
     }
     
@@ -102,7 +126,7 @@ export default function UserProfile() {
       .upload(fileName, file);
     
     if (uploadError) {
-      setMessage({ type: 'error', text: 'Failed to upload avatar' });
+      showToast('error', 'Failed to upload avatar');
       setUploadingAvatar(false);
       return;
     }
@@ -113,12 +137,12 @@ export default function UserProfile() {
     
     setFormData(prev => ({ ...prev, avatar_url: publicUrl.publicUrl }));
     setUploadingAvatar(false);
+    showToast('success', 'Avatar uploaded! Click Save to apply.');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
-    setMessage({ type: '', text: '' });
     
     try {
       const { error: userError } = await supabase
@@ -142,10 +166,10 @@ export default function UserProfile() {
       
       if (profileError) throw profileError;
       
-      setMessage({ type: 'success', text: 'Profile updated successfully!' });
+      showToast('success', 'Profile updated successfully!');
       if (refreshProfile) refreshProfile();
     } catch (err) {
-      setMessage({ type: 'error', text: err.message });
+      showToast('error', err.message);
     } finally {
       setSaving(false);
     }
@@ -153,15 +177,17 @@ export default function UserProfile() {
 
   return (
     <div className="user-profile-page">
+      {/* Toast Notification */}
+      {toast.show && (
+        <div className={`toast-notification ${toast.type}`}>
+          <i className={`fas ${toast.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}`}></i>
+          <span>{toast.message}</span>
+        </div>
+      )}
+
       <div className="profile-header">
         <p>Manage your personal information and preferences</p>
       </div>
-      
-      {message.text && (
-        <div className={`notification ${message.type}`}>
-          {message.text}
-        </div>
-      )}
       
       <form onSubmit={handleSubmit} className="profile-form">
         <div className="profile-grid">
@@ -299,6 +325,46 @@ export default function UserProfile() {
           </div>
         </div>
       </form>
+
+      {/* Add the same toast CSS as in OrganizationSettings */}
+      <style>{`
+        .toast-notification {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          z-index: 10000;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 14px 20px;
+          border-radius: 12px;
+          background: white;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+          animation: slideIn 0.3s ease;
+          border-left: 4px solid;
+        }
+        .toast-notification.success {
+          border-left-color: #2e7d32;
+          color: #2e7d32;
+        }
+        .toast-notification.error {
+          border-left-color: #c62828;
+          color: #c62828;
+        }
+        .toast-notification i {
+          font-size: 20px;
+        }
+        @keyframes slideIn {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+      `}</style>
     </div>
   );
 }

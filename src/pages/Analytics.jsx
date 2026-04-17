@@ -169,63 +169,98 @@ export default function Analytics() {
     setCategoryComparison({ labels: allLabels, revenue: revenueAmounts, expense: expenseAmounts });
   };
 
-  const generateInsights = (data) => {
-    const insightsList = [];
+ const generateInsights = (data) => {
+  const insightsList = [];
 
-    const dayProfit = dayOfWeekData.revenue.map((rev, i) => rev - dayOfWeekData.expense[i]);
-    const bestDayIndex = dayProfit.indexOf(Math.max(...dayProfit));
-    const worstDayIndex = dayProfit.indexOf(Math.min(...dayProfit));
-    
-    if (bestDayIndex !== -1) {
-      insightsList.push({
-        icon: 'fa-calendar-check',
-        title: 'Best Day for Business',
-        description: `You make the most profit on ${dayOfWeekData.labels[bestDayIndex]}s.`
-      });
-    }
-    
-    if (worstDayIndex !== -1) {
-      insightsList.push({
-        icon: 'fa-calendar-times',
-        title: 'Worst Day for Business',
-        description: `Performance is weakest on ${dayOfWeekData.labels[worstDayIndex]}s.`
-      });
-    }
+  // 1️⃣ Compute day-of-week profit from raw data (no state dependency)
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const revenueByDay = new Array(7).fill(0);
+  const expenseByDay = new Array(7).fill(0);
 
-    const expenseCat = {};
-    data.forEach(tx => { if (tx.type === 'Expense') expenseCat[tx.particular] = (expenseCat[tx.particular] || 0) + tx.amount; });
-    const topExpense = Object.entries(expenseCat).sort((a,b) => b[1] - a[1])[0];
-    if (topExpense) {
-      const totalExpenses = Object.values(expenseCat).reduce((a,b) => a + b, 0);
-      insightsList.push({
-        icon: 'fa-tag',
-        title: 'Top Expense Category',
-        description: `"${topExpense[0]}" accounts for ${((topExpense[1] / totalExpenses) * 100).toFixed(1)}% of expenses.`
-      });
-    }
+  data.forEach(tx => {
+    const day = new Date(tx.date).getDay();
+    if (tx.type === 'Revenue') revenueByDay[day] += tx.amount;
+    else expenseByDay[day] += tx.amount;
+  });
 
-    const revenueCat = {};
-    data.forEach(tx => { if (tx.type === 'Revenue') revenueCat[tx.particular] = (revenueCat[tx.particular] || 0) + tx.amount; });
-    const topRevenue = Object.entries(revenueCat).sort((a,b) => b[1] - a[1])[0];
-    if (topRevenue) {
-      const totalRevenue = Object.values(revenueCat).reduce((a,b) => a + b, 0);
-      insightsList.push({
-        icon: 'fa-trophy',
-        title: 'Top Revenue Category',
-        description: `"${topRevenue[0]}" generates ${((topRevenue[1] / totalRevenue) * 100).toFixed(1)}% of revenue.`
-      });
-    }
+  const dayProfit = revenueByDay.map((rev, i) => rev - expenseByDay[i]);
 
-    if (metrics.growthRate !== 0) {
-      insightsList.push({
-        icon: metrics.growthRate > 0 ? 'fa-arrow-up' : 'fa-arrow-down',
-        title: 'Revenue Trend',
-        description: `Revenue has ${metrics.growthRate > 0 ? 'increased' : 'decreased'} by ${Math.abs(metrics.growthRate).toFixed(1)}% over last month.`
-      });
-    }
+  // Find best & worst days (ignore days with no activity)
+  let bestDayIndex = -1, worstDayIndex = -1;
+  let maxProfit = -Infinity, minProfit = Infinity;
 
-    setInsights(insightsList);
-  };
+  for (let i = 0; i < 7; i++) {
+    const hasActivity = revenueByDay[i] > 0 || expenseByDay[i] > 0;
+    if (hasActivity) {
+      if (dayProfit[i] > maxProfit) {
+        maxProfit = dayProfit[i];
+        bestDayIndex = i;
+      }
+      if (dayProfit[i] < minProfit) {
+        minProfit = dayProfit[i];
+        worstDayIndex = i;
+      }
+    }
+  }
+
+  // Add insights only if there is genuine variety
+  if (bestDayIndex !== -1 && worstDayIndex !== -1 && bestDayIndex !== worstDayIndex) {
+    insightsList.push({
+      icon: 'fa-calendar-check',
+      title: 'Best Day for Business',
+      description: `You make the most profit on ${dayNames[bestDayIndex]}s.`
+    });
+    insightsList.push({
+      icon: 'fa-calendar-times',
+      title: 'Worst Day for Business',
+      description: `Performance is weakest on ${dayNames[worstDayIndex]}s.`
+    });
+  } else if (bestDayIndex !== -1) {
+    // Only one day has activity – show a single neutral insight
+    insightsList.push({
+      icon: 'fa-calendar-day',
+      title: 'Business Activity Day',
+      description: `All your transactions occur on ${dayNames[bestDayIndex]}s.`
+    });
+  }
+
+  // 2️⃣ Top expense category (unchanged, but keep it)
+  const expenseCat = {};
+  data.forEach(tx => { if (tx.type === 'Expense') expenseCat[tx.particular] = (expenseCat[tx.particular] || 0) + tx.amount; });
+  const topExpense = Object.entries(expenseCat).sort((a,b) => b[1] - a[1])[0];
+  if (topExpense) {
+    const totalExpenses = Object.values(expenseCat).reduce((a,b) => a + b, 0);
+    insightsList.push({
+      icon: 'fa-tag',
+      title: 'Top Expense Category',
+      description: `"${topExpense[0]}" accounts for ${((topExpense[1] / totalExpenses) * 100).toFixed(1)}% of expenses.`
+    });
+  }
+
+  // 3️⃣ Top revenue category (unchanged)
+  const revenueCat = {};
+  data.forEach(tx => { if (tx.type === 'Revenue') revenueCat[tx.particular] = (revenueCat[tx.particular] || 0) + tx.amount; });
+  const topRevenue = Object.entries(revenueCat).sort((a,b) => b[1] - a[1])[0];
+  if (topRevenue) {
+    const totalRevenue = Object.values(revenueCat).reduce((a,b) => a + b, 0);
+    insightsList.push({
+      icon: 'fa-trophy',
+      title: 'Top Revenue Category',
+      description: `"${topRevenue[0]}" generates ${((topRevenue[1] / totalRevenue) * 100).toFixed(1)}% of revenue.`
+    });
+  }
+
+  // 4️⃣ Revenue growth (unchanged – `metrics` is computed earlier, but you can also recompute here)
+  if (metrics.growthRate !== 0) {
+    insightsList.push({
+      icon: metrics.growthRate > 0 ? 'fa-arrow-up' : 'fa-arrow-down',
+      title: 'Revenue Trend',
+      description: `Revenue has ${metrics.growthRate > 0 ? 'increased' : 'decreased'} by ${Math.abs(metrics.growthRate).toFixed(1)}% over last month.`
+    });
+  }
+
+  setInsights(insightsList);
+};
 
   const chartOptions = {
     responsive: true,

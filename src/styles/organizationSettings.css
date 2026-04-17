@@ -2,7 +2,7 @@
 .org-settings-page {
   max-width: 800px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 2px 16px;
 }
 .settings-header {
   margin-bottom: 32px;

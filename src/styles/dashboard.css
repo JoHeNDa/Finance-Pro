@@ -1,7 +1,7 @@
 /* ==================== DASHBOARD – db- PREFIX ==================== */
 .db-page {
   animation: db-fadeIn 0.5s ease;
-  padding: 20px 16px;
+  padding: 2px 16px;
 }
 
 @keyframes db-fadeIn {

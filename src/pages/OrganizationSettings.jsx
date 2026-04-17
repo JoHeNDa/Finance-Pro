@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useOrganization } from '../context/OrganizationContext';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
@@ -20,8 +20,9 @@ export default function OrganizationSettings() {
   });
   const [saving, setSaving] = useState(false);
   const [exporting, setExporting] = useState(false);
-  const [message, setMessage] = useState({ type: '', text: '' });
   const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [toast, setToast] = useState({ show: false, type: '', message: '' });
+  const toastTimeoutRef = useRef(null);
 
   useEffect(() => {
     if (organization) {
@@ -40,6 +41,14 @@ export default function OrganizationSettings() {
   }, [organization]);
 
   const isAdmin = userProfile?.role === 'owner' || userProfile?.role === 'admin';
+
+  const showToast = (type, message) => {
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    setToast({ show: true, type, message });
+    toastTimeoutRef.current = setTimeout(() => {
+      setToast({ show: false, type: '', message: '' });
+    }, 4000);
+  };
 
   if (!isAdmin) {
     return (
@@ -66,7 +75,7 @@ export default function OrganizationSettings() {
     if (!file) return;
 
     if (file.size > 2 * 1024 * 1024) {
-      setMessage({ type: 'error', text: 'Logo must be less than 2MB' });
+      showToast('error', 'Logo must be less than 2MB');
       return;
     }
 
@@ -76,12 +85,11 @@ export default function OrganizationSettings() {
     reader.onloadend = () => {
       setFormData(prev => ({ ...prev, logo_url: reader.result }));
       setUploadingLogo(false);
-      setMessage({ type: 'success', text: 'Logo uploaded! Click Save to apply.' });
-      setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+      showToast('success', 'Logo uploaded! Click Save to apply.');
     };
     reader.onerror = () => {
       setUploadingLogo(false);
-      setMessage({ type: 'error', text: 'Failed to read logo file' });
+      showToast('error', 'Failed to read logo file');
     };
     reader.readAsDataURL(file);
   };
@@ -89,7 +97,6 @@ export default function OrganizationSettings() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
-    setMessage({ type: '', text: '' });
 
     try {
       if (!formData.name || formData.name.trim() === '') {
@@ -120,22 +127,17 @@ export default function OrganizationSettings() {
       await updateOrganization(updates);
       await refresh();
 
-      setMessage({ type: 'success', text: 'Settings saved! Reloading...' });
-
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-
+      showToast('success', 'Settings saved successfully!');
     } catch (err) {
       console.error('Save error:', err);
-      setMessage({ type: 'error', text: err.message || 'Failed to save settings' });
+      showToast('error', err.message || 'Failed to save settings');
+    } finally {
       setSaving(false);
     }
   };
 
   const handleExport = async () => {
     setExporting(true);
-    setMessage({ type: '', text: '' });
 
     try {
       const { data, error } = await supabase
@@ -147,7 +149,7 @@ export default function OrganizationSettings() {
       if (error) throw error;
 
       if (!data || data.length === 0) {
-        setMessage({ type: 'error', text: 'No transactions to export' });
+        showToast('error', 'No transactions to export');
         setExporting(false);
         return;
       }
@@ -175,10 +177,9 @@ export default function OrganizationSettings() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      setMessage({ type: 'success', text: `Exported ${data.length} transactions!` });
-      setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+      showToast('success', `Exported ${data.length} transactions!`);
     } catch (err) {
-      setMessage({ type: 'error', text: 'Failed to export: ' + err.message });
+      showToast('error', 'Failed to export: ' + err.message);
     } finally {
       setExporting(false);
     }
@@ -186,8 +187,7 @@ export default function OrganizationSettings() {
 
   const handleRemoveLogo = () => {
     setFormData(prev => ({ ...prev, logo_url: '' }));
-    setMessage({ type: 'success', text: 'Logo removed. Click Save to apply.' });
-    setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+    showToast('success', 'Logo removed. Click Save to apply.');
   };
 
   if (orgLoading) {
@@ -201,16 +201,17 @@ export default function OrganizationSettings() {
 
   return (
     <div className="org-settings-page">
+      {/* Toast Notification */}
+      {toast.show && (
+        <div className={`toast-notification ${toast.type}`}>
+          <i className={`fas ${toast.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}`}></i>
+          <span>{toast.message}</span>
+        </div>
+      )}
+
       <div className="settings-header">
         <p>Customize your organization's branding and financial settings</p>
       </div>
-
-      {message.text && (
-        <div className={`notification ${message.type}`}>
-          <i className={`fas ${message.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}`}></i>
-          {message.text}
-        </div>
-      )}
 
       <form onSubmit={handleSubmit} className="settings-form">
         {/* Basic Information */}
@@ -368,6 +369,46 @@ export default function OrganizationSettings() {
           </button>
         </div>
       </form>
+
+      {/* Add toast CSS if not already present */}
+      <style>{`
+        .toast-notification {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          z-index: 10000;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 14px 20px;
+          border-radius: 12px;
+          background: white;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+          animation: slideIn 0.3s ease;
+          border-left: 4px solid;
+        }
+        .toast-notification.success {
+          border-left-color: #2e7d32;
+          color: #2e7d32;
+        }
+        .toast-notification.error {
+          border-left-color: #c62828;
+          color: #c62828;
+        }
+        .toast-notification i {
+          font-size: 20px;
+        }
+        @keyframes slideIn {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+      `}</style>
     </div>
   );
 }

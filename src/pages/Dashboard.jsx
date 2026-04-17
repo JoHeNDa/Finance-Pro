@@ -40,6 +40,22 @@ export default function Dashboard() {
   const paymentChartRef = useRef(null);
   const chartInstances = useRef({});
 
+  // ---------- Expanded color palettes ----------
+  const categoryColors = [
+    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
+    '#FF6384', '#C9CBCF', '#7B1FA2', '#E91E63', '#009688', '#FF5722',
+    '#607D8B', '#3F51B5', '#CDDC39', '#FFC107', '#9C27B0', '#F44336'
+  ];
+  const paymentColors = [
+    '#0288d1', '#f9a825', '#388e3c', '#d32f2f', '#7b1fa2', '#00acc1',
+    '#ffb300', '#5e35b1', '#43a047', '#e53935', '#1e88e5', '#fb8c00'
+  ];
+
+  // Helper to assign colors cyclically
+  const getColors = (dataLength, baseColors) => {
+    return Array.from({ length: dataLength }, (_, i) => baseColors[i % baseColors.length]);
+  };
+
   useEffect(() => {
     if (!userProfile?.organization_id) return;
     fetchDashboardData();
@@ -107,6 +123,7 @@ export default function Dashboard() {
     setLoading(false);
   };
 
+  // ========== CHART CREATION ==========
   useEffect(() => {
     if (loading) return;
 
@@ -118,6 +135,7 @@ export default function Dashboard() {
     const revenueData = months.map(m => monthlyData[m]?.Revenue || 0);
     const expenseData = months.map(m => monthlyData[m]?.Expense || 0);
 
+    // ----- Line Chart (vertical grid lines restored, both axes same font) -----
     if (trendChartRef.current && months.length) {
       chartInstances.current.trend = new Chart(trendChartRef.current, {
         type: 'line',
@@ -128,27 +146,99 @@ export default function Dashboard() {
             { label: 'Expenses', data: expenseData, borderColor: '#c62828', backgroundColor: 'rgba(198,40,40,0.1)', tension: 0.4, fill: true }
           ]
         },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: { bodyFont: { size: 10 }, titleFont: { size: 11 } }
+          },
+          scales: {
+            x: {
+              ticks: { font: { size: 10 } },
+              grid: { display: true, color: 'rgba(0,0,0,0.05)' }
+            },
+            y: {
+              ticks: { font: { size: 10 } },
+              grid: { color: 'rgba(0,0,0,0.05)' }
+            }
+          },
+          layout: {
+            padding: { top: 8, bottom: 4, left: 4, right: 4 }
+          }
+        }
       });
     }
 
+    // ----- Expense Categories Doughnut (expanded colors, legend 10px, tooltip %) -----
     const catNames = Object.keys(categories);
     const catValues = catNames.map(c => categories[c]);
     if (categoryChartRef.current && catNames.length && catValues.some(v => v > 0)) {
+      const catColorSet = getColors(catNames.length, categoryColors);
       chartInstances.current.category = new Chart(categoryChartRef.current, {
         type: 'doughnut',
-        data: { labels: catNames, datasets: [{ data: catValues, backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'] }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+        data: {
+          labels: catNames,
+          datasets: [{
+            data: catValues,
+            backgroundColor: catColorSet
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 10 } } },
+            tooltip: {
+              bodyFont: { size: 10 },
+              titleFont: { size: 11 },
+              callbacks: {
+                label: (ctx) => {
+                  const value = ctx.raw;
+                  const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                  const percent = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                  return `${ctx.label}: ${formatCurrency(value)} (${percent}%)`;
+                }
+              }
+            }
+          }
+        }
       });
     }
 
+    // ----- Payment Methods Pie (expanded colors, legend 10px, tooltip %) -----
     const modeNames = Object.keys(paymentModes).filter(m => paymentModes[m] > 0);
     const modeValues = modeNames.map(m => paymentModes[m]);
     if (paymentChartRef.current && modeNames.length) {
+      const modeColorSet = getColors(modeNames.length, paymentColors);
       chartInstances.current.payment = new Chart(paymentChartRef.current, {
         type: 'pie',
-        data: { labels: modeNames, datasets: [{ data: modeValues, backgroundColor: ['#0288d1', '#f9a825', '#388e3c'] }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+        data: {
+          labels: modeNames,
+          datasets: [{
+            data: modeValues,
+            backgroundColor: modeColorSet
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 10 } } },
+            tooltip: {
+              bodyFont: { size: 10 },
+              titleFont: { size: 11 },
+              callbacks: {
+                label: (ctx) => {
+                  const value = ctx.raw;
+                  const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                  const percent = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                  return `${ctx.label}: ${formatCurrency(value)} (${percent}%)`;
+                }
+              }
+            }
+          }
+        }
       });
     }
   }, [loading, monthlyData, categories, paymentModes]);
@@ -164,7 +254,7 @@ export default function Dashboard() {
 
   return (
     <div className="db-page">
-      {/* Summary Cards */}
+      {/* Summary Cards (unchanged) */}
       <div className="db-summary-grid">
         <div className="db-summary-card db-gross-revenue">
           <div className="db-card-icon"><i className="fas fa-coins"></i></div>
@@ -296,7 +386,7 @@ export default function Dashboard() {
                 <th>Type</th>
                 <th>Particular</th>
                 <th>Amount</th>
-               </tr>
+              </tr>
             </thead>
             <tbody>
               {recentTransactions.map(tx => (
@@ -314,7 +404,9 @@ export default function Dashboard() {
                 </tr>
               ))}
               {recentTransactions.length === 0 && (
-                <tr><td colSpan="4" className="db-empty-state">No recent transactions</td></tr>
+                <tr>
+                  <td colSpan="4" className="db-empty-state">No recent transactions</td>
+                </tr>
               )}
             </tbody>
           </table>

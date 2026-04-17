@@ -51,7 +51,7 @@
 .view-records-page {
   animation: fadeIn 0.5s ease;
   font-family: 'Inter', sans-serif;
-  padding: 7px;              /* was 0.75rem → 12px */
+  padding: 2px;              /* was 0.75rem → 12px */
   width: 100%;
   overflow-x: hidden;
 }
