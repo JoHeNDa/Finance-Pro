@@ -210,7 +210,7 @@ export default function Signup() {
         name,
         organizationName,
         logoUrl,
-        '#1e293b', // primary color
+        null, // primary color
         secondaryColor,
         parseFloat(vatRate),
         currencySymbol,
