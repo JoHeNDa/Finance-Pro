@@ -37,7 +37,7 @@ export default function Login() {
   };
 
   const currentYear = new Date().getFullYear();
-  const appName = 'Finance Pro';
+  const appName = 'IUS Finance Pro';
   const appLogo = null;
 
   return (
