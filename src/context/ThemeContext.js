@@ -33,6 +33,7 @@ const themes = {
     '--button-bg': '#2e7d32',
     '--button-bg-hover': '#2e7d32',
     '--button-bg-hover-rgb': '46, 125, 50',
+    '--action-btn-color': '#313131',
 
     '--topbar-icon-color': '#2e7d32',
     '--primary': '#2e7d32',
@@ -61,7 +62,7 @@ const themes = {
     '--button-text': '#ffd700',
     '--button-bg': '#2a312a',
     '--button-bg-hover': '#221c1c4d',
-    
+    '--action-btn-color': '#dfdfdf',
     
     '--primary': '#4caf50',
     '--primary-dark': '#388e3c',

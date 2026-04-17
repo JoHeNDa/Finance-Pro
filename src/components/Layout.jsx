@@ -75,7 +75,7 @@ export default function Layout() {
     navigate('/login');
   };
 
-  const appName = organization?.name || 'Infinite FMIS';
+  const appName = organization?.name || 'IUS Finance Pro';
   const appLogo = organization?.logo_url || null;
   const userName = userProfile?.name || user?.email?.split('@')[0] || 'Admin';
   const userRole = userProfile?.role || 'Financial Manager';
@@ -102,10 +102,10 @@ export default function Layout() {
                   src={appLogo}
                   alt={appName}
                   className="layout-logo-img"
-                  style={{ width: '4rem', height: '4rem', objectFit: 'contain' }}
+                  style={{ width: '5rem', height: '5rem', objectFit: 'contain' }}
                 />
               ) : (
-                <i className="fas fa-chart-line" style={{ fontSize: '1.5rem', color: 'var(--secondary)' }}></i>
+                <i className="fas fa-chart-line" style={{ fontSize: '2rem', color: 'var(--secondary)' }}></i>
               )}
             </div>
             <span className="layout-logo-text">{appName}</span>

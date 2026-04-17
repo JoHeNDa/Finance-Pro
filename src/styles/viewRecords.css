@@ -458,6 +458,9 @@
 .records-table td:nth-child(3) {
   font-weight: 600;
   color: var(--text-primary);
+  white-space: normal;
+  word-break: break-word;
+  min-width: 150px;
 }
 .records-table td:nth-child(4){
   white-space: normal;
@@ -597,6 +600,9 @@
   cursor: pointer;
   transition: all 0.2s;
 }
+
+
+
 .card-action-btn.edit:hover {
   background: rgba(var(--primary-rgb), 0.2);
   color: var(--primary);
@@ -627,7 +633,6 @@
 .table-footer {
   position: sticky;
   top: 0;
-  
   z-index: 1;
   background: var(--card-bg);
   border-radius: 16px;      /* was 1rem → 16px */
@@ -861,7 +866,7 @@
   border: none;
   border-radius: 50%;
   background: var(--hover-bg);
-  color: var(--text-muted);
+  color: var(--action-btn-color);
   cursor: pointer;
   transition: all 0.2s;
   display: inline-flex;
@@ -876,13 +881,16 @@
 }
 .action-btn.delete {
   background: var(--hover-bg);
-  color: var(--text-muted);
+  color: var(--action-btn-color);
 }
 .action-btn.delete:hover {
   background: rgba(var(--danger-rgb), 0.2);
   color: var(--danger);
   transform: scale(1.05);
 }
+
+
+
 
 /* ===== RESPONSIVE FONT ADJUSTMENTS (mobile larger) ===== */
 @media (max-width: 768px) {
