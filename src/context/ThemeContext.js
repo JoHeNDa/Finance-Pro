@@ -21,7 +21,7 @@ const themes = {
     '--border-color': '#e5e7eb',
     '--input-bg': '#ffffff',
     '--hover-bg': '#f1f5f9',
-    '--sidebar-bg': '#2e7d32',
+    '--sidebar-bg': '#336d36',
     '--sidebar-text': '#ffffff',
     '--sidebar-text-secondary': 'rgba(255,255,255,0.85)',
     '--sidebar-hover-bg': 'rgba(255, 255, 255, 0.1)',

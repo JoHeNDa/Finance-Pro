@@ -238,6 +238,7 @@
   overflow-x: auto;
   overflow-y: auto;
   flex: 1;
+  border-radius: 10px;
 }
 .db-transactions-table {
   width: 100%;

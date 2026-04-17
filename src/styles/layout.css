@@ -89,7 +89,7 @@ html, body {
 .layout-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0px;
   font-size: 20px;          /* was 19px → -15% */
   font-weight: 600;
   color: var(--secondary);
@@ -97,7 +97,7 @@ html, body {
 }
 
 .layout-logo-text {
-  color: var(--sidebar-text);
+  color: var(--gray-400);
   font-weight: 700;
   font-size: 22px;          /* was 26px → -15% */
 }
