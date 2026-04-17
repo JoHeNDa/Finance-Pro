@@ -167,7 +167,8 @@ export default function Layout() {
         </ul>
 
         <div className="layout-sidebar-footer">
-          <div className="layout-user-info">
+          {/* ✅ Clickable user area – navigates to profile */}
+          <Link to="/profile" className="layout-user-info" style={{ textDecoration: 'none' }}>
             {userAvatar ? (
               <img
                 src={userAvatar}
@@ -188,7 +189,7 @@ export default function Layout() {
               <span className="layout-user-name">{userName}</span>
               <span className="layout-user-role">{userRole}</span>
             </div>
-          </div>
+          </Link>
           <button className="layout-logout-btn" onClick={handleLogout}>
             <i className="fas fa-sign-out-alt"></i>
             <span>Logout</span>
