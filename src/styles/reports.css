@@ -55,9 +55,9 @@
 }
 .rp-preset-btn:hover,
 .rp-preset-btn.active {
-  background: rgba(var(--primary-rgb), 0.15);
-  color: var(--primary);
-  border-color: var(--primary);
+  background: rgba(var(--primary-save-btn-rgb), 0.15);
+  color: rgba(var(--button-save-text-rgb), 1);
+  border-color: rgba(var(--button-save-text-rgb), 1);
   transform: translateY(-1px);
 }
 .rp-filter-body {
@@ -87,16 +87,21 @@
   color: var(--text-primary);
 }
 .rp-apply-btn {
-  padding: 8px 24px;
-  background: rgba(var(--primary-rgb), 0.15);
-  color: var(--primary);
-  border: none;
-  border-radius: 40px;
-  font-weight: 600;
+  padding: 10px 20px;
+  background: rgba(var(--primary-save-btn-rgb), 0.15);
+  color: rgba(var(--button-save-text-rgb), 1);
+  border: 1px solid rgba(var(--primary-save-btn-rgb), 1);
+  border-radius: 20px;
+  
+  font-weight: 700;
   font-size: 14px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  
   white-space: nowrap;
-  transition: all 0.2s;
 }
 .rp-apply-btn i {
   margin-right: 6px;

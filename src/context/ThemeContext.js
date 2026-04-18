@@ -31,7 +31,7 @@ const themes = {
     '--sidebar-icon-color': '#ffd700',
     '--button-text': '#ffd700',
     '--button-bg': '#2e7d32',
-    '--button-bg-hover': '#2e7d32',
+    '--button-bg-hover': '#ffffff4d',
     '--button-bg-hover-rgb': '46, 125, 50',
     '--action-btn-color': '#5a5a5a',
 
