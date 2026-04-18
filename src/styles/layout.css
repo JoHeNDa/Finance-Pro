@@ -74,7 +74,7 @@ html, body {
   transition: transform 0.3s ease, width 0.3s ease, background 0.3s ease;
   flex-shrink: 0;
   overflow: hidden;
-  border-bottom-right-radius: 10px;
+  border-bottom-right-radius: 5px;
 }
 
 .layout-sidebar-header {
