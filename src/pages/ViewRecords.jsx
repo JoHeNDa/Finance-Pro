@@ -55,21 +55,21 @@ export default function ViewRecords() {
     })}`;
   };
 
-  // ========== NEW: Responsive pageSize (7 rows on smallest screens) ==========
+  // Responsive pageSize (7 rows on smallest screens)
   useEffect(() => {
     const handleResize = () => {
       const newSize = window.innerWidth <= 480 ? 7 : 10;
       if (newSize !== pageSize) {
         setPageSize(newSize);
-        setPage(1); // reset to first page when rows per page changes
+        setPage(1);
       }
     };
-    handleResize(); // set initial value
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [pageSize]); // pageSize dependency to avoid loops
+  }, [pageSize]);
 
-  // Fetch users mapping (unchanged)
+  // Fetch users mapping
   useEffect(() => {
     const fetchUsers = async () => {
       if (!userProfile?.organization_id) return;
@@ -87,7 +87,7 @@ export default function ViewRecords() {
     fetchUsers();
   }, [userProfile]);
 
-  // Fetch transactions and stats (unchanged, uses pageSize)
+  // Fetch transactions and stats
   useEffect(() => {
     if (!userProfile?.organization_id) return;
     fetchTransactions();
@@ -357,7 +357,7 @@ export default function ViewRecords() {
   return (
     <>
       <div className="view-records-page">
-        {/* Header with Stats and Filters (unchanged) */}
+        {/* Header with Stats and Filters */}
         <div className="records-header">
           <div className="records-stats">
             <div className="stat-badge">
@@ -533,7 +533,7 @@ export default function ViewRecords() {
           </div>
         </div>
 
-        {/* Card View (unchanged) */}
+        {/* Card View */}
         <div className="view-container" style={{ display: viewMode === 'cards' ? 'block' : 'none' }}>
           <div className="cards-grid">
             {loading && transactions.length === 0 ? (
@@ -586,7 +586,7 @@ export default function ViewRecords() {
           </div>
         </div>
 
-        {/* Pagination – now with sticky positioning */}
+        {/* SMART PAGINATION – max 5 pages + ellipsis */}
         <div className="table-footer">
           <div className="pagination-info">
             Showing {startIndex} to {endIndex} of {totalCount} entries
@@ -596,15 +596,51 @@ export default function ViewRecords() {
               <i className="fas fa-chevron-left"></i>
             </button>
             <div className="page-numbers">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
-                <button
-                  key={num}
-                  className={`page-number ${num === page ? 'active' : ''}`}
-                  onClick={() => setPage(num)}
-                >
-                  {num}
-                </button>
-              ))}
+              {(() => {
+                const total = totalPages;
+                const current = page;
+                const maxVisible = 5;
+                if (total <= maxVisible) {
+                  return Array.from({ length: total }, (_, i) => i + 1).map(num => (
+                    <button
+                      key={num}
+                      className={`page-number ${num === page ? 'active' : ''}`}
+                      onClick={() => setPage(num)}
+                    >
+                      {num}
+                    </button>
+                  ));
+                }
+                const pages = [];
+                const leftSibling = Math.max(1, current - 1);
+                const rightSibling = Math.min(total, current + 1);
+                const showLeftEllipsis = leftSibling > 2;
+                const showRightEllipsis = rightSibling < total - 1;
+
+                if (showLeftEllipsis) {
+                  pages.push(1, '...');
+                } else {
+                  for (let i = 1; i <= leftSibling; i++) pages.push(i);
+                }
+                for (let i = leftSibling; i <= rightSibling; i++) {
+                  if (!pages.includes(i)) pages.push(i);
+                }
+                if (showRightEllipsis) {
+                  pages.push('...', total);
+                } else {
+                  for (let i = rightSibling + 1; i <= total; i++) pages.push(i);
+                }
+                return pages.map((item, idx) => (
+                  <button
+                    key={idx}
+                    className={`page-number ${item === page ? 'active' : ''}`}
+                    onClick={() => typeof item === 'number' && setPage(item)}
+                    disabled={item === '...'}
+                  >
+                    {item}
+                  </button>
+                ));
+              })()}
             </div>
             <button className="page-btn" onClick={() => changeViewPage('next')} disabled={page === totalPages || totalPages === 0}>
               <i className="fas fa-chevron-right"></i>
@@ -613,7 +649,7 @@ export default function ViewRecords() {
         </div>
       </div>
 
-      {/* Delete Confirmation Modal (unchanged) */}
+      {/* Delete Confirmation Modal */}
       {deleteModalOpen && (
         <div className="modal" style={{ display: 'flex' }}>
           <div className="modal-content">
@@ -633,7 +669,7 @@ export default function ViewRecords() {
         </div>
       )}
 
-      {/* Edit Modal (unchanged) */}
+      {/* Edit Modal */}
       {editModalOpen && (
         <div className="modal" style={{ display: 'flex' }}>
           <div className="modal-content modal-content-edit">
@@ -644,7 +680,6 @@ export default function ViewRecords() {
             <div className="modal-body">
               <form id="editForm">
                 <div className="edit-form-grid">
-                  {/* ... all form fields remain exactly as before ... */}
                   <div className="form-group">
                     <label>Date</label>
                     <input
