@@ -1,9 +1,8 @@
 /* ==================== ADD TRANSACTION – tx- PREFIX ==================== */
 .tx-page {
-  max-width: 1140px;
+  max-width: 1140px;        /* was 1200px → 5% smaller */
   margin: 0 auto;
   padding: 2px 8px;
-  overflow-x: hidden;
   animation: tx-fadeSlideUp 0.4s ease;
 }
 
@@ -16,24 +15,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 19px;
-  padding: 0 0 11px 0;
+  margin-bottom: 19px;      /* was 20px → ~5% smaller */
+  padding: 0 0 11px 0;      /* was 12px → 5% smaller */
   border-bottom: 2px solid rgba(var(--primary-rgb), 0.15);
   flex-wrap: wrap;
-  gap: 11px;
+  gap: 11px;                /* was 12px */
 }
 
 .tx-subtitle {
   color: var(--text-muted);
   margin: 0;
-  font-size: 12px;
+  font-size: 12px;          /* was 13px → 5% smaller (rounded) */
 }
 
 .tx-header-stats .tx-stat-badge {
   background: var(--hover-bg);
-  padding: 6px 15px;
-  border-radius: 38px;
-  font-size: 13px;
+  padding: 6px 15px;        /* was 6px 16px → 15px */
+  border-radius: 38px;      /* was 40px → ~5% */
+  font-size: 13px;          /* was 14px → 5% smaller */
   color: var(--text-primary);
   display: flex;
   align-items: center;
@@ -43,14 +42,14 @@
 
 .tx-stat-badge i {
   color: var(--secondary);
-  font-size: 16px;
+  font-size: 16px;          /* was 17px → ~5% smaller */
 }
 
-/* ========== TWO‑COLUMN LAYOUT (stack on narrow screens) ========== */
+/* ========== TWO‑COLUMN LAYOUT (equal height) ========== */
 .tx-two-columns {
   display: grid;
-  grid-template-columns: 1fr 342px;
-  gap: 19px;
+  grid-template-columns: 1fr 342px;  /* was 360px → 5% smaller */
+  gap: 19px;                        /* was 20px */
   align-items: stretch;
 }
 
@@ -59,8 +58,6 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-width: 0;
-  overflow-x: hidden;
 }
 
 .tx-form-col .tx-card {
@@ -68,7 +65,7 @@
 }
 
 .tx-right-col {
-  gap: 27px;
+  gap: 27px;               /* was 28px → ~5% */
 }
 
 .tx-right-col .tx-card:first-child {
@@ -79,25 +76,24 @@
   flex: 1;
 }
 
-/* Cards */
+/* Cards – base styles */
 .tx-card {
   background: var(--card-bg);
-  border-radius: 15px;
+  border-radius: 15px;      /* was 16px → ~5% */
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   border: 1px solid var(--border-color);
   overflow: hidden;
-  max-width: 100%;
 }
 
 .tx-card-header {
   background: var(--hover-bg);
-  padding: 10px 19px;
+  padding: 10px 19px;       /* was 10px 20px → 19px */
   border-bottom: 1px solid var(--border-color);
 }
 
 .tx-card-header h3 {
   margin: 0;
-  font-size: 13px;
+  font-size: 13px;          /* was 14px → ~5% */
   font-weight: 600;
   color: var(--text-primary);
   display: flex;
@@ -107,33 +103,31 @@
 
 .tx-card-header h3 i {
   color: var(--secondary);
-  font-size: 15px;
+  font-size: 15px;          /* was 16px → ~5% */
 }
 
-/* Form grid – two columns on desktop, becomes single column earlier */
+/* Form card (left) */
 .tx-form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 19px;
-  padding: 19px;
+  gap: 19px;                /* was 20px */
+  padding: 19px;            /* was 20px */
 }
 
 .tx-form-column {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  min-width: 0;
+  gap: 15px;                /* was 16px */
 }
 
 .tx-input-group {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  min-width: 0;
 }
 
 .tx-input-group label {
-  font-size: 11px;
+  font-size: 11px;          /* was 12px → ~5% */
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -144,14 +138,13 @@
   position: relative;
   display: flex;
   align-items: center;
-  width: 100%;
 }
 
 .tx-input-icon i {
   position: absolute;
-  left: 11px;
+  left: 11px;               /* was 12px → ~5% */
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 11px;          /* was 12px → ~5% */
   pointer-events: none;
 }
 
@@ -159,10 +152,10 @@
 .tx-input-icon textarea,
 .tx-input-icon select {
   width: 100%;
-  padding: 8px 11px 8px 32px;
+  padding: 8px 11px 8px 32px;  /* was 8px 12px 8px 34px → adjusted */
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 12px;              /* was 13px → ~5% */
   background: var(--input-bg);
   color: var(--text-secondary);
   font-family: inherit;
@@ -178,7 +171,7 @@
 
 .tx-input-icon textarea {
   resize: vertical;
-  min-height: 67px;
+  min-height: 67px;         /* was 70px → ~5% */
 }
 
 .tx-type-toggle {
@@ -194,12 +187,12 @@
   gap: 6px;
   padding: 8px;
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 12px;      /* was 13px → ~5% */
   background: var(--card-bg);
   color: var(--text-secondary);
   font-weight: 500;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 11px;          /* was 12px → ~5% */
   transition: all 0.2s;
 }
 
@@ -227,35 +220,34 @@
   color: var(--danger);
 }
 
-/* Amount + VAT row – two columns, becomes vertical on small screens */
 .tx-amount-vat-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 19px;
-  padding: 0 19px 19px;
+  gap: 19px;                /* was 20px */
+  padding: 0 19px 19px;     /* was 0 20px 20px */
 }
 
 .tx-vat-calculator {
-  padding: 0 19px 19px;
+  padding: 0 19px 19px;     /* was 0 20px 20px */
 }
 
 .tx-vat-info {
-  font-size: 10px;
-  margin: 4px 0 0 19px;
+  font-size: 10px;          /* unchanged (already small) */
+  margin: 4px 0 0 19px;     /* was 20px */
   color: var(--text-muted);
 }
 
-/* Attachment */
+/* Attachment card */
 .tx-file-area {
   position: relative;
-  min-height: 95px;
+  min-height: 95px;         /* was 100px */
   border: 1px dashed var(--border-color);
   background: var(--hover-bg);
-  margin: 19px;
+  margin: 19px;             /* was 20px */
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 11px;
+  border-radius: 11px;      /* was 12px */
 }
 
 .tx-file-input {
@@ -274,12 +266,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 13px;
+  padding: 13px;            /* was 14px */
   text-align: center;
 }
 
 .tx-file-content i {
-  font-size: 23px;
+  font-size: 23px;          /* was 24px → ~5% */
   color: var(--secondary);
   margin-bottom: 4px;
 }
@@ -287,8 +279,8 @@
 .tx-file-preview {
   background: var(--card-bg);
   margin: 8px;
-  padding: 6px 11px;
-  border-radius: 29px;
+  padding: 6px 11px;        /* was 6px 12px */
+  border-radius: 29px;      /* was 30px */
   display: flex;
   align-items: center;
   gap: 8px;
@@ -297,7 +289,7 @@
 
 .tx-file-name {
   flex: 1;
-  font-size: 10px;
+  font-size: 10px;          /* was 11px → ~5% */
   color: var(--text-primary);
 }
 
@@ -310,7 +302,7 @@
 
 .tx-upload-progress {
   position: relative;
-  width: 67px;
+  width: 67px;              /* was 70px */
   height: 4px;
   background: var(--border-color);
   border-radius: 4px;
@@ -323,24 +315,23 @@
   transition: width 0.3s ease;
 }
 
-/* Summary card – items stack on small screens */
+/* Summary card */
 .tx-summary {
   background: var(--hover-bg);
-  padding: 15px 19px;
-  border-radius: 11px;
-  margin: 19px;
+  padding: 15px 19px;       /* was 16px 20px */
+  border-radius: 11px;      /* was 12px */
+  margin: 19px;             /* was 20px */
   display: flex;
   flex-direction: column;
-  gap: 11px;
+  gap: 11px;                /* was 12px */
 }
 
 .tx-summary-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 13px;
-  gap: 11px;
-  flex-wrap: wrap;
+  font-size: 13px;          /* was 14px → ~5% */
+  gap: 11px;                /* was 12px */
 }
 
 .tx-summary-item span {
@@ -350,9 +341,9 @@
 
 .tx-summary-item strong {
   background: var(--card-bg);
-  padding: 4px 11px;
-  border-radius: 29px;
-  font-size: 11px;
+  padding: 4px 11px;        /* was 4px 12px */
+  border-radius: 29px;      /* was 30px */
+  font-size: 11px;          /* was 12px → ~5% */
   font-weight: 600;
   color: var(--text-primary);
   border: 1px solid var(--border-color);
@@ -360,22 +351,22 @@
 
 .tx-actions {
   display: flex;
-  gap: 11px;
-  margin-top: 11px;
+  gap: 11px;                /* was 12px */
+  margin-top: 11px;         /* was 12px */
 }
 
-/* Buttons */
+/* ===== BUTTONS ===== */
 .tx-btn-primary,
 .tx-btn-secondary {
-  padding: 8px 15px;
-  border-radius: 12px;
+  padding: 8px 15px;        /* was 8px 16px */
+  border-radius: 12px;      /* was 13px */
   font-weight: 700;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: 13px;          /* was 14px → ~5% */
   transition: all 0.2s;
 }
 
@@ -419,10 +410,10 @@
   position: fixed;
   top: 20px;
   right: 20px;
-  padding: 10px 17px;
+  padding: 10px 17px;       /* was 10px 18px */
   border-radius: 8px;
   font-weight: 500;
-  font-size: 12px;
+  font-size: 12px;          /* was 13px → ~5% */
   z-index: 10000;
   animation: tx-slideIn 0.3s ease;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -443,29 +434,27 @@
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* Recent Transactions Table */
+/* ========== RECENT TRANSACTIONS TABLE ========== */
 .tx-recent-card {
-  margin-top: 19px;
+  margin-top: 19px;         /* was 20px */
   background: var(--card-bg);
-  border-radius: 11px;
+  border-radius: 11px;      /* was 12px */
   border: 1px solid var(--border-color);
   overflow: hidden;
 }
 
 .tx-recent-card .tx-card-header {
   background: var(--hover-bg);
-  padding: 10px 19px;
+  padding: 10px 19px;       /* was 10px 20px */
   border-bottom: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 
 .tx-recent-card .tx-card-header h3 {
   margin: 0;
-  font-size: 13px;
+  font-size: 13px;          /* was 14px → ~5% */
   font-weight: 600;
   color: var(--text-primary);
   display: flex;
@@ -480,7 +469,7 @@
 .tx-view-all-link {
   color: var(--primary);
   text-decoration: none;
-  font-size: 12px;
+  font-size: 12px;          /* was 13px → ~5% */
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -492,19 +481,16 @@
   padding: 5px 5px;
   transform: translateX(2px);
   background-color: rgba(var(--primary-rgb), 0.2);
-  border-radius: 15px;
+  border-radius: 15px;      /* was 16px */
 }
 
 .tx-recent-table-wrapper {
   overflow-x: auto;
-  overflow-y: hidden;
-  width: 100%;
-  -webkit-overflow-scrolling: touch;
+  padding: 10px 5px 1px;
 }
 
 .tx-recent-table {
   width: 100%;
-  min-width: 600px;
   border-collapse: collapse;
 }
 
@@ -514,25 +500,34 @@
   border-bottom: 1px solid var(--border-color);
   background: transparent;
   font-weight: 600;
-  font-size: 10px;
+  font-size: 10px;          /* was 11px → ~5% */
   text-transform: uppercase;
   color: var(--text-muted);
   letter-spacing: 0.5px;
 }
 
 .tx-recent-table td {
-  padding: 7px 11px;
+  padding: 7px 11px;        /* was 7px 12px */
   text-align: left;
   border-bottom: 1px solid var(--border-color);
   background: transparent;
-  font-size: 11px;
+  font-size: 11px;          /* was 12px → ~5% */
   color: var(--text-primary);
 }
 
 .tx-recent-table tr:last-child td {
   border-bottom: none;
+
 }
 
+.tx-recent-table td:nth-child(4){
+  white-space: normal;
+  word-break: break-word;
+  min-width: 70px;
+}
+
+
+/* Income/expense text colours */
 .tx-recent-table td.tx-income-text {
   color: var(--primary);
   font-weight: 600;
@@ -543,212 +538,159 @@
   font-weight: 600;
 }
 
-/* ========== RESPONSIVE BREAKPOINTS – STACK EVERYTHING ========== */
-
-/* At 1024px, shrink the right column width */
+/* ========== RESPONSIVE SCALING (already proportionally adjusted) ========== */
 @media (max-width: 1024px) {
   .tx-two-columns {
-    grid-template-columns: 1fr 304px;
-    gap: 15px;
+    grid-template-columns: 1fr 304px;  /* was 320px → 5% smaller */
+    gap: 15px;                         /* was 16px */
   }
   .tx-right-col {
-    gap: 23px;
+    gap: 23px;                         /* was 24px */
   }
 }
 
-/* At 900px, switch to single column layout and force all critical items to stack */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .tx-two-columns {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 15px;
+    align-items: start;
   }
   .tx-form-col,
   .tx-right-col {
     height: auto;
   }
-  .tx-right-col {
-    gap: 20px;
+  .tx-form-col .tx-card,
+  .tx-right-col .tx-summary-card {
+    flex: none;
   }
-  /* Make the main form grid single column */
+  .tx-right-col {
+    gap: 15px;
+  }
   .tx-form-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 13px;               /* was 14px */
+    padding: px;           /* was 14px */
   }
-  /* Stack amount and VAT inputs vertically */
-  .tx-amount-vat-row {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  /* Stack Revenue/Expense toggle buttons vertically if they become too wide */
-  .tx-type-toggle {
-    flex-direction: column;
-    gap: 8px;
-  }
-  .tx-type-option {
-    width: 100%;
-  }
-}
-
-/* At 768px, fine‑tune spacing and fonts */
-@media (max-width: 768px) {
   .tx-page {
-    padding: 30px;
+    padding: 40px;           /* was 12px */
   }
   .tx-subtitle {
-    font-size: 11px;
+    font-size: 11px;         /* was 12px */
   }
   .tx-card-header h3 {
-    font-size: 13px;
+    font-size: 13px;         /* was 14px */
   }
   .tx-card-header h3 i {
     font-size: 13px;
   }
   .tx-input-group label {
-    font-size: 11px;
+    font-size: 11px;         /* was 12px */
   }
   .tx-input-icon input,
   .tx-input-icon textarea,
   .tx-input-icon select {
-    font-size: 12px;
+    font-size: 12px;         /* was 13px */
     padding: 10px 11px 10px 32px;
   }
-  /* Force type toggle buttons to stay in one row */
-  .tx-type-toggle {
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    gap: 8px;
-  }
   .tx-type-option {
-    flex: 1;
-    min-width: 0;          /* allow shrinking */
-    padding: 6px 4px;
-    font-size: 10px;
-    white-space: nowrap;   /* prevent text wrapping inside button */
-  }
-  .tx-type-option i {
-    font-size: 10px;
-    margin-right: 2px;
+    font-size: 11px;         /* was 12px */
+    padding: 7px;
   }
   .tx-summary-item {
-    font-size: 11px;
+    font-size: 11px;         /* was 12px */
   }
   .tx-summary-item strong {
-    font-size: 11px;
-  }
-  .tx-actions {
-    flex-direction: column;
-    gap: 10px;
+    font-size: 11px;         /* was 12px */
   }
   .tx-btn-primary,
   .tx-btn-secondary {
-    width: 100%;
-    flex: none;
+    font-size: 15px;         /* was 16px */
+    padding: 9px 19px;       /* was 10px 20px */
   }
   .tx-file-content i {
-    font-size: 25px;
+    font-size: 25px;         /* was 26px */
   }
   .tx-file-name {
-    font-size: 11px;
-  }
-  .tx-recent-table {
-    min-width: 500px;
+    font-size: 11px;         /* was 12px */
   }
   .tx-recent-table th {
-    font-size: 9px;
+    font-size: 9px;          /* was 10px */
   }
   .tx-recent-table td {
-    font-size: 12px;
+    font-size: 12px;         /* was 13px */
   }
 }
 
-/* At 480px, further stack and adjust */
 @media (max-width: 480px) {
   .tx-page {
     padding: 8px;
   }
-  .tx-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-  .tx-header-stats .tx-stat-badge {
-    justify-content: center;
-  }
   .tx-subtitle {
-    font-size: 12px;
-    text-align: center;
+    font-size: 12px;         /* was 13px */
   }
   .tx-card-header h3 {
-    font-size: 12px;
+    font-size: 12px;         /* was 13px */
   }
   .tx-input-group label {
-    font-size: 10px;
+    font-size: 10px;         /* was 11px */
   }
   .tx-input-icon input,
   .tx-input-icon textarea,
   .tx-input-icon select {
-    font-size: 12px;
+    font-size: 12px;         /* was 13px */
     padding: 7px 9px 7px 30px;
   }
   .tx-type-option {
-    font-size: 10px;
+    font-size: 10px;         /* was 11px */
   }
-  /* Ensure summary items are fully stacked */
   .tx-summary-item {
-    font-size: 12px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+    font-size: 12px;         /* was 13px */
   }
   .tx-summary-item strong {
-    font-size: 11px;
-    align-self: flex-start;
+    font-size: 11px;         /* was 12px */
   }
   .tx-btn-primary,
   .tx-btn-secondary {
-    font-size: 13px;
+    font-size: 13px;         /* was 14px */
     padding: 7px 15px;
   }
   .tx-notification {
-    font-size: 11px;
+    font-size: 11px;         /* was 12px */
     top: 10px;
     right: 10px;
     left: 10px;
     text-align: center;
   }
-  .tx-recent-card .tx-card-header {
-    flex-direction: column;
-    align-items: stretch;
-    text-align: center;
-  }
-  .tx-view-all-link {
-    justify-content: center;
-  }
-  .tx-recent-table {
-    min-width: 450px;
-  }
+
+
+.tx-recent-table tr:last-child td {
+  border-bottom: none;
+  
 }
 
-/* At 1000px, if the right column still exists, make type toggle wrap or reduce padding */
-@media (max-width: 1000px) {
-  .tx-type-option {
-    padding: 6px 8px;
-    font-size: 10px;
-    gap: 4px;
-  }
-  .tx-type-option i {
-    font-size: 10px;
-  }
+.tx-recent-table td:nth-child(4){
+  white-space: normal;
+  word-break: break-word;
+  min-width: 200px;
 }
 
-/* At 950px, force type toggle to stack even before two-column layout collapses */
-@media (max-width: 950px) {
-  .tx-type-toggle {
-    flex-direction: column;
-    gap: 8px;
-  }
-  .tx-type-option {
-    width: 100%;
-    justify-content: center;
-  }
+.tx-recent-table td:nth-child(5){
+  white-space: normal;
+  word-break: break-word;
+  min-width: 100px;
 }
+
+.tx-recent-table td:nth-child(6){
+  white-space: normal;
+  word-break: break-word;
+  min-width: 100px;
+}
+
+.tx-recent-table td:nth-child(7){
+  white-space: normal;
+  word-break: break-word;
+  min-width: 100px;
+}
+
+}
+
