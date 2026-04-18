@@ -55,6 +55,20 @@ export default function ViewRecords() {
     })}`;
   };
 
+  // ========== NEW: Responsive pageSize (7 rows on smallest screens) ==========
+  useEffect(() => {
+    const handleResize = () => {
+      const newSize = window.innerWidth <= 480 ? 7 : 10;
+      if (newSize !== pageSize) {
+        setPageSize(newSize);
+        setPage(1); // reset to first page when rows per page changes
+      }
+    };
+    handleResize(); // set initial value
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [pageSize]); // pageSize dependency to avoid loops
+
   // Fetch users mapping (unchanged)
   useEffect(() => {
     const fetchUsers = async () => {
@@ -73,7 +87,7 @@ export default function ViewRecords() {
     fetchUsers();
   }, [userProfile]);
 
-  // Fetch transactions and stats (unchanged)
+  // Fetch transactions and stats (unchanged, uses pageSize)
   useEffect(() => {
     if (!userProfile?.organization_id) return;
     fetchTransactions();
@@ -471,7 +485,6 @@ export default function ViewRecords() {
                   ) : (
                     transactions.map((tx) => {
                       const gross = tx.type === 'Revenue' ? tx.amount + (tx.vat_amount || 0) : tx.amount;
-                      // FIXED: add conditional classes for VAT and Gross
                       const vatClass = tx.type === 'Revenue' ? 'vat-income' : 'vat-expense';
                       const grossClass = tx.type === 'Revenue' ? 'gross-income' : 'gross-expense';
                       return (
@@ -487,9 +500,7 @@ export default function ViewRecords() {
                           <td className={tx.type === 'Revenue' ? 'income-text' : 'expense-text'}>
                             {formatCurrencyWithSymbol(tx.amount)}
                           </td>
-                          {/* FIXED: apply vatClass */}
                           <td className={vatClass}>{formatCurrencyWithSymbol(tx.vat_amount || 0)}</td>
-                          {/* FIXED: apply grossClass */}
                           <td className={grossClass}>{formatCurrencyWithSymbol(gross)}</td>
                           <td>{tx.payment_mode}</td>
                           <td>{users[tx.user_id] || tx.user_id}</td>
@@ -522,7 +533,7 @@ export default function ViewRecords() {
           </div>
         </div>
 
-        {/* Card View */}
+        {/* Card View (unchanged) */}
         <div className="view-container" style={{ display: viewMode === 'cards' ? 'block' : 'none' }}>
           <div className="cards-grid">
             {loading && transactions.length === 0 ? (
@@ -532,7 +543,6 @@ export default function ViewRecords() {
             ) : (
               transactions.map((tx) => {
                 const gross = tx.type === 'Revenue' ? tx.amount + (tx.vat_amount || 0) : tx.amount;
-                // FIXED: add conditional classes for VAT and Gross in card view
                 const vatClass = tx.type === 'Revenue' ? 'vat-income' : 'vat-expense';
                 const grossClass = tx.type === 'Revenue' ? 'gross-income' : 'gross-expense';
                 return (
@@ -549,9 +559,7 @@ export default function ViewRecords() {
                     <div className="card-particular">{tx.particular}</div>
                     <div className="card-description">{tx.description || '-'}</div>
                     <div className="card-amount">{formatCurrencyWithSymbol(tx.amount)}</div>
-                    {/* FIXED: applied vatClass */}
                     <div className={`card-vat ${vatClass}`}>VAT: {formatCurrencyWithSymbol(tx.vat_amount || 0)}</div>
-                    {/* ADDED: show Gross amount with grossClass */}
                     <div className={`card-gross ${grossClass}`}>Gross: {formatCurrencyWithSymbol(gross)}</div>
                     <div className="card-footer">
                       <div className="card-payment">
@@ -578,7 +586,7 @@ export default function ViewRecords() {
           </div>
         </div>
 
-        {/* Pagination (unchanged) */}
+        {/* Pagination – now with sticky positioning */}
         <div className="table-footer">
           <div className="pagination-info">
             Showing {startIndex} to {endIndex} of {totalCount} entries
@@ -625,19 +633,18 @@ export default function ViewRecords() {
         </div>
       )}
 
-      {/* Edit Modal – PROFESSIONAL & THEME RESPONSIVE */}
+      {/* Edit Modal (unchanged) */}
       {editModalOpen && (
         <div className="modal" style={{ display: 'flex' }}>
-          <div className="modal-content modal-content-edit">  {/* Added class for larger width */}
-            {/* FIXED: Neutral header with close button, no green gradient */}
+          <div className="modal-content modal-content-edit">
             <div className="modal-header">
               <h3><i className="fas fa-edit"></i> Edit Transaction</h3>
               <button className="close-modal" onClick={closeEditModal}>&times;</button>
             </div>
             <div className="modal-body">
               <form id="editForm">
-                {/* Use CSS grid class instead of inline style */}
                 <div className="edit-form-grid">
+                  {/* ... all form fields remain exactly as before ... */}
                   <div className="form-group">
                     <label>Date</label>
                     <input
@@ -741,7 +748,6 @@ export default function ViewRecords() {
                   </div>
                 </div>
 
-                {/* File upload area – using CSS classes only */}
                 <div className="file-upload-section">
                   <label>Update Receipt (optional)</label>
                   <div className="file-upload-area">

@@ -286,7 +286,7 @@
 .db-transactions-table td:nth-child(4){
   white-space: normal;
   word-break: break-word;
-  min-width: 100px;
+  min-width: 70px;
 }
 
 .db-badge {
@@ -563,5 +563,107 @@
     break-inside: avoid;
     box-shadow: none;
     border: 1px solid #ddd;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .db-page {
+    padding: 10px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+  .db-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .db-summary-card {
+    padding: 8px 6px;
+    gap: 8px;
+  }
+  .db-card-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+  .db-card-value {
+    font-size: 15px;
+  }
+  .db-card-label {
+    font-size: 8px;
+  }
+  .db-card-trend {
+    font-size: 8px;
+  }
+
+  /* ===== CHANGE: 2 stat cards per row ===== */
+  .db-stats-row {
+    grid-template-columns: repeat(2, 1fr);  /* two columns */
+    gap: 8px;
+  }
+
+  .db-stat-item {
+    padding: 8px 10px;
+  }
+  .db-stat-item i {
+    font-size: 18px;
+    padding: 6px;
+  }
+  .db-stat-item > div {
+    flex-direction: column;      /* stack label above value */
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .db-stat-label {
+    white-space: normal;         /* allow label to wrap */
+    font-size: 10px;
+    line-height: 1.3;
+    word-break: break-word;      /* break long words if needed */
+    width: 100%;                 /* take full width */
+  }
+  .db-stat-value {
+    font-size: 14px;
+    white-space: normal;         /* value can also wrap, or keep nowrap if you prefer */
+    word-break: break-word;
+  }
+
+  /* … keep all other existing rules for charts, tables, etc. … */
+  .db-charts-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .db-chart-card {
+    padding: 10px;
+  }
+  .db-chart-header h3 {
+    font-size: 12px;
+  }
+  .db-chart-legend {
+    font-size: 9px;
+    gap: 8px;
+  }
+  .db-chart-container {
+    height: 180px !important;
+  }
+  .db-recent-card {
+    max-height: 340px;
+    padding: 10px;
+  }
+  .db-recent-card .db-card-header h3 {
+    font-size: 12px;
+  }
+  .db-view-all-link {
+    font-size: 10px;
+  }
+  .db-transactions-table th {
+    font-size: 9px;
+    padding: 6px 4px;
+  }
+  .db-transactions-table td {
+    font-size: 10px;
+    padding: 6px 4px;
+  }
+  .db-badge {
+    font-size: 8px;
+    padding: 2px 5px;
   }
 }

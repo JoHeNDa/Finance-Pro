@@ -1235,3 +1235,42 @@
 
 
 
+/* Make the card a flex column */
+.table-card {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  max-height: 70vh;          /* optional: limit card height relative to viewport */
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 0;                /* remove padding if any, or keep but adjust */
+  overflow: hidden;
+}
+
+/* The scrollable table area takes remaining space */
+.table-responsive {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;             /* needed for flex children to shrink properly */
+  border-radius: 0;
+}
+
+/* Footer stays at the bottom, never moves */
+.table-footer {
+  flex-shrink: 0;
+  background: var(--card-bg);
+  border-top: 1px solid var(--border-color);
+  margin-top: 0;
+  /* remove any existing margin or sticky positioning */
+  position: static;
+}
+
+/* Ensure the table itself doesn't cause extra height */
+.records-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+
+
+

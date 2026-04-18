@@ -767,6 +767,44 @@
 }
 
 
+@media (max-width: 480px) {
+  /* ... keep all other existing rules ... */
+
+  /* Stats row – 2 columns per row, stacked label/value */
+  .rp-stats-grid {
+    grid-template-columns: repeat(2, 1fr);  /* two cards per row */
+    gap: 10px;
+  }
+  .rp-stat-card {
+    padding: 8px 10px;
+  }
+  .rp-stat-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 14px;
+  }
+  .rp-stat-details {
+    flex-direction: column;      /* stack label above value */
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .rp-stat-label {
+    white-space: normal;         /* allow label to wrap */
+    font-size: 10px;
+    line-height: 1.3;
+    padding-right: 0;
+    word-break: break-word;
+  }
+  .rp-stat-number {
+    font-size: 14px;
+    white-space: normal;         /* allow value to wrap if needed */
+    word-break: break-word;
+  }
+
+  /* ... keep all other rules for charts, tables, etc. ... */
+}
+
+
 /* Print styles */
 @media print {
   .rp-page {
