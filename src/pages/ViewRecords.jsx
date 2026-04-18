@@ -347,21 +347,21 @@ export default function ViewRecords() {
     setNewReceiptFile(null);
   };
 
-  const changeViewPage = (direction) => {
-    let newPage = page;
-    if (direction === 'prev' && page > 1) {
-      newPage = page - 1;
-    } else if (direction === 'next' && page < totalPages) {
-      newPage = page + 1;
-    }
-    setPage(newPage);
-    // Adjust visible window so the new page stays inside
-    if (newPage < visibleStart) {
-      setVisibleStart(Math.max(1, newPage - 2));
-    } else if (newPage > visibleStart + 4) {
-      setVisibleStart(Math.min(totalPages - 4, newPage - 2));
-    }
-  };
+ const changeViewPage = (direction) => {
+  let newPage = page;
+  if (direction === 'prev' && page > 1) {
+    newPage = page - 1;
+  } else if (direction === 'next' && page < totalPages) {
+    newPage = page + 1;
+  }
+  setPage(newPage);
+  // Adjust visible window – now using 3 (since 4 numbers, offset = 3)
+  if (newPage < visibleStart) {
+    setVisibleStart(Math.max(1, newPage - 2));
+  } else if (newPage > visibleStart + 3) {
+    setVisibleStart(Math.min(totalPages - 3, newPage - 2));
+  }
+};
 
   if (loading && transactions.length === 0) {
     return (
@@ -605,67 +605,68 @@ export default function ViewRecords() {
         </div>
 
         {/* SLIDING PAGINATION – exactly 5 page numbers at a time */}
-        <div className="table-footer">
-          <div className="pagination-info">
-            Showing {startIndex} to {endIndex} of {totalCount} entries
-          </div>
-          <div className="pagination-controls">
-            <button className="page-btn" onClick={() => changeViewPage('prev')} disabled={page === 1}>
-              <i className="fas fa-chevron-left"></i>
-            </button>
+        {/* SLIDING PAGINATION – exactly 4 page numbers at a time */}
+<div className="table-footer">
+  <div className="pagination-info">
+    Showing {startIndex} to {endIndex} of {totalCount} entries
+  </div>
+  <div className="pagination-controls">
+    <button className="page-btn" onClick={() => changeViewPage('prev')} disabled={page === 1}>
+      <i className="fas fa-chevron-left"></i>
+    </button>
 
-            <div className="page-numbers">
-              {/* Shift window left (double arrow) */}
-              <button
-                className="page-btn window-nav"
-                onClick={() => setVisibleStart(Math.max(1, visibleStart - 1))}
-                disabled={visibleStart === 1}
-              >
-                <i className="fas fa-angle-double-left"></i>
-              </button>
+    <div className="page-numbers">
+      {/* Shift window left (double arrow) */}
+      <button
+        className="page-btn window-nav"
+        onClick={() => setVisibleStart(Math.max(1, visibleStart - 1))}
+        disabled={visibleStart === 1}
+      >
+        <i className="fas fa-angle-double-left"></i>
+      </button>
 
-              {(() => {
-                const maxVisible = 5;
-                const start = visibleStart;
-                const end = Math.min(visibleStart + maxVisible - 1, totalPages);
-                const pageNumbers = [];
-                for (let i = start; i <= end; i++) {
-                  pageNumbers.push(i);
-                }
-                return pageNumbers.map((pageNum) => (
-                  <button
-                    key={pageNum}
-                    className={`page-number ${pageNum === page ? 'active' : ''}`}
-                    onClick={() => {
-                      setPage(pageNum);
-                      // Adjust window if needed
-                      if (pageNum < visibleStart) {
-                        setVisibleStart(Math.max(1, pageNum - 2));
-                      } else if (pageNum > visibleStart + 4) {
-                        setVisibleStart(Math.min(totalPages - 4, pageNum - 2));
-                      }
-                    }}
-                  >
-                    {pageNum}
-                  </button>
-                ));
-              })()}
+      {(() => {
+        const maxVisible = 4;  // Only 4 numbers visible
+        const start = visibleStart;
+        const end = Math.min(visibleStart + maxVisible - 1, totalPages);
+        const pageNumbers = [];
+        for (let i = start; i <= end; i++) {
+          pageNumbers.push(i);
+        }
+        return pageNumbers.map((pageNum) => (
+          <button
+            key={pageNum}
+            className={`page-number ${pageNum === page ? 'active' : ''}`}
+            onClick={() => {
+              setPage(pageNum);
+              // Adjust window if needed (using offset 3)
+              if (pageNum < visibleStart) {
+                setVisibleStart(Math.max(1, pageNum - 2));
+              } else if (pageNum > visibleStart + 3) {
+                setVisibleStart(Math.min(totalPages - 3, pageNum - 2));
+              }
+            }}
+          >
+            {pageNum}
+          </button>
+        ));
+      })()}
 
-              {/* Shift window right (double arrow) */}
-              <button
-                className="page-btn window-nav"
-                onClick={() => setVisibleStart(Math.min(totalPages - 4, visibleStart + 1))}
-                disabled={visibleStart + 4 >= totalPages}
-              >
-                <i className="fas fa-angle-double-right"></i>
-              </button>
-            </div>
+      {/* Shift window right (double arrow) */}
+      <button
+        className="page-btn window-nav"
+        onClick={() => setVisibleStart(Math.min(totalPages - 3, visibleStart + 1))}
+        disabled={visibleStart + 3 >= totalPages}
+      >
+        <i className="fas fa-angle-double-right"></i>
+      </button>
+    </div>
 
-            <button className="page-btn" onClick={() => changeViewPage('next')} disabled={page === totalPages || totalPages === 0}>
-              <i className="fas fa-chevron-right"></i>
-            </button>
-          </div>
-        </div>
+    <button className="page-btn" onClick={() => changeViewPage('next')} disabled={page === totalPages || totalPages === 0}>
+      <i className="fas fa-chevron-right"></i>
+    </button>
+  </div>
+</div>
       </div>
 
       {/* Delete Confirmation Modal */}
