@@ -3,6 +3,7 @@
   animation: rp-fadeIn 0.5s ease;
   padding: 2px 16px;
   padding-bottom: max(20px, env(safe-area-inset-bottom));
+  overflow-x: hidden;
 }
 
 @keyframes rp-fadeIn {
@@ -52,12 +53,7 @@
   color: var(--text-secondary);
   transition: all 0.2s;
 }
-.rp-preset-btn:hover {
-  background: rgba(var(--primary-rgb), 0.15);
-  color: var(--primary);
-  border-color: var(--primary);
-  transform: translateY(-1px);
-}
+.rp-preset-btn:hover,
 .rp-preset-btn.active {
   background: rgba(var(--primary-rgb), 0.15);
   color: var(--primary);
@@ -336,6 +332,7 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.04);
   border: 1px solid var(--border-color);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 0; /* prevent overflow */
 }
 .rp-chart-card:hover {
   transform: translateY(-2px) scale(1.03);
@@ -358,6 +355,12 @@
 .rp-chart-container {
   height: 180px;
   position: relative;
+  width: 100%; /* ensure container fills card */
+}
+.rp-chart-container canvas {
+  max-width: 100%;
+  height: auto !important;
+  width: 100% !important;
 }
 
 /* ===== TRANSACTIONS TABLE ===== */
@@ -429,7 +432,7 @@
 
 /* ========== RESPONSIVE BREAKPOINTS (aligned with analytics) ========== */
 
-/* 1200px and below – reduce gaps, adjust charts grid */
+/* 1200px and below – reduce charts grid to 2 columns */
 @media (max-width: 1200px) {
   .rp-charts-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -492,6 +495,19 @@
   .rp-export-toolbar {
     padding: 8px 14px;
   }
+  /* Stats card adjustments for tablet */
+  .rp-stat-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .rp-stat-label {
+    white-space: normal;
+    font-size: 11px;
+  }
+  .rp-stat-number {
+    font-size: 16px;
+  }
 }
 
 /* 768px and below – tablet portrait / small tablet */
@@ -551,6 +567,19 @@
   .rp-stats-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
+  }
+  /* Stats card wrapping for 768px */
+  .rp-stat-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .rp-stat-label {
+    white-space: normal;
+    font-size: 11px;
+  }
+  .rp-stat-number {
+    font-size: 16px;
   }
   .rp-charts-grid {
     grid-template-columns: 1fr;
@@ -642,24 +671,31 @@
   .rp-kpi-grid-secondary .rp-kpi-label {
     font-size: 6px;
   }
-  /* Stats row – single column */
+  /* Stats row – single column with proper wrapping */
   .rp-stats-grid {
     grid-template-columns: 1fr;
     gap: 10px;
   }
   .rp-stat-card {
-    padding: 8px 12px;
+    padding: 10px 12px;
   }
   .rp-stat-icon {
     width: 1.8rem;
     height: 1.8rem;
     font-size: 14px;
   }
-  .rp-stat-number {
-    font-size: 15px;
+  .rp-stat-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
   }
   .rp-stat-label {
-    font-size: 12px;
+    white-space: normal;
+    font-size: 10px;
+    line-height: 1.3;
+  }
+  .rp-stat-number {
+    font-size: 16px;
   }
   /* Charts – full width */
   .rp-charts-grid {
@@ -722,34 +758,3 @@
 }
 
 
-/* Inside @media (max-width: 768px) */
-.rp-stat-details {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-}
-.rp-stat-label {
-  white-space: normal;
-  font-size: 11px;
-}
-.rp-stat-number {
-  font-size: 16px;
-}
-
-/* Inside @media (max-width: 480px) */
-.rp-stat-card {
-  padding: 10px 12px;
-}
-.rp-stat-details {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-}
-.rp-stat-label {
-  white-space: normal;
-  font-size: 10px;
-  line-height: 1.3;
-}
-.rp-stat-number {
-  font-size: 16px;
-}

@@ -185,6 +185,7 @@
 .db-chart-header h3 i {
   color: var(--secondary);
 }
+
 .db-chart-legend {
   display: flex;
   gap: 12px;
@@ -195,9 +196,16 @@
 }
 .db-legend-income i { color: #4caf50; }
 .db-legend-expense i { color: #f44336; }
+
 .db-chart-container {
-  height: 220px !important;
+  height: 180px;
   position: relative;
+  width: 100%; /* ensure container fills card */
+}
+.db-chart-container canvas {
+  max-width: 100%;
+  height: auto !important;
+  width: 100% !important;
 }
 
 /* ---------- Recent Transactions (base: desktop – unchanged) ---------- */
