@@ -47,6 +47,9 @@ export default function ViewRecords() {
   const [dateRange, setDateRange] = useState({ min: '', max: '' });
   const [totalAmount, setTotalAmount] = useState(0);
 
+  // Sliding pagination: first visible page number
+  const [visibleStart, setVisibleStart] = useState(1);
+
   const currencySymbol = organization?.currency_symbol || '£';
   const formatCurrencyWithSymbol = (amount) => {
     return `${currencySymbol} ${Number(amount).toLocaleString(undefined, {
@@ -323,9 +326,15 @@ export default function ViewRecords() {
     URL.revokeObjectURL(url);
   };
 
+  // Calculate pagination values BEFORE the useEffect that depends on totalPages
   const totalPages = Math.ceil(totalCount / pageSize);
   const startIndex = (page - 1) * pageSize + 1;
   const endIndex = Math.min(page * pageSize, totalCount);
+
+  // Reset visible window when total pages change
+  useEffect(() => {
+    setVisibleStart(1);
+  }, [totalPages]);
 
   const toggleFilters = () => setShowFilters(!showFilters);
   const closeModal = () => {
@@ -337,11 +346,20 @@ export default function ViewRecords() {
     setSelectedTransaction(null);
     setNewReceiptFile(null);
   };
+
   const changeViewPage = (direction) => {
+    let newPage = page;
     if (direction === 'prev' && page > 1) {
-      setPage(page - 1);
+      newPage = page - 1;
     } else if (direction === 'next' && page < totalPages) {
-      setPage(page + 1);
+      newPage = page + 1;
+    }
+    setPage(newPage);
+    // Adjust visible window so the new page stays inside
+    if (newPage < visibleStart) {
+      setVisibleStart(Math.max(1, newPage - 2));
+    } else if (newPage > visibleStart + 4) {
+      setVisibleStart(Math.min(totalPages - 4, newPage - 2));
     }
   };
 
@@ -586,7 +604,7 @@ export default function ViewRecords() {
           </div>
         </div>
 
-        {/* SMART PAGINATION – max 5 pages + ellipsis */}
+        {/* SLIDING PAGINATION – exactly 5 page numbers at a time */}
         <div className="table-footer">
           <div className="pagination-info">
             Showing {startIndex} to {endIndex} of {totalCount} entries
@@ -595,53 +613,54 @@ export default function ViewRecords() {
             <button className="page-btn" onClick={() => changeViewPage('prev')} disabled={page === 1}>
               <i className="fas fa-chevron-left"></i>
             </button>
-            <div className="page-numbers">
-              {(() => {
-                const total = totalPages;
-                const current = page;
-                const maxVisible = 5;
-                if (total <= maxVisible) {
-                  return Array.from({ length: total }, (_, i) => i + 1).map(num => (
-                    <button
-                      key={num}
-                      className={`page-number ${num === page ? 'active' : ''}`}
-                      onClick={() => setPage(num)}
-                    >
-                      {num}
-                    </button>
-                  ));
-                }
-                const pages = [];
-                const leftSibling = Math.max(1, current - 1);
-                const rightSibling = Math.min(total, current + 1);
-                const showLeftEllipsis = leftSibling > 2;
-                const showRightEllipsis = rightSibling < total - 1;
 
-                if (showLeftEllipsis) {
-                  pages.push(1, '...');
-                } else {
-                  for (let i = 1; i <= leftSibling; i++) pages.push(i);
+            <div className="page-numbers">
+              {/* Shift window left (double arrow) */}
+              <button
+                className="page-btn window-nav"
+                onClick={() => setVisibleStart(Math.max(1, visibleStart - 1))}
+                disabled={visibleStart === 1}
+              >
+                <i className="fas fa-angle-double-left"></i>
+              </button>
+
+              {(() => {
+                const maxVisible = 5;
+                const start = visibleStart;
+                const end = Math.min(visibleStart + maxVisible - 1, totalPages);
+                const pageNumbers = [];
+                for (let i = start; i <= end; i++) {
+                  pageNumbers.push(i);
                 }
-                for (let i = leftSibling; i <= rightSibling; i++) {
-                  if (!pages.includes(i)) pages.push(i);
-                }
-                if (showRightEllipsis) {
-                  pages.push('...', total);
-                } else {
-                  for (let i = rightSibling + 1; i <= total; i++) pages.push(i);
-                }
-                return pages.map((item, idx) => (
+                return pageNumbers.map((pageNum) => (
                   <button
-                    key={idx}
-                    className={`page-number ${item === page ? 'active' : ''}`}
-                    onClick={() => typeof item === 'number' && setPage(item)}
-                    disabled={item === '...'}
+                    key={pageNum}
+                    className={`page-number ${pageNum === page ? 'active' : ''}`}
+                    onClick={() => {
+                      setPage(pageNum);
+                      // Adjust window if needed
+                      if (pageNum < visibleStart) {
+                        setVisibleStart(Math.max(1, pageNum - 2));
+                      } else if (pageNum > visibleStart + 4) {
+                        setVisibleStart(Math.min(totalPages - 4, pageNum - 2));
+                      }
+                    }}
                   >
-                    {item}
+                    {pageNum}
                   </button>
                 ));
               })()}
+
+              {/* Shift window right (double arrow) */}
+              <button
+                className="page-btn window-nav"
+                onClick={() => setVisibleStart(Math.min(totalPages - 4, visibleStart + 1))}
+                disabled={visibleStart + 4 >= totalPages}
+              >
+                <i className="fas fa-angle-double-right"></i>
+              </button>
             </div>
+
             <button className="page-btn" onClick={() => changeViewPage('next')} disabled={page === totalPages || totalPages === 0}>
               <i className="fas fa-chevron-right"></i>
             </button>
