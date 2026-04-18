@@ -1,4 +1,4 @@
-/* ===== VIEW RECORDS – forced horizontal scrollbar always visible ===== */
+/* ===== VIEW RECORDS – final unified (px font sizes only) ===== */
 * {
   margin: 0;
   padding: 0;
@@ -88,7 +88,7 @@
   font-size: 14px;
 }
 
-/* ===== FILTER SECTION (unchanged) ===== */
+/* ===== FILTER SECTION – responsive (unchanged) ===== */
 .filter-section {
   background: var(--card-bg);
   border-radius: 20px;
@@ -349,7 +349,7 @@
   }
 }
 
-/* ===== TABLE – FORCED HORIZONTAL SCROLLBAR ALWAYS VISIBLE ===== */
+/* ===== TABLE – HORIZONTAL SCROLLBAR ALWAYS VISIBLE, VERTICAL HIDDEN UNTIL HOVER ===== */
 .table-card {
   background: var(--card-bg);
   border-radius: 20px;
@@ -358,78 +358,71 @@
   overflow: hidden;
 }
 
-/* Critical: force horizontal scroll and always show scrollbar */
 .table-responsive {
-        /* always reserve space for horizontal scrollbar */
-                     /* vertical scroll appears on content overflow */
+  overflow-x: scroll !important;    /* force horizontal scrollbar to always occupy space */
+  overflow-y: auto;                 /* vertical scroll appears only when needed */
   width: 100%;
   border-radius: 15px;
   max-height: 460px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-    
-  margin-right: 10px;        /* reserve space to avoid layout shift */
+  scrollbar-gutter: stable;         /* reserve space for scrollbar to avoid layout shift */
 }
 
-/* Firefox: force scrollbar to be always visible (thin but non‑overlay) */
+/* Firefox – horizontal scrollbar always visible (thin), vertical hidden by default (will appear on hover) */
 .table-responsive {
-  scrollbar-width: thin;              /* forces scrollbar to be always visible in Firefox */
-  scrollbar-color: var(--gray-100) ;
+  scrollbar-width: none;            /* hides both scrollbars in Firefox initially */
+}
+.table-responsive:hover,
+.table-responsive:focus-within {
+  scrollbar-width: thin;            /* shows both scrollbars (thin) on hover */
 }
 
-/* WebKit (Chrome, Edge, Safari): force horizontal scrollbar to always appear */
+/* WebKit (Chrome, Edge, Safari) – horizontal scrollbar always visible, vertical hidden by default */
 .table-responsive::-webkit-scrollbar {
-  height: 8px;                        /* horizontal scrollbar height */
-  width: 0;                           /* hide vertical scrollbar initially (will appear on hover) */
+  height: 8px;                      /* horizontal scrollbar always visible */
+  width: 0;                         /* vertical scrollbar hidden initially */
   background: transparent;
-  -webkit-appearance: none;
 }
-/* Horizontal scrollbar track and thumb – always visible */
-.table-responsive::-webkit-scrollbar-track:horizontal {
+.table-responsive::-webkit-scrollbar-track {
   background: var(--border-color);
   border-radius: 4px;
+}
+.table-responsive::-webkit-scrollbar-thumb {
+  background: var(--gray-500);
+  border-radius: 4px;
+}
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-600);
+}
+
+/* On hover/focus, show vertical scrollbar (width 8px) */
+.table-responsive:hover::-webkit-scrollbar,
+.table-responsive:focus-within::-webkit-scrollbar {
+  width: 8px;                       /* vertical scrollbar appears */
+}
+
+/* Ensure horizontal scrollbar always has a visible track and thumb (no transparency) */
+.table-responsive::-webkit-scrollbar:horizontal {
+  height: 8px;
+}
+.table-responsive::-webkit-scrollbar-track:horizontal {
+  background: var(--border-color);
 }
 .table-responsive::-webkit-scrollbar-thumb:horizontal {
   background: var(--gray-500);
-  border-radius: 4px;
-}
-.table-responsive::-webkit-scrollbar-thumb:horizontal:hover {
-  background: var(--gray-600);
 }
 
-/* Vertical scrollbar hidden by default, appears on hover/focus */
-.table-responsive::-webkit-scrollbar:vertical {
-  width: 0;
-}
-.table-responsive:hover::-webkit-scrollbar:vertical,
-.table-responsive:focus-within::-webkit-scrollbar:vertical {
-  width: 8px;
-}
-.table-responsive::-webkit-scrollbar-track:vertical {
-  background: var(--border-color);
-  border-radius: 4px;
-}
-.table-responsive::-webkit-scrollbar-thumb:vertical {
-  background: var(--gray-500);
-  border-radius: 4px;
-}
-.table-responsive::-webkit-scrollbar-thumb:vertical:hover {
-  background: var(--gray-600);
-}
-
-/* Ensure the table always triggers horizontal overflow on small screens */
+/* Table itself – ensure horizontal overflow triggers scroll */
 .records-table {
   border-radius: 10px;
   width: 100%;
   border-collapse: collapse;
-  min-width: 768px;
-  padding: 20px;   
-  ;                 /* forces horizontal scroll on narrower containers */
+  min-width: 768px;                 /* forces horizontal scroll on smaller containers */
 }
 
 .records-table th {
   padding: 10px 8px;
   text-align: left;
-  margin-right: 10px;
 }
 .records-table td {
   padding: 5px 8px;
@@ -823,7 +816,7 @@
   transform: translateY(-1px);
 }
 
-/* Edit modal specifics (unchanged) */
+/* Edit modal specifics */
 .modal-content[style*="max-width: 700px"] {
   max-width: 704px;
 }
@@ -989,7 +982,7 @@
   .btn-filter, .filter-select, .btn-export {
     font-size: 11px;
   }
-  /* Ensure horizontal scrollbar remains forced */
+  /* Force horizontal scroll on small screens */
   .table-responsive {
     overflow-x: scroll !important;
   }
@@ -1225,4 +1218,3 @@
   color: var(--text-muted);
   padding: 0 8px;
 }
-
