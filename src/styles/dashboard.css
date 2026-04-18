@@ -255,10 +255,11 @@
 .db-transactions-table {
   width: 100%;
   border-collapse: collapse;
+  max-height: 200px;
 }
 .db-transactions-table th,
 .db-transactions-table td {
-  padding: 10px 8px;
+  padding: 5px 8px;
   text-align: left;
 }
 .db-transactions-table th {
