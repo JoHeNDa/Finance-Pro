@@ -1,7 +1,7 @@
 /* ==================== ANALYTICS – an- PREFIX ==================== */
 .an-page {
   animation: an-fadeIn 0.5s ease;
-  padding: 2px 16px;
+  padding: 20px 16px;
   padding-bottom: max(20px, env(safe-area-inset-bottom));
 }
 

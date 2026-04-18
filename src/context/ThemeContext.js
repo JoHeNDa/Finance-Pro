@@ -20,7 +20,7 @@ const themes = {
     '--text-muted': '#9ca3af',
     '--border-color': '#e5e7eb',
     '--input-bg': '#ffffff',
-    '--hover-bg': '#f1f5f9',
+    '--hover-bg': '#eeeff1',
     '--sidebar-bg': '#336d36',
     '--sidebar-text': '#ffffff',
     '--sidebar-text-secondary': 'rgba(255,255,255,0.85)',
@@ -33,7 +33,10 @@ const themes = {
     '--button-bg': '#2e7d32',
     '--button-bg-hover': '#2e7d32',
     '--button-bg-hover-rgb': '46, 125, 50',
-    '--action-btn-color': '#313131',
+    '--action-btn-color': '#5a5a5a',
+
+    '--primary-save-btn-rgb': '46, 125, 80',
+    '--button-save-text-rgb': '46, 125, 50',
 
     '--topbar-icon-color': '#2e7d32',
     '--primary': '#2e7d32',
@@ -63,6 +66,9 @@ const themes = {
     '--button-bg': '#2a312a',
     '--button-bg-hover': '#221c1c4d',
     '--action-btn-color': '#dfdfdf',
+
+    '--primary-save-btn-rgb': '255, 215, 0',
+    '--button-save-text-rgb': '255, 215, 0',
     
     '--primary': '#4caf50',
     '--primary-dark': '#388e3c',

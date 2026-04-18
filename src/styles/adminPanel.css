@@ -41,11 +41,12 @@
 
 .ap-invite-btn {
   padding: 12px 24px;
-  background: var(--button-bg);
-  border: none;
+  background: rgba(var(--primary-save-btn-rgb), 0.15);
+  color: rgba(var(--button-save-text-rgb), 1);
+  border: 1px solid rgba(var(--primary-save-btn-rgb), 1);
   border-radius: 12px;
-  color: var(--button-text);
-  font-weight: 600;
+  
+  font-weight: 700;
   font-size: 14px;
   cursor: pointer;
   display: inline-flex;

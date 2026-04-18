@@ -150,7 +150,7 @@
   display: flex;
   gap: 8px;
   align-items: center;
-  background: var(--hover-bg);
+  background: var(--gray-600);
   padding: 4px 12px;
   border-radius: 32px;
   flex: 1;
@@ -168,7 +168,8 @@
   padding: 6px 16px;
   background: rgba(var(--primary-rgb), 0.15);
   color: var(--primary);
-  border: none;
+  
+  border: 0.2px solid var(--primary);
   border-radius: 32px;
   font-size: 13px;
   font-weight: 500;
@@ -224,7 +225,7 @@
   padding: 6px 13px;
   background: rgba(var(--primary-rgb), 0.15);
   color: var(--primary);
-  border: none;
+  border: 0.2px solid var(--primary);
   border-radius: 32px;
   font-size: 12px;
   font-weight: 500;
@@ -234,7 +235,7 @@
   transition: all 0.2s;
 }
 .btn-export i {
-  color: var(--secondary);
+  color: var(--primary);
 }
 .btn-export:hover {
   background: rgba(var(--primary-rgb), 0.25);
@@ -595,8 +596,8 @@
   height: 29px;
   border: none;
   border-radius: 50%;
-  background: var(--gray-700);
-  color: var(--text-primary);
+  background: var(--hover-bg);
+  color: var(--action-btn-color);
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -689,9 +690,10 @@
   transition: all 0.2s;
 }
 .page-number.active {
-  background: rgba(var(--primary-rgb), 1);
-  color: var(--secondary);
-  border-color: var(--primary);
+  background: rgba(var(--primary-rgb), 0.2);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  
 }
 .page-number:hover:not(.active) {
   background: var(--hover-bg);

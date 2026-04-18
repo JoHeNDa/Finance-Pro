@@ -2,6 +2,7 @@
 .db-page {
   animation: db-fadeIn 0.5s ease;
   padding: 2px 16px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
 }
 
 @keyframes db-fadeIn {
@@ -9,33 +10,35 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ---------- Summary Cards Grid (base: desktop) ---------- */
+/* ---------- Summary Cards Grid (base: desktop – unchanged) ---------- */
 .db-summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 14px;
+  margin-top: 8px;
+  margin-bottom: 28px;
 }
 
 .db-summary-card {
   background: var(--card-bg);
   border-radius: 14px;
-  padding: 16px 12px;
+  padding: 0.9rem;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0.8rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
   border: 1px solid var(--border-color);
+  min-width: 0;
 }
 .db-summary-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
-  width: 4px;
+  width: 0px;
   height: 100%;
 }
 .db-summary-card.db-gross-revenue::before { background: linear-gradient(180deg, #ff9800, #f57c00); }
@@ -50,49 +53,50 @@
 }
 
 .db-card-icon {
-  width: 35px;
-  height: 35px;
-  border-radius: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;          /* was 22px → scaled down */
+  font-size: 19px;
   background: var(--hover-bg);
   color: var(--primary);
   flex-shrink: 0;
+  transition: all 0.3s ease;
 }
 .db-card-content {
   flex: 1;
   min-width: 0;
 }
 .db-card-label {
-  font-size: 11px;          /* was 12px → scaled down */
-  color: var(--gray-600);
+  font-size: 10px;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 500;
-  margin-bottom: px;
+  margin-bottom: 2px;
 }
 .db-card-value {
   display: block;
-  font-size: 20px;          /* was 20px → scaled down */
+  font-size: 19px;
   font-weight: 700;
   color: var(--text-primary);
   margin: 2px 0;
-  line-height: 1.2;
+  white-space: normal;
+  word-break: break-word;
 }
 .db-card-trend {
-  font-size: 9px;           /* was 11px → scaled down */
+  font-size: 10px;
   color: var(--text-muted);
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-top: 2px;
 }
 .db-card-trend.db-positive { color: #2e7d32; }
 .db-card-trend.db-negative { color: #c62828; }
 
-/* ---------- Stats Row ---------- */
+/* ---------- Stats Row (base: desktop – unchanged) ---------- */
 .db-stats-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -110,7 +114,7 @@
   border: 1px solid var(--border-color);
 }
 .db-stat-item i {
-  font-size: 19px;          /* was 24px → scaled down */
+  font-size: 19px;
   color: var(--primary);
   background: rgba(46,125,50,0.08);
   padding: 8px;
@@ -126,13 +130,13 @@
   flex-wrap: wrap;
 }
 .db-stat-label {
-  font-size: 11px;          /* was 12px → scaled down */
+  font-size: 11px;
   color: var(--gray-600);
   text-transform: capitalize;
   letter-spacing: 0.3px;
 }
 .db-stat-value {
-  font-size: 13px;          /* was 16px → scaled down */
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
@@ -140,7 +144,7 @@
   text-overflow: ellipsis;
 }
 
-/* ---------- Charts Grid ---------- */
+/* ---------- Charts Grid (base: desktop – unchanged) ---------- */
 .db-charts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -170,7 +174,7 @@
   gap: 8px;
 }
 .db-chart-header h3 {
-  font-size: 13px;          /* was 14px → scaled down */
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-secondary);
   display: flex;
@@ -184,10 +188,10 @@
 .db-chart-legend {
   display: flex;
   gap: 12px;
-  font-size: 10px;           /* was 11px → scaled down */
+  font-size: 10px;
 }
 .db-legend-income i, .db-legend-expense i {
-  font-size: 9px;           /* was 11px → scaled down */
+  font-size: 9px;
 }
 .db-legend-income i { color: #4caf50; }
 .db-legend-expense i { color: #f44336; }
@@ -196,7 +200,7 @@
   position: relative;
 }
 
-/* ---------- Recent Transactions ---------- */
+/* ---------- Recent Transactions (base: desktop – unchanged) ---------- */
 .db-recent-card {
   background: var(--card-bg);
   border-radius: 16px;
@@ -217,7 +221,7 @@
   border-bottom: 1px solid var(--border-color);
 }
 .db-recent-card .db-card-header h3 {
-  font-size: 12px;          /* was 14px → scaled down */
+  font-size: 12px;
   font-weight: 600;
   margin: 0;
   display: flex;
@@ -231,7 +235,7 @@
 .db-view-all-link {
   color: var(--primary);
   text-decoration: none;
-  font-size: 11px;          /* was 12px → scaled down */
+  font-size: 11px;
   font-weight: 500;
 }
 .db-table-responsive {
@@ -253,7 +257,7 @@
   background: var(--hover-bg);
   color: var(--text-secondary);
   font-weight: 600;
-  font-size: 10px;           /* was 11px → scaled down */
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   position: sticky;
@@ -262,7 +266,7 @@
   border-bottom: 1px solid var(--border-color);
 }
 .db-transactions-table td {
-  font-size: 11px;          /* was 12px → scaled down */
+  font-size: 11px;
   color: var(--text-primary);
   border-bottom: 1px solid var(--border-color);
 }
@@ -272,7 +276,7 @@
 .db-badge {
   padding: 4px 8px;
   border-radius: 20px;
-  font-size: 9px;           /* was 11px → scaled down */
+  font-size: 9px;
   font-weight: 500;
   display: inline-block;
 }
@@ -290,120 +294,248 @@
 .db-income-text { color: #2e7d32; }
 .db-expense-text { color: #c62828; }
 
-/* ========== RESPONSIVE BREAKPOINTS ========== */
+/* ========== RESPONSIVE BREAKPOINTS (adopted from analytics) ========== */
 
-/* Tablet (481px – 768px) – slightly larger fonts, 2–3 cards */
-@media (min-width: 481px) and (max-width: 768px) {
-  .db-summary-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-  }
-  .db-card-value {
-    font-size: 18px;        /* unchanged from original tablet value */
-  }
-  .db-stat-value {
-    font-size: 15px;
-  }
-  .db-chart-container {
-    height: 200px !important;
-  }
-  .db-transactions-table th {
-    font-size: 10px;
-  }
-  .db-transactions-table td {
-    font-size: 11px;
+/* 1200px and below – adjust charts gap */
+@media (max-width: 1200px) {
+  .db-charts-grid {
+    gap: 16px;
   }
 }
 
-/* Mobile (≤480px) – 2 cards per row, bigger fonts, taller charts */
-@media (max-width: 480px) {
+/* 1024px and below – tablet adjustments (spacing, fonts, stats wrapping) */
+@media (max-width: 1024px) {
   .db-page {
-    padding: 12px 10px;
+    padding: 16px 12px;
   }
-
-  /* Summary cards – force 2 columns, increase font sizes */
   .db-summary-grid {
-    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
+    margin-bottom: 24px;
   }
   .db-summary-card {
-    padding: 10px 10px;
-    gap: 10px;
+    padding: 0.7rem;
+    gap: 0.6rem;
   }
   .db-card-icon {
-    width: 30px;
-    height: 30px;
+    width: 2.2rem;
+    height: 2.2rem;
+    font-size: 16px;
+  }
+  .db-card-value {
     font-size: 18px;
   }
   .db-card-label {
-    font-size: 8px;
-  }
-  .db-card-value {
-    font-size: 16px;
+    font-size: 9px;
   }
   .db-card-trend {
     font-size: 9px;
   }
-
-  /* Stats row – single column (or auto-fit) */
-  .db-stats-row {
-    grid-template-columns: 1fr;
+  .db-stat-item {
+    padding: 6px;
     gap: 10px;
   }
-  .db-stat-item {
-    padding: 5px;
-  }
   .db-stat-item i {
-    font-size: 20px;
+    font-size: 18px;
     padding: 6px;
   }
   .db-stat-label {
-    font-size: 11px;
+    font-size: 10px;
   }
   .db-stat-value {
-    font-size: 14px;
+    font-size: 13px;
+    white-space: normal;
+    word-break: break-word;
   }
-
-  /* Charts – full width, taller containers */
   .db-charts-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 14px;
+    margin-bottom: 20px;
   }
   .db-chart-card {
     padding: 12px;
   }
   .db-chart-header h3 {
-    font-size: 13px;
+    font-size: 12px;
   }
   .db-chart-legend {
-    font-size: 10px;
-    gap: 10px;
+    font-size: 9px;
   }
   .db-chart-container {
     height: 200px !important;
   }
-
-  /* Recent transactions – more row height, bigger text */
   .db-recent-card {
-    max-height: 320px;
+    max-height: 300px;
     padding: 12px;
   }
+}
+
+/* 768px and below – tablet portrait (force 2 summary cards, adjust stats) */
+@media (max-width: 768px) {
+  .db-page {
+    padding: 12px;
+  }
+  .db-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .db-summary-card {
+    padding: 10px 8px;
+  }
+  .db-card-icon {
+    width: 2rem;
+    height: 2rem;
+    font-size: 14px;
+  }
+  .db-card-value {
+    font-size: 17px;
+  }
+  .db-card-label {
+    font-size: 8px;
+  }
+  .db-card-trend {
+    font-size: 8px;
+  }
+  .db-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .db-stat-item {
+    padding: 8px;
+  }
+  .db-stat-item > div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .db-stat-label {
+    white-space: normal;
+    font-size: 10px;
+  }
+  .db-stat-value {
+    font-size: 14px;
+    white-space: normal;
+  }
+  .db-charts-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .db-chart-container {
+    height: 200px !important;
+  }
+  .db-recent-card {
+    max-height: 320px;
+  }
+  .db-transactions-table th,
+  .db-transactions-table td {
+    padding: 8px 6px;
+  }
+}
+
+/* 480px and below – mobile (2 summary cards, 1 column stats, full width charts) */
+@media (max-width: 480px) {
+  .db-page {
+    padding: 10px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+  .db-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .db-summary-card {
+    padding: 8px 6px;
+    gap: 8px;
+  }
+  .db-card-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+  .db-card-value {
+    font-size: 15px;
+  }
+  .db-card-label {
+    font-size: 8px;
+  }
+  .db-card-trend {
+    font-size: 8px;
+  }
+  .db-stats-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .db-stat-item {
+    padding: 8px 10px;
+  }
+  .db-stat-item i {
+    font-size: 18px;
+    padding: 6px;
+  }
+  .db-stat-item > div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  .db-stat-label {
+    white-space: normal;
+    font-size: 10px;
+    line-height: 1.3;
+  }
+  .db-stat-value {
+    font-size: 14px;
+    white-space: normal;
+    word-break: break-word;
+  }
+  .db-charts-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .db-chart-card {
+    padding: 10px;
+  }
+  .db-chart-header h3 {
+    font-size: 12px;
+  }
+  .db-chart-legend {
+    font-size: 9px;
+    gap: 8px;
+  }
+  .db-chart-container {
+    height: 180px !important;
+  }
+  .db-recent-card {
+    max-height: 340px;
+    padding: 10px;
+  }
   .db-recent-card .db-card-header h3 {
-    font-size: 13px;
+    font-size: 12px;
   }
   .db-view-all-link {
-    font-size: 11px;
+    font-size: 10px;
   }
   .db-transactions-table th {
     font-size: 9px;
-    padding: 8px 6px;
+    padding: 6px 4px;
   }
   .db-transactions-table td {
-    font-size: 11px;
-    padding: 8px 6px;
+    font-size: 10px;
+    padding: 6px 4px;
   }
   .db-badge {
-    font-size: 9px;
-    padding: 3px 6px;
+    font-size: 8px;
+    padding: 2px 5px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .db-page {
+    padding: 0;
+    background: white;
+  }
+  .db-summary-card,
+  .db-chart-card,
+  .db-recent-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ddd;
   }
 }
