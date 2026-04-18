@@ -97,7 +97,7 @@ html, body {
 }
 
 .layout-logo-text {
-  color: var(--gray-400);
+  color: var(--gray-100);
   font-weight: 700;
   font-size: 22px;          /* was 26px → -15% */
 }
@@ -306,7 +306,7 @@ html, body {
   padding: 6px 12px;
   border-radius: 24px;
   font-size: 11px;          /* was 13px → -15% */
-  color: var(--text-muted);
+  color: var(--gray-600);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -324,11 +324,11 @@ html, body {
   justify-content: center;
   cursor: pointer;
   transition: var(--transition);
-  color: var(--text-muted);
+  color: var(--gray-600);
 }
 
 .layout-refresh-btn i {
-  color: var(--text-muted);
+  color: var(--gray-600);
 }
 
 .layout-refresh-btn:hover {
@@ -350,7 +350,7 @@ html, body {
   justify-content: center;
   cursor: pointer;
   transition: var(--transition);
-  color: var(--text-muted);
+  color: var(--gray-600);
 }
 
 .layout-menu-toggle i {
