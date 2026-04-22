@@ -78,68 +78,65 @@ export default function AdminPanel() {
     setLoading(false);
   };
 
-  const handleInvite = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
+ const handleInvite = async (e) => {
+  e.preventDefault();
+  setError('');
+  setSuccess('');
+  setSaving(true);
 
-    if (!inviteEmail || !inviteName) {
-      setError('Please fill in all fields');
+  if (!inviteEmail || !inviteName) {
+    setError('Please fill in all fields');
+    setSaving(false);
+    return;
+  }
+
+  try {
+    // Quick client-side check (optional)
+    const { data: existing } = await supabase
+      .from('users')
+      .select('email')
+      .eq('email', inviteEmail)
+      .eq('organization_id', userProfile.organization_id)
+      .maybeSingle();
+
+    if (existing) {
+      setError('A user with this email already exists in your organization');
+      setSaving(false);
       return;
     }
 
-    try {
-      const { data: existingUsers } = await supabase
-        .from('users')
-        .select('email')
-        .eq('email', inviteEmail)
-        .single();
-
-      if (existingUsers) {
-        setError('A user with this email already exists in your organization');
-        return;
-      }
-
-      const tempPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
-      
-      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+    // Call the Edge Function
+    const { data, error: functionError } = await supabase.functions.invoke('invite-user', {
+      body: {
         email: inviteEmail,
-        password: tempPassword,
-        email_confirm: true,
-        user_metadata: { name: inviteName }
-      });
+        name: inviteName,
+        organization_id: userProfile.organization_id,
+        role: inviteRole,
+      },
+    });
 
-      if (authError) {
-        setError('Failed to create user: ' + authError.message);
-        return;
-      }
-
-      const { error: insertError } = await supabase
-        .from('users')
-        .insert({
-          id: authData.user.id,
-          email: inviteEmail,
-          name: inviteName,
-          organization_id: userProfile.organization_id,
-          role: inviteRole,
-        });
-
-      if (insertError) {
-        setError('Failed to add user to organization');
-        return;
-      }
-
-      setSuccess(`User invited successfully! Temporary password: ${tempPassword}`);
-      setInviteEmail('');
-      setInviteName('');
-      setInviteRole('member');
-      setShowInviteModal(false);
-      fetchUsers();
-      fetchOrgStats();
-    } catch (err) {
-      setError('An error occurred: ' + err.message);
+    if (functionError) {
+      console.error('Function error:', functionError);
+      throw new Error(functionError.message || 'Failed to invite user');
     }
-  };
+
+    if (data.error) {
+      throw new Error(data.error);
+    }
+
+    setSuccess(`User invited successfully! Temporary password: ${data.tempPassword}`);
+    setInviteEmail('');
+    setInviteName('');
+    setInviteRole('member');
+    setShowInviteModal(false);
+    fetchUsers();
+    fetchOrgStats();
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setSaving(false);
+  }
+};
 
   const updateUserRole = async (userId, newRole) => {
     if (!isOwner && newRole === 'owner') {
