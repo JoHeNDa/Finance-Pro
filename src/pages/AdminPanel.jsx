@@ -91,21 +91,7 @@ export default function AdminPanel() {
   }
 
   try {
-    // Quick client-side check (optional)
-    const { data: existing } = await supabase
-      .from('users')
-      .select('email')
-      .eq('email', inviteEmail)
-      .eq('organization_id', userProfile.organization_id)
-      .maybeSingle();
-
-    if (existing) {
-      setError('A user with this email already exists in your organization');
-      setSaving(false);
-      return;
-    }
-
-    // Call the Edge Function
+    // Call the deployed Edge Function
     const { data, error: functionError } = await supabase.functions.invoke('invite-user', {
       body: {
         email: inviteEmail,
@@ -120,7 +106,7 @@ export default function AdminPanel() {
       throw new Error(functionError.message || 'Failed to invite user');
     }
 
-    if (data.error) {
+    if (data?.error) {
       throw new Error(data.error);
     }
 
@@ -409,7 +395,7 @@ export default function AdminPanel() {
               </div>
               <h2>Invite New Team Member</h2>
               <p>Send an invitation to join your organization</p>
-              <button className="ap-modal-close" onClick={() => setShowInviteModal(false)}>
+              <button type="submit" className="ap-modal-close" onClick={() => setShowInviteModal(false)}>
                 <i className="fas fa-times"></i>
               </button>
             </div>
