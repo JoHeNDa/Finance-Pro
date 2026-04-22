@@ -309,87 +309,127 @@ export default function ViewRecords() {
     }
   };
 
- const handleExport = () => {
-  // Sort by date ascending for a correct running balance
-  const sorted = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
+const handleExport = async () => {
+  // Show loading indicator (optional)
+  const originalLoading = loading;
+  setLoading(true);
 
-  const headers = [
-    'Date',
-    'Particular',
-    'Description',
-    'Revenue',
-    'Expense',
-    'VAT',
-    'Gross Revenue',
-    'Balance',
-    'Payment Mode',
-    'Recorded By',
-    'Receipt URL',
-    'Timestamp'
-  ];
+  try {
+    // Build the same query as fetchTransactions but WITHOUT pagination
+    let query = supabase
+      .from('transactions')
+      .select('*')
+      .eq('organization_id', userProfile.organization_id)
+      .order('date', { ascending: true }); // sort by date for balance calculation
 
-  let runningBalance = 0;
-  let totalRevenue = 0;
-  let totalExpense = 0;
-  let totalVAT = 0;
-  let totalGrossRevenue = 0;
+    if (typeFilter !== 'all') {
+      query = query.eq('type', typeFilter);
+    }
 
-  const rows = sorted.map(tx => {
-    const revenue = tx.type === 'Revenue' ? tx.amount : 0;
-    const expense = tx.type === 'Expense' ? tx.amount : 0;
-    const vat = tx.type === 'Revenue' ? (tx.vat_amount || 0) : 0;
-    const grossRevenue = revenue + vat;
+    if (debouncedSearch) {
+      query = query.or(`particular.ilike.%${debouncedSearch}%,description.ilike.%${debouncedSearch}%`);
+    }
 
-    runningBalance += (revenue - expense);
-    totalRevenue += revenue;
-    totalExpense += expense;
-    totalVAT += vat;
-    totalGrossRevenue += grossRevenue;
+    if (startDate) {
+      query = query.gte('date', startDate);
+    }
+    if (endDate) {
+      query = query.lte('date', endDate);
+    }
 
-    return [
-      new Date(tx.date).toLocaleDateString(),
-      tx.particular,
-      tx.description || '',
-      revenue.toFixed(2),
-      expense.toFixed(2),
-      vat.toFixed(2),
-      grossRevenue.toFixed(2),
-      runningBalance.toFixed(2),
-      tx.payment_mode,
-      users[tx.user_id] || tx.user_id,
-      tx.receipt_url || '',
-      new Date(tx.timestamp).toLocaleString(),
+    const { data: allTransactions, error } = await query;
+
+    if (error) {
+      console.error('Error fetching all transactions for export:', error);
+      alert('Failed to export data');
+      return;
+    }
+
+    if (!allTransactions || allTransactions.length === 0) {
+      alert('No transactions to export');
+      return;
+    }
+
+    // Build CSV from the full dataset
+    const headers = [
+      'Date',
+      'Particular',
+      'Description',
+      'Revenue',
+      'Expense',
+      'VAT',
+      'Gross Revenue',
+      'Balance',
+      'Payment Mode',
+      'Recorded By',
+      'Receipt URL',
+      'Timestamp'
     ];
-  });
 
-  // Add totals row
-  const totalsRow = [
-    'TOTAL',               // Date
-    '',                    // Particular
-    '',                    // Description
-    totalRevenue.toFixed(2),
-    totalExpense.toFixed(2),
-    totalVAT.toFixed(2),
-    totalGrossRevenue.toFixed(2),
-    (totalRevenue - totalExpense).toFixed(2), // Final balance
-    '', '', '', ''         // Remaining columns empty
-  ];
+    let runningBalance = 0;
+    let totalRevenue = 0;
+    let totalExpense = 0;
+    let totalVAT = 0;
+    let totalGrossRevenue = 0;
 
-  rows.push(totalsRow);
+    const rows = allTransactions.map(tx => {
+      const revenue = tx.type === 'Revenue' ? tx.amount : 0;
+      const expense = tx.type === 'Expense' ? tx.amount : 0;
+      const vat = tx.type === 'Revenue' ? (tx.vat_amount || 0) : 0;
+      const grossRevenue = revenue + vat;
 
-  const csv = [headers, ...rows]
-    .map(row => row.map(cell => `"${cell}"`).join(','))
-    .join('\n');
+      runningBalance += (revenue - expense);
+      totalRevenue += revenue;
+      totalExpense += expense;
+      totalVAT += vat;
+      totalGrossRevenue += grossRevenue;
 
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  const url = URL.createObjectURL(blob);
-  link.href = url;
-  link.download = `transactions_${new Date().toISOString().split('T')[0]}.csv`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+      return [
+        new Date(tx.date).toLocaleDateString(),
+        tx.particular,
+        tx.description || '',
+        revenue.toFixed(2),
+        expense.toFixed(2),
+        vat.toFixed(2),
+        grossRevenue.toFixed(2),
+        runningBalance.toFixed(2),
+        tx.payment_mode,
+        users[tx.user_id] || tx.user_id,
+        tx.receipt_url || '',
+        new Date(tx.timestamp).toLocaleString(),
+      ];
+    });
+
+    // Totals row
+    const totalsRow = [
+      'TOTAL',
+      '',
+      '',
+      totalRevenue.toFixed(2),
+      totalExpense.toFixed(2),
+      totalVAT.toFixed(2),
+      totalGrossRevenue.toFixed(2),
+      (totalRevenue - totalExpense).toFixed(2),
+      '', '', '', ''
+    ];
+    rows.push(totalsRow);
+
+    const csv = [headers, ...rows]
+      .map(row => row.map(cell => `"${cell}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.href = url;
+    link.download = `transactions_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  } finally {
+    setLoading(originalLoading);
+  }
 };
 
   // Calculate pagination values BEFORE the useEffect that depends on totalPages
