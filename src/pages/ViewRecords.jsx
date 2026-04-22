@@ -134,43 +134,56 @@ export default function ViewRecords() {
     setLoading(false);
   };
 
-  const fetchStats = async () => {
-    if (!userProfile?.organization_id) return;
-    const { count } = await supabase
-      .from('transactions')
-      .select('*', { count: 'exact', head: true })
-      .eq('organization_id', userProfile.organization_id);
-    setTotalRecords(count || 0);
+ const fetchStats = async () => {
+  if (!userProfile?.organization_id) return;
+  
+  // Total count
+  const { count } = await supabase
+    .from('transactions')
+    .select('*', { count: 'exact', head: true })
+    .eq('organization_id', userProfile.organization_id);
+  setTotalRecords(count || 0);
 
-    const { data: dates } = await supabase
-      .from('transactions')
-      .select('date')
-      .eq('organization_id', userProfile.organization_id)
-      .order('date', { ascending: true })
-      .limit(1);
-    const { data: datesDesc } = await supabase
-      .from('transactions')
-      .select('date')
-      .eq('organization_id', userProfile.organization_id)
-      .order('date', { ascending: false })
-      .limit(1);
+  // Min and max dates
+  const { data: datesMin } = await supabase
+    .from('transactions')
+    .select('date')
+    .eq('organization_id', userProfile.organization_id)
+    .order('date', { ascending: true })
+    .limit(1);
+    
+  const { data: datesMax } = await supabase
+    .from('transactions')
+    .select('date')
+    .eq('organization_id', userProfile.organization_id)
+    .order('date', { ascending: false })
+    .limit(1);
 
-    if (dates && dates[0] && datesDesc && datesDesc[0]) {
-      setDateRange({
-        min: new Date(dates[0].date).toLocaleDateString(),
-        max: new Date(datesDesc[0].date).toLocaleDateString(),
-      });
-    }
+  if (datesMin && datesMin[0] && datesMax && datesMax[0]) {
+    const minDate = datesMin[0].date;
+    const maxDate = datesMax[0].date;
+    
+    // Format for display
+    setDateRange({
+      min: new Date(minDate).toLocaleDateString(),
+      max: new Date(maxDate).toLocaleDateString(),
+    });
+    
+    // Only set filter dates if they are still empty (initial load)
+    setStartDate(prev => prev === '' ? minDate : prev);
+    setEndDate(prev => prev === '' ? maxDate : prev);
+  }
 
-    const { data: amounts } = await supabase
-      .from('transactions')
-      .select('amount')
-      .eq('organization_id', userProfile.organization_id);
-    if (amounts) {
-      const total = amounts.reduce((sum, tx) => sum + tx.amount, 0);
-      setTotalAmount(total);
-    }
-  };
+  // Total amount
+  const { data: amounts } = await supabase
+    .from('transactions')
+    .select('amount')
+    .eq('organization_id', userProfile.organization_id);
+  if (amounts) {
+    const total = amounts.reduce((sum, tx) => sum + tx.amount, 0);
+    setTotalAmount(total);
+  }
+};
 
   const handleSort = (column) => {
     if (sortColumn === column) {
@@ -388,6 +401,12 @@ export default function ViewRecords() {
   useEffect(() => {
     setVisibleStart(1);
   }, [totalPages]);
+
+  useEffect(() => {
+  // Reset date filters when organization changes
+  setStartDate('');
+  setEndDate('');
+}, [userProfile?.organization_id]);
 
   const toggleFilters = () => setShowFilters(!showFilters);
   const closeModal = () => {
