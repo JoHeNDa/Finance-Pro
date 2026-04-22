@@ -296,35 +296,88 @@ export default function ViewRecords() {
     }
   };
 
-  const handleExport = () => {
-    const headers = ['Date', 'Type', 'Particular', 'Description', 'Net Amount', 'VAT', 'Gross Amount', 'Payment Mode', 'Recorded By', 'Receipt URL', 'Timestamp'];
-    const rows = transactions.map(tx => {
-      const gross = tx.type === 'Revenue' ? tx.amount + (tx.vat_amount || 0) : tx.amount;
-      return [
-        new Date(tx.date).toLocaleDateString(),
-        tx.type,
-        tx.particular,
-        tx.description || '',
-        tx.amount,
-        tx.vat_amount || 0,
-        gross,
-        tx.payment_mode,
-        users[tx.user_id] || tx.user_id,
-        tx.receipt_url || '',
-        new Date(tx.timestamp).toLocaleString(),
-      ];
-    });
-    const csv = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.href = url;
-    link.download = `transactions_${new Date().toISOString().split('T')[0]}.csv`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
+ const handleExport = () => {
+  // Sort by date ascending for a correct running balance
+  const sorted = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  const headers = [
+    'Date',
+    'Particular',
+    'Description',
+    'Revenue',
+    'Expense',
+    'VAT',
+    'Gross Revenue',
+    'Balance',
+    'Payment Mode',
+    'Recorded By',
+    'Receipt URL',
+    'Timestamp'
+  ];
+
+  let runningBalance = 0;
+  let totalRevenue = 0;
+  let totalExpense = 0;
+  let totalVAT = 0;
+  let totalGrossRevenue = 0;
+
+  const rows = sorted.map(tx => {
+    const revenue = tx.type === 'Revenue' ? tx.amount : 0;
+    const expense = tx.type === 'Expense' ? tx.amount : 0;
+    const vat = tx.type === 'Revenue' ? (tx.vat_amount || 0) : 0;
+    const grossRevenue = revenue + vat;
+
+    runningBalance += (revenue - expense);
+    totalRevenue += revenue;
+    totalExpense += expense;
+    totalVAT += vat;
+    totalGrossRevenue += grossRevenue;
+
+    return [
+      new Date(tx.date).toLocaleDateString(),
+      tx.particular,
+      tx.description || '',
+      revenue.toFixed(2),
+      expense.toFixed(2),
+      vat.toFixed(2),
+      grossRevenue.toFixed(2),
+      runningBalance.toFixed(2),
+      tx.payment_mode,
+      users[tx.user_id] || tx.user_id,
+      tx.receipt_url || '',
+      new Date(tx.timestamp).toLocaleString(),
+    ];
+  });
+
+  // Add totals row
+  const totalsRow = [
+    'TOTAL',               // Date
+    '',                    // Particular
+    '',                    // Description
+    totalRevenue.toFixed(2),
+    totalExpense.toFixed(2),
+    totalVAT.toFixed(2),
+    totalGrossRevenue.toFixed(2),
+    (totalRevenue - totalExpense).toFixed(2), // Final balance
+    '', '', '', ''         // Remaining columns empty
+  ];
+
+  rows.push(totalsRow);
+
+  const csv = [headers, ...rows]
+    .map(row => row.map(cell => `"${cell}"`).join(','))
+    .join('\n');
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  link.href = url;
+  link.download = `transactions_${new Date().toISOString().split('T')[0]}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
 
   // Calculate pagination values BEFORE the useEffect that depends on totalPages
   const totalPages = Math.ceil(totalCount / pageSize);
