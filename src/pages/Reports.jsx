@@ -170,145 +170,250 @@ export default function Reports() {
     setLoading(false);
   };
 
-  const exportToCSV = () => {
-    const headers = ['Date', 'Type', 'Particular', 'Description', 'Net Amount', 'VAT', 'Gross Amount', 'Payment Mode'];
-    const rows = transactions.map(tx => {
-      const gross = tx.type === 'Revenue' ? tx.amount + (tx.vat_amount || 0) : tx.amount;
-      return [
-        new Date(tx.date).toLocaleDateString(),
-        tx.type,
-        tx.particular,
-        tx.description || '',
-        tx.amount,
-        tx.vat_amount || 0,
-        gross,
-        tx.payment_mode,
-      ];
-    });
-    const csvContent = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.href = url;
-    link.download = `report_${appliedStartDate.toISOString().split('T')[0]}_to_${appliedEndDate.toISOString().split('T')[0]}.csv`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
+const exportToCSV = () => {
+  // Sort by date ascending for running balance
+  const sorted = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
 
-  const exportToExcel = () => {
-    const wsData = [
-      ['IUS Finances - Financial Report'],
-      [`Period: ${appliedStartDate.toLocaleDateString()} - ${appliedEndDate.toLocaleDateString()}`],
-      [`Generated: ${new Date().toLocaleString()}`],
-      [],
-      ['SUMMARY'],
-      ['Metric', 'Value'],
-      ['Gross Revenue', summary.totalGrossRevenue],
-      ['Net Revenue', summary.totalNetRevenue],
-      ['Total VAT', summary.totalVAT],
-      ['Total Expenses', summary.totalExpenses],
-      ['Net Income', summary.netIncome],
-      ['Profit Margin', `${summary.profitMargin.toFixed(1)}%`],
-      [],
-      ['TRANSACTION DETAILS'],
-      ['Date', 'Type', 'Particular', 'Description', 'Net Amount', 'VAT', 'Gross Amount', 'Payment Mode'],
+  const headers = [
+    'Date',
+    'Particular',
+    'Description',
+    'Revenue',
+    'Expense',
+    'VAT',
+    'Gross Revenue',
+    'Balance',
+    'Payment Mode'
+  ];
+
+  let runningBalance = 0;
+  let totalRevenue = 0, totalExpense = 0, totalVAT = 0, totalGrossRevenue = 0;
+
+  const rows = sorted.map(tx => {
+    const revenue = tx.type === 'Revenue' ? tx.amount : 0;
+    const expense = tx.type === 'Expense' ? tx.amount : 0;
+    const vat = tx.type === 'Revenue' ? (tx.vat_amount || 0) : 0;
+    const grossRevenue = revenue + vat;
+
+    runningBalance += (revenue - expense);
+    totalRevenue += revenue;
+    totalExpense += expense;
+    totalVAT += vat;
+    totalGrossRevenue += grossRevenue;
+
+    return [
+      new Date(tx.date).toLocaleDateString(),
+      tx.particular,
+      tx.description || '',
+      revenue.toFixed(2),
+      expense.toFixed(2),
+      vat.toFixed(2),
+      grossRevenue.toFixed(2),
+      runningBalance.toFixed(2),
+      tx.payment_mode
     ];
-    transactions.forEach(tx => {
-      const gross = tx.type === 'Revenue' ? tx.amount + (tx.vat_amount || 0) : tx.amount;
-      wsData.push([
-        new Date(tx.date).toLocaleDateString(),
-        tx.type,
-        tx.particular,
-        tx.description || '',
-        tx.amount,
-        tx.vat_amount || 0,
-        gross,
-        tx.payment_mode,
-      ]);
-    });
-    const ws = XLSX.utils.aoa_to_sheet(wsData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Report');
-    XLSX.writeFile(wb, `report_${appliedStartDate.toISOString().split('T')[0]}_to_${appliedEndDate.toISOString().split('T')[0]}.xlsx`);
-  };
+  });
 
-  const exportToPDF = () => {
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
+  // Totals row
+  const totalsRow = [
+    'TOTAL',
+    '', '',
+    totalRevenue.toFixed(2),
+    totalExpense.toFixed(2),
+    totalVAT.toFixed(2),
+    totalGrossRevenue.toFixed(2),
+    (totalRevenue - totalExpense).toFixed(2),
+    ''
+  ];
+  rows.push(totalsRow);
 
-    doc.setFillColor(46,125,50);
-    doc.rect(0,0,pageWidth,30,'F');
-    doc.setTextColor(255,255,255);
-    doc.setFontSize(16).setFont('helvetica','bold').text('IUS Finances',20,18);
-    doc.setFontSize(10).setFont('helvetica','normal').text('Financial Performance Report',20,25);
-    doc.setTextColor(0,0,0);
-    doc.setFontSize(9);
-    doc.text(`Period: ${appliedStartDate.toLocaleDateString()} - ${appliedEndDate.toLocaleDateString()}`, pageWidth-20,15, { align: 'right' });
-    doc.text(`Generated: ${new Date().toLocaleString()}`, pageWidth-20,22, { align: 'right' });
+  const csvContent = [headers, ...rows]
+    .map(row => row.map(cell => `"${cell}"`).join(','))
+    .join('\n');
 
-    let y = 45;
-    doc.setFontSize(14).setFont('helvetica','bold').text('Executive Summary',20,y); y+=8;
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  link.href = url;
+  link.download = `statement_${appliedStartDate.toISOString().split('T')[0]}_to_${appliedEndDate.toISOString().split('T')[0]}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
 
-    const summaryData = [
-      ['Gross Revenue', formatCurrency(summary.totalGrossRevenue)],
-      ['Net Revenue', formatCurrency(summary.totalNetRevenue)],
-      ['Total VAT', formatCurrency(summary.totalVAT)],
-      ['Total Expenses', formatCurrency(summary.totalExpenses)],
-      ['Net Income', formatCurrency(summary.netIncome)],
-      ['Profit Margin', `${summary.profitMargin.toFixed(1)}%`],
+const exportToExcel = () => {
+  const sorted = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  const wsData = [
+    ['IUS Finances - Financial Statement'],
+    [`Period: ${appliedStartDate.toLocaleDateString()} - ${appliedEndDate.toLocaleDateString()}`],
+    [`Generated: ${new Date().toLocaleString()}`],
+    [],
+    ['TRANSACTION STATEMENT'],
+    ['Date', 'Particular', 'Description', 'Revenue', 'Expense', 'VAT', 'Gross Revenue', 'Balance', 'Payment Mode']
+  ];
+
+  let runningBalance = 0;
+  let totalRevenue = 0, totalExpense = 0, totalVAT = 0, totalGrossRevenue = 0;
+
+  sorted.forEach(tx => {
+    const revenue = tx.type === 'Revenue' ? tx.amount : 0;
+    const expense = tx.type === 'Expense' ? tx.amount : 0;
+    const vat = tx.type === 'Revenue' ? (tx.vat_amount || 0) : 0;
+    const grossRevenue = revenue + vat;
+
+    runningBalance += (revenue - expense);
+    totalRevenue += revenue;
+    totalExpense += expense;
+    totalVAT += vat;
+    totalGrossRevenue += grossRevenue;
+
+    wsData.push([
+      new Date(tx.date).toLocaleDateString(),
+      tx.particular,
+      tx.description || '',
+      revenue.toFixed(2),
+      expense.toFixed(2),
+      vat.toFixed(2),
+      grossRevenue.toFixed(2),
+      runningBalance.toFixed(2),
+      tx.payment_mode
+    ]);
+  });
+
+  // Totals row
+  wsData.push([
+    'TOTAL',
+    '', '',
+    totalRevenue.toFixed(2),
+    totalExpense.toFixed(2),
+    totalVAT.toFixed(2),
+    totalGrossRevenue.toFixed(2),
+    (totalRevenue - totalExpense).toFixed(2),
+    ''
+  ]);
+
+  // Summary sheet (optional)
+  wsData.push([], ['SUMMARY'], ['Metric', 'Value']);
+  wsData.push(['Gross Revenue', totalGrossRevenue.toFixed(2)]);
+  wsData.push(['Net Revenue', totalRevenue.toFixed(2)]);
+  wsData.push(['Total VAT', totalVAT.toFixed(2)]);
+  wsData.push(['Total Expenses', totalExpense.toFixed(2)]);
+  wsData.push(['Net Income', (totalRevenue - totalExpense).toFixed(2)]);
+  wsData.push(['Profit Margin', totalRevenue ? ((totalRevenue - totalExpense) / totalRevenue * 100).toFixed(1) + '%' : '0.0%']);
+
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Statement');
+  XLSX.writeFile(wb, `statement_${appliedStartDate.toISOString().split('T')[0]}_to_${appliedEndDate.toISOString().split('T')[0]}.xlsx`);
+};
+
+const exportToPDF = () => {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  // Header
+  doc.setFillColor(46,125,50);
+  doc.rect(0,0,pageWidth,30,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(16).setFont('helvetica','bold').text('IUS Finances',20,18);
+  doc.setFontSize(10).setFont('helvetica','normal').text('Financial Statement',20,25);
+  doc.setTextColor(0,0,0);
+  doc.setFontSize(9);
+  doc.text(`Period: ${appliedStartDate.toLocaleDateString()} - ${appliedEndDate.toLocaleDateString()}`, pageWidth-20,15, { align: 'right' });
+  doc.text(`Generated: ${new Date().toLocaleString()}`, pageWidth-20,22, { align: 'right' });
+
+  let y = 45;
+
+  // Summary Table
+  doc.setFontSize(14).setFont('helvetica','bold').text('Summary',20,y); y+=8;
+
+  const summaryData = [
+    ['Gross Revenue', formatCurrency(summary.totalGrossRevenue)],
+    ['Net Revenue', formatCurrency(summary.totalNetRevenue)],
+    ['Total VAT', formatCurrency(summary.totalVAT)],
+    ['Total Expenses', formatCurrency(summary.totalExpenses)],
+    ['Net Income', formatCurrency(summary.netIncome)],
+    ['Profit Margin', `${summary.profitMargin.toFixed(1)}%`],
+  ];
+  autoTable(doc, {
+    startY: y,
+    head: [['Metric', 'Value']],
+    body: summaryData,
+    theme: 'striped',
+    headStyles: { fillColor: [46,125,50] },
+  });
+  y = doc.lastAutoTable.finalY + 12;
+
+  // Transaction Statement
+  doc.setFontSize(14).setFont('helvetica','bold').text('Transaction Statement',20,y); y+=8;
+
+  const sorted = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
+  let runningBalance = 0;
+  let totalRevenue = 0, totalExpense = 0, totalVAT = 0, totalGrossRevenue = 0;
+
+  const statementRows = sorted.map(tx => {
+    const revenue = tx.type === 'Revenue' ? tx.amount : 0;
+    const expense = tx.type === 'Expense' ? tx.amount : 0;
+    const vat = tx.type === 'Revenue' ? (tx.vat_amount || 0) : 0;
+    const grossRevenue = revenue + vat;
+
+    runningBalance += (revenue - expense);
+    totalRevenue += revenue;
+    totalExpense += expense;
+    totalVAT += vat;
+    totalGrossRevenue += grossRevenue;
+
+    return [
+      new Date(tx.date).toLocaleDateString(),
+      tx.particular,
+      tx.description || '',
+      formatCurrency(revenue),
+      formatCurrency(expense),
+      formatCurrency(vat),
+      formatCurrency(grossRevenue),
+      formatCurrency(runningBalance),
+      tx.payment_mode
     ];
-    autoTable(doc, {
-      startY: y,
-      head: [['Metric', 'Value']],
-      body: summaryData,
-      theme: 'striped',
-      headStyles: { fillColor: [46,125,50] },
-    });
+  });
 
-    y = doc.lastAutoTable.finalY + 15;
-    doc.setFontSize(14).setFont('helvetica','bold').text('Key Metrics',20,y); y+=8;
+  // Totals row
+  statementRows.push([
+    'TOTAL',
+    '', '',
+    formatCurrency(totalRevenue),
+    formatCurrency(totalExpense),
+    formatCurrency(totalVAT),
+    formatCurrency(totalGrossRevenue),
+    formatCurrency(totalRevenue - totalExpense),
+    ''
+  ]);
 
-    const metricsData = [
-      ['Daily Burn Rate', formatCurrency(summary.totalExpenses / 30)],
-      ['Expense Ratio', `${((summary.totalExpenses / summary.totalNetRevenue) * 100).toFixed(1)}%`],
-    ];
-    autoTable(doc, {
-      startY: y,
-      head: [['Metric', 'Value']],
-      body: metricsData,
-      theme: 'striped',
-      headStyles: { fillColor: [46,125,50] },
-    });
+  autoTable(doc, {
+    startY: y,
+    head: [['Date', 'Particular', 'Description', 'Revenue', 'Expense', 'VAT', 'Gross Rev', 'Balance', 'Payment']],
+    body: statementRows,
+    theme: 'striped',
+    headStyles: { fillColor: [46,125,50] },
+    margin: { left: 10, right: 10 },
+    columnStyles: {
+      0: { cellWidth: 22 },
+      1: { cellWidth: 25 },
+      2: { cellWidth: 30 },
+      3: { cellWidth: 20 },
+      4: { cellWidth: 20 },
+      5: { cellWidth: 18 },
+      6: { cellWidth: 22 },
+      7: { cellWidth: 22 },
+      8: { cellWidth: 25 }
+    },
+    styles: { fontSize: 8 },
+    headStyles: { fontSize: 8 }
+  });
 
-    y = doc.lastAutoTable.finalY + 15;
-    doc.setFontSize(14).setFont('helvetica','bold').text('Transaction Details',20,y); y+=8;
-
-    const transactionRows = transactions.map(tx => {
-      const gross = tx.type === 'Revenue' ? tx.amount + (tx.vat_amount || 0) : tx.amount;
-      return [
-        new Date(tx.date).toLocaleDateString(),
-        tx.type,
-        tx.particular,
-        tx.description || '',
-        formatCurrency(tx.amount),
-        formatCurrency(tx.vat_amount || 0),
-        formatCurrency(gross),
-        tx.payment_mode,
-      ];
-    });
-    autoTable(doc, {
-      startY: y,
-      head: [['Date', 'Type', 'Particular', 'Description', 'Net', 'VAT', 'Gross', 'Payment Mode']],
-      body: transactionRows,
-      theme: 'striped',
-      headStyles: { fillColor: [46,125,50] },
-      margin: { left: 10, right: 10 },
-    });
-
-    doc.save(`report_${appliedStartDate.toISOString().split('T')[0]}_to_${appliedEndDate.toISOString().split('T')[0]}.pdf`);
-  };
+  doc.save(`statement_${appliedStartDate.toISOString().split('T')[0]}_to_${appliedEndDate.toISOString().split('T')[0]}.pdf`);
+};
 
   const printReport = () => {
     const printWindow = window.open('', '_blank');
