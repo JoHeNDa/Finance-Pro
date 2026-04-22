@@ -171,8 +171,9 @@ export default function Reports() {
   };
 
 const exportToCSV = () => {
-  // Sort by date ascending for running balance
   const sorted = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  const fmt = (val) => Math.abs(val) < 0.001 ? '' : val.toFixed(2);
 
   const headers = [
     'Date',
@@ -205,24 +206,23 @@ const exportToCSV = () => {
       new Date(tx.date).toLocaleDateString(),
       tx.particular,
       tx.description || '',
-      revenue.toFixed(2),
-      expense.toFixed(2),
-      vat.toFixed(2),
-      grossRevenue.toFixed(2),
-      runningBalance.toFixed(2),
+      fmt(revenue),
+      fmt(expense),
+      fmt(vat),
+      fmt(grossRevenue),
+      fmt(runningBalance),
       tx.payment_mode
     ];
   });
 
-  // Totals row
   const totalsRow = [
     'TOTAL',
     '', '',
-    totalRevenue.toFixed(2),
-    totalExpense.toFixed(2),
-    totalVAT.toFixed(2),
-    totalGrossRevenue.toFixed(2),
-    (totalRevenue - totalExpense).toFixed(2),
+    fmt(totalRevenue),
+    fmt(totalExpense),
+    fmt(totalVAT),
+    fmt(totalGrossRevenue),
+    fmt(totalRevenue - totalExpense),
     ''
   ];
   rows.push(totalsRow);
@@ -244,6 +244,7 @@ const exportToCSV = () => {
 
 const exportToExcel = () => {
   const sorted = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const fmt = (val) => Math.abs(val) < 0.001 ? '' : val.toFixed(2);
 
   const wsData = [
     ['IUS Finances - Financial Statement'],
@@ -273,11 +274,11 @@ const exportToExcel = () => {
       new Date(tx.date).toLocaleDateString(),
       tx.particular,
       tx.description || '',
-      revenue.toFixed(2),
-      expense.toFixed(2),
-      vat.toFixed(2),
-      grossRevenue.toFixed(2),
-      runningBalance.toFixed(2),
+      fmt(revenue),
+      fmt(expense),
+      fmt(vat),
+      fmt(grossRevenue),
+      fmt(runningBalance),
       tx.payment_mode
     ]);
   });
@@ -286,21 +287,21 @@ const exportToExcel = () => {
   wsData.push([
     'TOTAL',
     '', '',
-    totalRevenue.toFixed(2),
-    totalExpense.toFixed(2),
-    totalVAT.toFixed(2),
-    totalGrossRevenue.toFixed(2),
-    (totalRevenue - totalExpense).toFixed(2),
+    fmt(totalRevenue),
+    fmt(totalExpense),
+    fmt(totalVAT),
+    fmt(totalGrossRevenue),
+    fmt(totalRevenue - totalExpense),
     ''
   ]);
 
-  // Summary sheet (optional)
+  // Summary sheet
   wsData.push([], ['SUMMARY'], ['Metric', 'Value']);
-  wsData.push(['Gross Revenue', totalGrossRevenue.toFixed(2)]);
-  wsData.push(['Net Revenue', totalRevenue.toFixed(2)]);
-  wsData.push(['Total VAT', totalVAT.toFixed(2)]);
-  wsData.push(['Total Expenses', totalExpense.toFixed(2)]);
-  wsData.push(['Net Income', (totalRevenue - totalExpense).toFixed(2)]);
+  wsData.push(['Gross Revenue', fmt(totalGrossRevenue)]);
+  wsData.push(['Net Revenue', fmt(totalRevenue)]);
+  wsData.push(['Total VAT', fmt(totalVAT)]);
+  wsData.push(['Total Expenses', fmt(totalExpense)]);
+  wsData.push(['Net Income', fmt(totalRevenue - totalExpense)]);
   wsData.push(['Profit Margin', totalRevenue ? ((totalRevenue - totalExpense) / totalRevenue * 100).toFixed(1) + '%' : '0.0%']);
 
   const ws = XLSX.utils.aoa_to_sheet(wsData);
@@ -312,6 +313,12 @@ const exportToExcel = () => {
 const exportToPDF = () => {
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
+
+  // Helper: empty string for zero, otherwise formatted currency
+  const fmtCurrencyOrEmpty = (val) => {
+    const num = parseFloat(val) || 0;
+    return Math.abs(num) < 0.001 ? '' : formatCurrency(num);
+  };
 
   // Header
   doc.setFillColor(46,125,50);
@@ -330,12 +337,12 @@ const exportToPDF = () => {
   doc.setFontSize(14).setFont('helvetica','bold').text('Summary',20,y); y+=8;
 
   const summaryData = [
-    ['Gross Revenue', formatCurrency(summary.totalGrossRevenue)],
-    ['Net Revenue', formatCurrency(summary.totalNetRevenue)],
-    ['Total VAT', formatCurrency(summary.totalVAT)],
-    ['Total Expenses', formatCurrency(summary.totalExpenses)],
-    ['Net Income', formatCurrency(summary.netIncome)],
-    ['Profit Margin', `${summary.profitMargin.toFixed(1)}%`],
+    ['Gross Revenue', fmtCurrencyOrEmpty(summary.totalGrossRevenue)],
+    ['Net Revenue', fmtCurrencyOrEmpty(summary.totalNetRevenue)],
+    ['Total VAT', fmtCurrencyOrEmpty(summary.totalVAT)],
+    ['Total Expenses', fmtCurrencyOrEmpty(summary.totalExpenses)],
+    ['Net Income', fmtCurrencyOrEmpty(summary.netIncome)],
+    ['Profit Margin', summary.totalNetRevenue ? `${summary.profitMargin.toFixed(1)}%` : '0.0%'],
   ];
   autoTable(doc, {
     startY: y,
@@ -369,11 +376,11 @@ const exportToPDF = () => {
       new Date(tx.date).toLocaleDateString(),
       tx.particular,
       tx.description || '',
-      formatCurrency(revenue),
-      formatCurrency(expense),
-      formatCurrency(vat),
-      formatCurrency(grossRevenue),
-      formatCurrency(runningBalance),
+      fmtCurrencyOrEmpty(revenue),
+      fmtCurrencyOrEmpty(expense),
+      fmtCurrencyOrEmpty(vat),
+      fmtCurrencyOrEmpty(grossRevenue),
+      fmtCurrencyOrEmpty(runningBalance),
       tx.payment_mode
     ];
   });
@@ -382,11 +389,11 @@ const exportToPDF = () => {
   statementRows.push([
     'TOTAL',
     '', '',
-    formatCurrency(totalRevenue),
-    formatCurrency(totalExpense),
-    formatCurrency(totalVAT),
-    formatCurrency(totalGrossRevenue),
-    formatCurrency(totalRevenue - totalExpense),
+    fmtCurrencyOrEmpty(totalRevenue),
+    fmtCurrencyOrEmpty(totalExpense),
+    fmtCurrencyOrEmpty(totalVAT),
+    fmtCurrencyOrEmpty(totalGrossRevenue),
+    fmtCurrencyOrEmpty(totalRevenue - totalExpense),
     ''
   ]);
 
@@ -415,16 +422,20 @@ const exportToPDF = () => {
   doc.save(`statement_${appliedStartDate.toISOString().split('T')[0]}_to_${appliedEndDate.toISOString().split('T')[0]}.pdf`);
 };
 
- const printReport = () => {
+const printReport = () => {
   const printWindow = window.open('', '_blank');
   
-  // Sort transactions by date for running balance
   const sorted = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
   
+  // Helper for print view: empty if zero, otherwise formatted currency
+  const fmtCurrencyOrEmpty = (val) => {
+    const num = parseFloat(val) || 0;
+    return Math.abs(num) < 0.001 ? '' : formatCurrency(num);
+  };
+
   let runningBalance = 0;
   let totalRevenue = 0, totalExpense = 0, totalVAT = 0, totalGrossRevenue = 0;
 
-  // Generate transaction rows
   const transactionRowsHtml = sorted.map(tx => {
     const revenue = tx.type === 'Revenue' ? tx.amount : 0;
     const expense = tx.type === 'Expense' ? tx.amount : 0;
@@ -442,27 +453,26 @@ const exportToPDF = () => {
         <td>${new Date(tx.date).toLocaleDateString()}</td>
         <td>${tx.particular}</td>
         <td>${tx.description || '-'}</td>
-        <td class="income">${formatCurrency(revenue)}</td>
-        <td class="expense">${formatCurrency(expense)}</td>
-        <td>${formatCurrency(vat)}</td>
-        <td>${formatCurrency(grossRevenue)}</td>
-        <td>${formatCurrency(runningBalance)}</td>
+        <td class="income">${fmtCurrencyOrEmpty(revenue)}</td>
+        <td class="expense">${fmtCurrencyOrEmpty(expense)}</td>
+        <td>${fmtCurrencyOrEmpty(vat)}</td>
+        <td>${fmtCurrencyOrEmpty(grossRevenue)}</td>
+        <td>${fmtCurrencyOrEmpty(runningBalance)}</td>
         <td>${tx.payment_mode}</td>
       </tr>
     `;
   }).join('');
 
-  // Totals row
   const totalsRowHtml = `
     <tr style="font-weight: 700; background: #f1f8e9; border-top: 2px solid #2e7d32;">
       <td><strong>TOTAL</strong></td>
       <td></td>
       <td></td>
-      <td class="income">${formatCurrency(totalRevenue)}</td>
-      <td class="expense">${formatCurrency(totalExpense)}</td>
-      <td>${formatCurrency(totalVAT)}</td>
-      <td>${formatCurrency(totalGrossRevenue)}</td>
-      <td>${formatCurrency(totalRevenue - totalExpense)}</td>
+      <td class="income">${fmtCurrencyOrEmpty(totalRevenue)}</td>
+      <td class="expense">${fmtCurrencyOrEmpty(totalExpense)}</td>
+      <td>${fmtCurrencyOrEmpty(totalVAT)}</td>
+      <td>${fmtCurrencyOrEmpty(totalGrossRevenue)}</td>
+      <td>${fmtCurrencyOrEmpty(totalRevenue - totalExpense)}</td>
       <td></td>
     </tr>
   `;
@@ -557,27 +567,27 @@ const exportToPDF = () => {
       <div class="summary-grid">
         <div class="summary-item">
           <span class="label">Gross Revenue</span>
-          <span class="value">${formatCurrency(summary.totalGrossRevenue)}</span>
+          <span class="value">${fmtCurrencyOrEmpty(summary.totalGrossRevenue)}</span>
         </div>
         <div class="summary-item">
           <span class="label">Net Revenue</span>
-          <span class="value">${formatCurrency(summary.totalNetRevenue)}</span>
+          <span class="value">${fmtCurrencyOrEmpty(summary.totalNetRevenue)}</span>
         </div>
         <div class="summary-item">
           <span class="label">Total VAT</span>
-          <span class="value">${formatCurrency(summary.totalVAT)}</span>
+          <span class="value">${fmtCurrencyOrEmpty(summary.totalVAT)}</span>
         </div>
         <div class="summary-item">
           <span class="label">Total Expenses</span>
-          <span class="value">${formatCurrency(summary.totalExpenses)}</span>
+          <span class="value">${fmtCurrencyOrEmpty(summary.totalExpenses)}</span>
         </div>
         <div class="summary-item">
           <span class="label">Net Income</span>
-          <span class="value">${formatCurrency(summary.netIncome)}</span>
+          <span class="value">${fmtCurrencyOrEmpty(summary.netIncome)}</span>
         </div>
         <div class="summary-item">
           <span class="label">Profit Margin</span>
-          <span class="value">${summary.profitMargin.toFixed(1)}%</span>
+          <span class="value">${summary.totalNetRevenue ? summary.profitMargin.toFixed(1) + '%' : '0.0%'}</span>
         </div>
       </div>
 

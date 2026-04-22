@@ -310,17 +310,15 @@ export default function ViewRecords() {
   };
 
 const handleExport = async () => {
-  // Show loading indicator (optional)
   const originalLoading = loading;
   setLoading(true);
 
   try {
-    // Build the same query as fetchTransactions but WITHOUT pagination
     let query = supabase
       .from('transactions')
       .select('*')
       .eq('organization_id', userProfile.organization_id)
-      .order('date', { ascending: true }); // sort by date for balance calculation
+      .order('date', { ascending: true });
 
     if (typeFilter !== 'all') {
       query = query.eq('type', typeFilter);
@@ -350,7 +348,12 @@ const handleExport = async () => {
       return;
     }
 
-    // Build CSV from the full dataset
+    // Helper: format number, return empty string if zero (or very close to zero)
+    const fmtNumber = (value) => {
+      const num = parseFloat(value) || 0;
+      return Math.abs(num) < 0.001 ? '' : num.toFixed(2);
+    };
+
     const headers = [
       'Date',
       'Particular',
@@ -388,11 +391,11 @@ const handleExport = async () => {
         new Date(tx.date).toLocaleDateString(),
         tx.particular,
         tx.description || '',
-        revenue.toFixed(2),
-        expense.toFixed(2),
-        vat.toFixed(2),
-        grossRevenue.toFixed(2),
-        runningBalance.toFixed(2),
+        fmtNumber(revenue),
+        fmtNumber(expense),
+        fmtNumber(vat),
+        fmtNumber(grossRevenue),
+        fmtNumber(runningBalance),
         tx.payment_mode,
         users[tx.user_id] || tx.user_id,
         tx.receipt_url || '',
@@ -400,16 +403,16 @@ const handleExport = async () => {
       ];
     });
 
-    // Totals row
+    // Totals row – use empty string for zero totals as well
     const totalsRow = [
       'TOTAL',
       '',
       '',
-      totalRevenue.toFixed(2),
-      totalExpense.toFixed(2),
-      totalVAT.toFixed(2),
-      totalGrossRevenue.toFixed(2),
-      (totalRevenue - totalExpense).toFixed(2),
+      fmtNumber(totalRevenue),
+      fmtNumber(totalExpense),
+      fmtNumber(totalVAT),
+      fmtNumber(totalGrossRevenue),
+      fmtNumber(totalRevenue - totalExpense),
       '', '', '', ''
     ];
     rows.push(totalsRow);
@@ -431,7 +434,6 @@ const handleExport = async () => {
     setLoading(originalLoading);
   }
 };
-
   // Calculate pagination values BEFORE the useEffect that depends on totalPages
   const totalPages = Math.ceil(totalCount / pageSize);
   const startIndex = (page - 1) * pageSize + 1;
