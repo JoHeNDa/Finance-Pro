@@ -12,10 +12,10 @@ Deno.serve(async (req) => {
   }
 
   try {
-    console.log("INVITE FUNCTION STARTED")
+    console.log('INVITE FUNCTION STARTED')
 
+    // ✅ 1. AUTH HEADER
     const authHeader = req.headers.get('Authorization')
-
     if (!authHeader) {
       return new Response(JSON.stringify({ error: 'Missing auth header' }), {
         status: 401,
@@ -23,21 +23,19 @@ Deno.serve(async (req) => {
       })
     }
 
-    // user client (validates caller)
+    // ✅ 2. USER CLIENT (verify caller)
     const userClient = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_ANON_KEY')!,
       {
-        global: {
-          headers: { Authorization: authHeader },
-        },
+        global: { headers: { Authorization: authHeader } },
       }
     )
 
-    const { data: userData, error: userError } =
-      await userClient.auth.getUser()
+    const { data: userData, error: userError } = await userClient.auth.getUser()
 
     if (userError || !userData?.user?.id) {
+      console.log('AUTH ERROR:', userError)
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
         headers: corsHeaders,
@@ -46,19 +44,21 @@ Deno.serve(async (req) => {
 
     const callerId = userData.user.id
 
+    // ✅ 3. ADMIN CLIENT
     const adminClient = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     )
 
-    // get caller role
+    // ✅ 4. GET CALLER ROLE
     const { data: caller, error: callerError } = await adminClient
       .from('users')
       .select('role, organization_id')
       .eq('id', callerId)
-      .maybeSingle()
+      .single()
 
     if (callerError || !caller) {
+      console.log('CALLER ERROR:', callerError)
       return new Response(JSON.stringify({ error: 'Caller not found' }), {
         status: 403,
         headers: corsHeaders,
@@ -72,24 +72,45 @@ Deno.serve(async (req) => {
       })
     }
 
-    const body = await req.json()
-    const { email, name, organization_id, role } = body
+    // ✅ 5. PARSE BODY
+    let body
+    try {
+      body = await req.json()
+    } catch {
+      return new Response(JSON.stringify({ error: 'Invalid JSON body' }), {
+        status: 400,
+        headers: corsHeaders,
+      })
+    }
 
-    if (!email || !name || !organization_id || !role) {
+    const { email, name, role } = body
+
+    if (!email || !name || !role) {
       return new Response(JSON.stringify({ error: 'Missing fields' }), {
         status: 400,
         headers: corsHeaders,
       })
     }
 
-    console.log("Inviting:", email)
+    const organization_id = caller.organization_id // ✅ NEVER trust client
 
-    // invite user
+    console.log('Inviting:', email)
+
+    // ✅ 6. INVITE USER
     const { data: inviteData, error: inviteError } =
       await adminClient.auth.admin.inviteUserByEmail(email)
 
     if (inviteError) {
-      console.error(inviteError)
+      console.log('INVITE ERROR:', inviteError)
+
+      // handle duplicate user gracefully
+      if (inviteError.message.includes('already')) {
+        return new Response(JSON.stringify({ error: 'User already invited or exists' }), {
+          status: 400,
+          headers: corsHeaders,
+        })
+      }
+
       return new Response(JSON.stringify({ error: inviteError.message }), {
         status: 400,
         headers: corsHeaders,
@@ -105,7 +126,22 @@ Deno.serve(async (req) => {
       })
     }
 
-    // insert into users table
+    // ✅ 7. CHECK IF USER ALREADY IN TABLE
+    const { data: existingUser } = await adminClient
+      .from('users')
+      .select('id')
+      .eq('id', userId)
+      .maybeSingle()
+
+    if (existingUser) {
+      console.log('User already exists in DB')
+      return new Response(JSON.stringify({ success: true, userId }), {
+        status: 200,
+        headers: corsHeaders,
+      })
+    }
+
+    // ✅ 8. INSERT INTO USERS TABLE
     const { error: dbError } = await adminClient.from('users').insert({
       id: userId,
       email,
@@ -115,13 +151,14 @@ Deno.serve(async (req) => {
     })
 
     if (dbError) {
-      console.error(dbError)
+      console.log('DB ERROR:', dbError)
       return new Response(JSON.stringify({ error: dbError.message }), {
         status: 400,
         headers: corsHeaders,
       })
     }
 
+    // ✅ SUCCESS
     return new Response(
       JSON.stringify({ success: true, userId }),
       {
@@ -131,7 +168,7 @@ Deno.serve(async (req) => {
     )
 
   } catch (err) {
-    console.error("INVITE FUNCTION CRASH:", err)
+    console.log('FATAL ERROR:', err)
 
     return new Response(
       JSON.stringify({
