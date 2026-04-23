@@ -21,7 +21,16 @@ export default function Login() {
       await signIn(email, password);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.message);
+      let friendlyMessage = err.message;
+      // Customize common Supabase error messages
+      if (err.message.includes('Invalid login credentials')) {
+        friendlyMessage = 'Incorrect email or password. Please try again.';
+      } else if (err.message.includes('Email not confirmed')) {
+        friendlyMessage = 'Please confirm your email address before logging in.';
+      } else if (err.message.includes('rate limit')) {
+        friendlyMessage = 'Too many failed attempts. Please wait a few minutes.';
+      }
+      setError(friendlyMessage);
     } finally {
       setLoading(false);
     }
@@ -91,7 +100,6 @@ export default function Login() {
             )}
           </div>
 
-          {/* Forgot password link */}
           <div className="lp-forgot-link">
             <Link to="/forgot-password">Forgot password?</Link>
           </div>

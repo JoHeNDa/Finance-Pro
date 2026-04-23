@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import { formatCurrency } from '../utils/formatting.js';
-import '../styles/adminPanel.css';  // ✅ import external CSS
+import '../styles/adminPanel.css';
 
 export default function AdminPanel() {
   const { userProfile } = useAuth();
@@ -11,12 +11,11 @@ export default function AdminPanel() {
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteName, setInviteName] = useState('');
   const [inviteRole, setInviteRole] = useState('member');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState({ show: false, type: '', text: '' });
   const [orgStats, setOrgStats] = useState({
     totalUsers: 0,
     totalTransactions: 0,
@@ -27,6 +26,11 @@ export default function AdminPanel() {
   const isOwner = userProfile?.role === 'owner';
   const isAdmin = userProfile?.role === 'admin' || isOwner;
   const canManageUsers = isAdmin;
+
+  const showToast = (type, text) => {
+    setToast({ show: true, type, text });
+    setTimeout(() => setToast({ show: false, type: '', text: '' }), 3000);
+  };
 
   useEffect(() => {
     if (canManageUsers) {
@@ -78,59 +82,46 @@ export default function AdminPanel() {
     setLoading(false);
   };
 
-const handleInvite = async (e) => {
-  e.preventDefault();
-  setError('');
-  setSuccess('');
-  setSaving(true);
+  const handleInvite = async (e) => {
+    e.preventDefault();
+    setSaving(true);
 
-  if (!inviteEmail || !inviteName) {
-    setError('Please fill in all fields');
-    setSaving(false);
-    return;
-  }
-
-  try {
-    const { data, error } = await supabase.functions.invoke('invite-user', {
-      body: {
-        email: inviteEmail,
-        name: inviteName,
-        organization_id: userProfile?.organization_id,
-        role: inviteRole,
-      },
-    });
-
-    const { data: sessionData } = await supabase.auth.getSession();
-    console.log("SESSION:", sessionData);
-
-    if (error) {
-      console.error('Edge function error:', error);
-      throw new Error(error.message || 'Failed to invite user');
+    if (!inviteEmail || !inviteName) {
+      showToast('error', 'Please fill in all fields');
+      setSaving(false);
+      return;
     }
 
-    if (data?.error) {
-      throw new Error(data.error);
+    try {
+      const { data, error } = await supabase.functions.invoke('invite-user', {
+        body: {
+          email: inviteEmail,
+          name: inviteName,
+          organization_id: userProfile?.organization_id,
+          role: inviteRole,
+        },
+      });
+
+      if (error) throw new Error(error.message || 'Failed to invite user');
+      if (data?.error) throw new Error(data.error);
+
+      showToast('success', `User invited successfully!`);
+      setInviteEmail('');
+      setInviteName('');
+      setInviteRole('member');
+      setShowInviteModal(false);
+      fetchUsers();
+      fetchOrgStats();
+    } catch (err) {
+      showToast('error', err.message);
+    } finally {
+      setSaving(false);
     }
-
-    setSuccess(`User invited successfully!`);
-    setInviteEmail('');
-    setInviteName('');
-    setInviteRole('member');
-    setShowInviteModal(false);
-
-    fetchUsers();
-    fetchOrgStats();
-
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setSaving(false);
-  }
-};
+  };
 
   const updateUserRole = async (userId, newRole) => {
     if (!isOwner && newRole === 'owner') {
-      setError('Only the organization owner can assign the owner role');
+      showToast('error', 'Only the organization owner can assign the owner role');
       return;
     }
 
@@ -140,42 +131,34 @@ const handleInvite = async (e) => {
       .eq('id', userId);
 
     if (error) {
-      setError('Failed to update user role');
+      showToast('error', 'Failed to update user role');
     } else {
-      setSuccess('User role updated successfully');
+      showToast('success', 'User role updated successfully');
       fetchUsers();
     }
   };
 
   const removeUser = async (userId) => {
     if (!confirm('Are you sure you want to remove this user? This action cannot be undone.')) return;
-    
+
     setSaving(true);
-    setError('');
-    
     try {
       const { error: functionError } = await supabase.functions.invoke('delete-user', {
         body: { userId }
       });
-
-      if (functionError) {
-        console.error('Function error:', functionError);
-        throw new Error(functionError.message);
-      }
+      if (functionError) throw new Error(functionError.message);
 
       const { error: deleteError } = await supabase
         .from('users')
         .delete()
         .eq('id', userId);
-
       if (deleteError) throw deleteError;
 
-      setSuccess('User removed successfully');
+      showToast('success', 'User removed successfully');
       fetchUsers();
       fetchOrgStats();
     } catch (err) {
-      console.error('Remove user error:', err);
-      setError(err.message || 'Failed to remove user');
+      showToast('error', err.message || 'Failed to remove user');
     } finally {
       setSaving(false);
     }
@@ -223,65 +206,61 @@ const handleInvite = async (e) => {
 
   return (
     <div className="ap-container">
-      {success && (
-        <div className="ap-notification success">
-          <i className="fas fa-check-circle"></i> {success}
-        </div>
-      )}
-      {error && (
-        <div className="ap-notification error">
-          <i className="fas fa-exclamation-circle"></i> {error}
+      {/* Toast notification */}
+      {toast.show && (
+        <div className={`ap-toast ap-toast-${toast.type}`}>
+          {toast.text}
         </div>
       )}
 
       <div className="ap-header">
         <div>
-          <h1> User Management</h1>
+          <h1>User Management</h1>
           <p className="ap-subtitle">Manage team members and their access permissions</p>
         </div>
-        <button type='submit' className="ap-invite-btn" onClick={() => setShowInviteModal(true)}>
+        <button className="ap-invite-btn" onClick={() => setShowInviteModal(true)}>
           <i className="fas fa-user-plus"></i> Invite User
         </button>
       </div>
 
-     <div className="ap-stats-grid">
-  <div className="ap-stat-card">
-    <div className="ap-stat-icon">
-      <i className="fas fa-users"></i>
-    </div>
-    <div className="ap-stat-info">
-      <h3>Total Users</h3>
-      <p className="ap-stat-number">{orgStats.totalUsers}</p>
-    </div>
-  </div>
-  <div className="ap-stat-card">
-    <div className="ap-stat-icon">
-      <i className="fas fa-exchange-alt"></i>
-    </div>
-    <div className="ap-stat-info">
-      <h3>Transactions</h3>
-      <p className="ap-stat-number">{orgStats.totalTransactions}</p>
-    </div>
-  </div>
-  <div className="ap-stat-card">
-    <div className="ap-stat-icon">
-      <i className="fas fa-arrow-down"></i>
-    </div>
-    <div className="ap-stat-info">
-      <h3>Total Revenue</h3>
-      <p className="ap-stat-number">{formatCurrency(orgStats.totalRevenue)}</p>
-    </div>
-  </div>
-  <div className="ap-stat-card">
-    <div className="ap-stat-icon">
-      <i className="fas fa-arrow-up"></i>
-    </div>
-    <div className="ap-stat-info">
-      <h3>Total Expenses</h3>
-      <p className="ap-stat-number">{formatCurrency(orgStats.totalExpenses)}</p>
-    </div>
-  </div>
-</div>
+      <div className="ap-stats-grid">
+        <div className="ap-stat-card">
+          <div className="ap-stat-icon">
+            <i className="fas fa-users"></i>
+          </div>
+          <div className="ap-stat-info">
+            <h3>Total Users</h3>
+            <p className="ap-stat-number">{orgStats.totalUsers}</p>
+          </div>
+        </div>
+        <div className="ap-stat-card">
+          <div className="ap-stat-icon">
+            <i className="fas fa-exchange-alt"></i>
+          </div>
+          <div className="ap-stat-info">
+            <h3>Transactions</h3>
+            <p className="ap-stat-number">{orgStats.totalTransactions}</p>
+          </div>
+        </div>
+        <div className="ap-stat-card">
+          <div className="ap-stat-icon">
+            <i className="fas fa-arrow-down"></i>
+          </div>
+          <div className="ap-stat-info">
+            <h3>Total Revenue</h3>
+            <p className="ap-stat-number">{formatCurrency(orgStats.totalRevenue)}</p>
+          </div>
+        </div>
+        <div className="ap-stat-card">
+          <div className="ap-stat-icon">
+            <i className="fas fa-arrow-up"></i>
+          </div>
+          <div className="ap-stat-info">
+            <h3>Total Expenses</h3>
+            <p className="ap-stat-number">{formatCurrency(orgStats.totalExpenses)}</p>
+          </div>
+        </div>
+      </div>
 
       <div className="ap-users-section">
         <div className="ap-users-header">
@@ -366,7 +345,7 @@ const handleInvite = async (e) => {
                     <td>{new Date(user.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</td>
                     <td>
                       {user.id !== userProfile?.id && (
-                        <button type='submit'
+                        <button
                           className="ap-action-btn"
                           onClick={() => removeUser(user.id)}
                           title="Remove user"
@@ -399,7 +378,7 @@ const handleInvite = async (e) => {
               </div>
               <h2>Invite New Team Member</h2>
               <p>Send an invitation to join your organization</p>
-              <button type="submit" className="ap-modal-close" onClick={() => setShowInviteModal(false)}>
+              <button className="ap-modal-close" onClick={() => setShowInviteModal(false)}>
                 <i className="fas fa-times"></i>
               </button>
             </div>
@@ -435,10 +414,7 @@ const handleInvite = async (e) => {
                   <label>Role</label>
                   <div className="ap-input-icon">
                     <i className="fas fa-tag"></i>
-                    <select
-                      value={inviteRole}
-                      onChange={(e) => setInviteRole(e.target.value)}
-                    >
+                    <select value={inviteRole} onChange={(e) => setInviteRole(e.target.value)}>
                       <option value="member">Member - View only</option>
                       <option value="manager">Manager - Can add/edit transactions</option>
                       <option value="admin">Admin - Can manage users</option>

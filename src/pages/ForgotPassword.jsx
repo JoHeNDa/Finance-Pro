@@ -16,7 +16,6 @@ export default function ForgotPassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${globalThis.location.origin}/update-password`,
@@ -33,19 +32,12 @@ export default function ForgotPassword() {
 
   return (
     <div className="lp-container">
-      {/* Toast notification */}
-      {toast.show && (
-        <div className={`lp-toast lp-toast-${toast.type}`}>
-          {toast.text}
-        </div>
-      )}
-
+      {toast.show && <div className={`lp-toast lp-toast-${toast.type}`}>{toast.text}</div>}
       <div className="lp-card">
         <div className="lp-logo">
           <i className="fas fa-key" style={{ fontSize: '3rem', color: 'var(--primary)' }} />
           <h1>Reset Password</h1>
         </div>
-
         <form onSubmit={handleSubmit} className="lp-form">
           <div className="lp-form-group">
             <label>Email Address</label>
@@ -58,20 +50,14 @@ export default function ForgotPassword() {
               placeholder="your@email.com"
             />
           </div>
-
           <button type="submit" className="lp-btn" disabled={loading}>
             {loading ? 'Sending...' : 'Send Reset Link'}
           </button>
         </form>
-
         <div className="lp-footer">
           <p>
             Remember your password? <Link to="/login">Back to Sign In</Link>
           </p>
-        </div>
-
-        <div className="lp-copyright">
-          © {new Date().getFullYear()} IUS Finance Pro. All rights reserved.
         </div>
       </div>
     </div>
