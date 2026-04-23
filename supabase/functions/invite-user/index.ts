@@ -12,36 +12,31 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const body = await req.json()
-    const { email, name, organization_id, role } = body
 
-    if (!email || !name || !organization_id || !role) {
-      return new Response(
-        JSON.stringify({ error: 'Missing fields' }),
-        { status: 400, headers: corsHeaders }
-      )
-    }
+    console.log("URL:", Deno.env.get('SUPABASE_URL'))
+console.log("SERVICE ROLE:", Deno.env.get('SUPABASE_SERVICE_ROLE_KEY'))
+    const { email, name, organization_id, role } = await req.json()
 
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     )
 
-    // STEP 1: Create auth user (NOT invite yet - simpler & more reliable)
-    const { data: authUser, error: authError } =
+    // STEP 1: create auth user safely
+    const { data: userData, error: authError } =
       await supabaseAdmin.auth.admin.createUser({
         email,
         email_confirm: true,
       })
 
     if (authError) {
-      return new Response(
-        JSON.stringify({ error: authError.message }),
-        { status: 400, headers: corsHeaders }
-      )
+      return new Response(JSON.stringify(authError), {
+        status: 400,
+        headers: corsHeaders,
+      })
     }
 
-    const userId = authUser.user?.id
+    const userId = userData.user?.id
 
     if (!userId) {
       return new Response(
@@ -50,7 +45,7 @@ Deno.serve(async (req) => {
       )
     }
 
-    // STEP 2: Insert into your app users table
+    // STEP 2: insert into users table (this is where most failures happen)
     const { error: dbError } = await supabaseAdmin
       .from('users')
       .insert({
@@ -63,25 +58,22 @@ Deno.serve(async (req) => {
 
     if (dbError) {
       return new Response(
-        JSON.stringify({ error: dbError.message }),
+        JSON.stringify(dbError),
         { status: 400, headers: corsHeaders }
       )
     }
 
     return new Response(
-      JSON.stringify({
-        success: true,
-        userId,
-      }),
-      { status: 200, headers: corsHeaders }
+      JSON.stringify({ success: true, userId }),
+      { headers: corsHeaders }
     )
 
-  } catch (err) {
+  } catch (e) {
     return new Response(
-      JSON.stringify({
-        error: err instanceof Error ? err.message : String(err),
-      }),
-      { status: 500, headers: corsHeaders }
+      JSON.stringify({ error: String(e) }),
+      { status: 500,
+        headers: corsHeaders
+      }
     )
   }
 })
