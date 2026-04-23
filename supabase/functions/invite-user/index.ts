@@ -23,14 +23,12 @@ Deno.serve(async (req) => {
       })
     }
 
-    // user client (validates caller)
+    // 🔐 Verify caller
     const userClient = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_ANON_KEY')!,
       {
-        global: {
-          headers: { Authorization: authHeader },
-        },
+        global: { headers: { Authorization: authHeader } },
       }
     )
 
@@ -46,12 +44,13 @@ Deno.serve(async (req) => {
 
     const callerId = userData.user.id
 
+    // 🔑 Admin client
     const adminClient = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     )
 
-    // get caller role
+    // 👤 Get caller role
     const { data: caller, error: callerError } = await adminClient
       .from('users')
       .select('role, organization_id')
@@ -72,6 +71,7 @@ Deno.serve(async (req) => {
       })
     }
 
+    // 📦 Request body
     const body = await req.json()
     const { email, name, organization_id, role } = body
 
@@ -82,37 +82,48 @@ Deno.serve(async (req) => {
       })
     }
 
-    console.log("Inviting:", email)
+    console.log("Generating invite link for:", email)
 
-    // invite user
-    const { data: inviteData, error: inviteError } =
-      await adminClient.auth.admin.inviteUserByEmail(email)
+    // 🔗 Generate invite link manually (IMPORTANT CHANGE)
+    const { data: linkData, error: linkError } =
+      await adminClient.auth.admin.generateLink({
+        type: 'invite',
+        email,
+        options: {
+          redirectTo: 'https://www.iusfinancepro.com/auth/callback',
+        },
+      })
 
-    if (inviteError) {
-      console.error(inviteError)
-      return new Response(JSON.stringify({ error: inviteError.message }), {
+    if (linkError) {
+      console.error(linkError)
+      return new Response(JSON.stringify({ error: linkError.message }), {
         status: 400,
         headers: corsHeaders,
       })
     }
 
-    const userId = inviteData?.user?.id
+    const inviteLink = linkData?.properties?.action_link
+    const userId = linkData?.user?.id
 
-    if (!userId) {
-      return new Response(JSON.stringify({ error: 'Invite failed (no user id)' }), {
+    if (!inviteLink || !userId) {
+      return new Response(JSON.stringify({ error: 'Failed to generate invite link' }), {
         status: 500,
         headers: corsHeaders,
       })
     }
 
-    // insert into users table
-    const { error: dbError } = await adminClient.from('users').insert({
-      id: userId,
-      email,
-      name,
-      organization_id,
-      role,
-    })
+    console.log("Invite link generated")
+
+    // 🧾 Insert into your users table
+    const { error: dbError } = await adminClient
+      .from('users')
+      .insert({
+        id: userId,
+        email,
+        name,
+        organization_id,
+        role,
+      })
 
     if (dbError) {
       console.error(dbError)
@@ -122,8 +133,12 @@ Deno.serve(async (req) => {
       })
     }
 
+    // 🚀 RETURN LINK (you can email it later)
     return new Response(
-      JSON.stringify({ success: true, userId }),
+      JSON.stringify({
+        success: true,
+        inviteLink,
+      }),
       {
         status: 200,
         headers: corsHeaders,
