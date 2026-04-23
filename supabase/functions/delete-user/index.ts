@@ -12,21 +12,23 @@ Deno.serve(async (req) => {
   }
 
   try {
-    console.log("FUNCTION STARTED")
-
     const authHeader = req.headers.get('Authorization')
+
     if (!authHeader) {
-      return new Response(JSON.stringify({ error: 'Missing auth header' }), {
-        status: 401,
-        headers: corsHeaders,
-      })
+      return new Response(
+        JSON.stringify({ error: 'Missing authorization header' }),
+        { status: 401, headers: corsHeaders }
+      )
     }
 
+    // CLIENT (for verifying caller)
     const userClient = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_ANON_KEY')!,
       {
-        global: { headers: { Authorization: authHeader } },
+        global: {
+          headers: { Authorization: authHeader },
+        },
       }
     )
 
@@ -34,90 +36,89 @@ Deno.serve(async (req) => {
       await userClient.auth.getUser()
 
     if (userError || !userData?.user?.id) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
-        headers: corsHeaders,
-      })
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: corsHeaders }
+      )
     }
 
     const callerId = userData.user.id
 
-    const adminClient = createClient(
+    // ADMIN CLIENT (service role)
+    const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     )
 
-    const { data: caller, error: callerError } = await adminClient
+    // Get caller role
+    const { data: caller, error: callerError } = await supabaseAdmin
       .from('users')
       .select('role, organization_id')
       .eq('id', callerId)
-      .maybeSingle()
+      .single()
 
     if (callerError || !caller) {
-      return new Response(JSON.stringify({ error: 'Caller not found' }), {
-        status: 403,
-        headers: corsHeaders,
-      })
+      return new Response(
+        JSON.stringify({ error: 'Caller profile not found' }),
+        { status: 403, headers: corsHeaders }
+      )
     }
 
     if (!['admin', 'owner'].includes(caller.role)) {
-      return new Response(JSON.stringify({ error: 'Forbidden' }), {
-        status: 403,
-        headers: corsHeaders,
-      })
+      return new Response(
+        JSON.stringify({ error: 'Forbidden' }),
+        { status: 403, headers: corsHeaders }
+      )
     }
 
+    // Parse request body safely
     const body = await req.json()
-    const userId = body?.userId
+    const userId: string | undefined = body?.userId
 
     if (!userId) {
-      return new Response(JSON.stringify({ error: 'Missing userId' }), {
-        status: 400,
-        headers: corsHeaders,
-      })
+      return new Response(
+        JSON.stringify({ error: 'Missing userId' }),
+        { status: 400, headers: corsHeaders }
+      )
     }
 
     if (userId === callerId) {
-      return new Response(JSON.stringify({ error: 'Cannot delete yourself' }), {
-        status: 400,
-        headers: corsHeaders,
-      })
+      return new Response(
+        JSON.stringify({ error: 'Cannot delete yourself' }),
+        { status: 400, headers: corsHeaders }
+      )
     }
 
-    console.log("Deleting user:", userId)
-
+    // Delete from auth
     const { error: authDeleteError } =
-      await adminClient.auth.admin.deleteUser(userId)
+      await supabaseAdmin.auth.admin.deleteUser(userId)
 
     if (authDeleteError) {
-      console.error(authDeleteError)
-      return new Response(JSON.stringify({ error: authDeleteError.message }), {
-        status: 400,
-        headers: corsHeaders,
-      })
+      return new Response(
+        JSON.stringify({ error: authDeleteError.message }),
+        { status: 400, headers: corsHeaders }
+      )
     }
 
-    const { error: dbError } = await adminClient
+    // Delete from app table
+    const { error: dbDeleteError } = await supabaseAdmin
       .from('users')
       .delete()
       .eq('id', userId)
 
-    if (dbError) {
-      console.error(dbError)
-      return new Response(JSON.stringify({ error: dbError.message }), {
-        status: 400,
-        headers: corsHeaders,
-      })
+    if (dbDeleteError) {
+      return new Response(
+        JSON.stringify({ error: dbDeleteError.message }),
+        { status: 400, headers: corsHeaders }
+      )
     }
 
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: corsHeaders,
-    })
+    return new Response(
+      JSON.stringify({ success: true }),
+      { status: 200, headers: corsHeaders }
+    )
 
-  } catch (err) {
-    console.error("EDGE FUNCTION CRASH:", err)
-
+  } catch (err: unknown) {
     return new Response(
       JSON.stringify({
         error: err instanceof Error ? err.message : String(err),
