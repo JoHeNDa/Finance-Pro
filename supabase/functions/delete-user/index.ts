@@ -14,20 +14,11 @@ Deno.serve(async (req) => {
   try {
     const authHeader = req.headers.get('Authorization')
 
-    if (!authHeader) {
-      return new Response(JSON.stringify({ error: 'Missing auth' }), {
-        status: 401,
-        headers: corsHeaders,
-      })
-    }
-
     const userClient = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_ANON_KEY')!,
       {
-        global: {
-          headers: { Authorization: authHeader },
-        },
+        global: { headers: { Authorization: authHeader } },
       }
     )
 
@@ -46,51 +37,36 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     )
 
-    // check role
-    const { data: callerProfile } = await supabaseAdmin
+    const { data: caller } = await supabaseAdmin
       .from('users')
       .select('role, organization_id')
       .eq('id', callerId)
       .single()
 
-    if (!callerProfile || !['admin', 'owner'].includes(callerProfile.role)) {
+    if (!caller || !['admin', 'owner'].includes(caller.role)) {
       return new Response(JSON.stringify({ error: 'Forbidden' }), {
         status: 403,
         headers: corsHeaders,
       })
     }
 
-    const { email, name, role } = await req.json()
+    const { userId } = await req.json()
 
-    const { data: authUser, error: authError } =
-      await supabaseAdmin.auth.admin.createUser({
-        email,
-        email_confirm: true,
-      })
-
-    if (authError) {
-      return new Response(JSON.stringify({ error: authError.message }), {
+    if (userId === callerId) {
+      return new Response(JSON.stringify({ error: 'Cannot delete yourself' }), {
         status: 400,
         headers: corsHeaders,
       })
     }
 
-    const userId = authUser.user?.id
+    // delete from auth
+    await supabaseAdmin.auth.admin.deleteUser(userId)
 
-    const { error: dbError } = await supabaseAdmin.from('users').insert({
-      id: userId,
-      email,
-      name,
-      organization_id: callerProfile.organization_id,
-      role,
-    })
-
-    if (dbError) {
-      return new Response(JSON.stringify({ error: dbError.message }), {
-        status: 400,
-        headers: corsHeaders,
-      })
-    }
+    // delete from app table
+    await supabaseAdmin
+      .from('users')
+      .delete()
+      .eq('id', userId)
 
     return new Response(JSON.stringify({ success: true }), {
       headers: corsHeaders,
