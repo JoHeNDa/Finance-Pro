@@ -101,9 +101,14 @@ export default function AdminPanel() {
   },
 });
 
+const { data: sessionData } = await supabase.auth.getSession();
+console.log("SESSION:", sessionData);
+
 if (error) {
   console.log("Edge function error:", error);
 }
+
+
 
     if (functionError) {
       console.error('Function error:', functionError);
