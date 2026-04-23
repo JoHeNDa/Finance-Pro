@@ -1,25 +1,40 @@
-useEffect(() => {
-  const handleAuth = async () => {
-    const { data, error } = await supabase.auth.getSession()
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase.js';
 
-    if (error) {
-      console.error(error)
-      return
-    }
+export default function AuthCallback() {
+  const navigate = useNavigate();
 
-    if (data?.session) {
-      const params = new URLSearchParams(globalThis.location.search)
-      const type = params.get('type')
+  useEffect(() => {
+    const handleAuth = async () => {
+      const { data, error } = await supabase.auth.getSession();
 
-      console.log("Auth type:", type)
-
-      if (type === 'invite' || type === 'recovery') {
-        navigate('/set-password')   // ✅ ALWAYS go here
-      } else {
-        navigate('/dashboard')
+      if (error) {
+        console.error(error);
+        return;
       }
-    }
-  }
 
-  handleAuth()
-}, [])
+      if (data?.session) {
+        const params = new URLSearchParams(globalThis.location.search);
+        const type = params.get('type');
+
+        console.log('Auth type:', type);
+
+        if (type === 'invite' || type === 'recovery') {
+          navigate('/set-password');
+        } else {
+          navigate('/dashboard');
+        }
+      }
+    };
+
+    handleAuth();
+  }, [navigate]);
+
+  return (
+    <div className="loading-spinner">
+      <div className="spinner"></div>
+      <p>Authenticating...</p>
+    </div>
+  );
+}
