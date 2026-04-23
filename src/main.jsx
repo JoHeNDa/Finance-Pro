@@ -7,6 +7,8 @@ import { ThemeProvider } from './context/ThemeContext.js'; // ✅ Import ThemePr
 import { BrandingProvider } from './context/BrandingContext.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
+import ForgotPassword from './pages/ForgotPassword.jsx';        // <-- ADDED
+import UpdatePassword from './pages/UpdatePassword.jsx';        // <-- ADDED
 import Layout from './components/Layout.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import AddTransaction from './pages/AddTransaction.jsx';
@@ -47,8 +49,10 @@ function AppRoutes() {
       {/* Public routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />   {/* <-- ADDED */}
+      <Route path="/update-password" element={<UpdatePassword />} />   {/* <-- ADDED */}
       <Route path="/auth/callback" element={<AuthCallback />} />
-      <Route path="/set-password" element={<SetPassword />} /> {/* ✅ MOVE HERE */}
+      <Route path="/set-password" element={<SetPassword />} />
 
       {/* Protected routes */}
       <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
@@ -75,7 +79,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <AuthProvider>
         <OrganizationProvider>
-          <ThemeProvider>  {/* ✅ ThemeProvider wraps everything that needs theme */}
+          <ThemeProvider>
             <BrandingProvider>
               <AppRoutes />
             </BrandingProvider>

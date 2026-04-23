@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext.jsx';
 import '../styles/login.css';
 
 export default function Login() {
@@ -27,7 +27,6 @@ export default function Login() {
     }
   };
 
-  // Detect caps lock
   const handleKeyDown = (e) => {
     if (e.getModifierState && e.getModifierState('CapsLock')) {
       setCapsLockOn(true);
@@ -90,6 +89,11 @@ export default function Login() {
                 <i className="fas fa-exclamation-triangle"></i> Caps Lock is on
               </div>
             )}
+          </div>
+
+          {/* Forgot password link */}
+          <div className="lp-forgot-link">
+            <Link to="/forgot-password">Forgot password?</Link>
           </div>
 
           {error && <div className="lp-error">{error}</div>}

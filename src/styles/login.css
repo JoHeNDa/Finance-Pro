@@ -34,7 +34,7 @@
 }
 
 .lp-logo h1 {
-  font-size: 29px;            /* was 1.8rem → 29px */
+  font-size: 29px;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
@@ -54,7 +54,7 @@
   margin-bottom: 8px;
   font-weight: 500;
   color: var(--text-secondary);
-  font-size: 14px;            /* was 0.85rem → 14px */
+  font-size: 14px;
 }
 
 .lp-form-group input {
@@ -62,7 +62,7 @@
   padding: 12px;
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  font-size: 15px;            /* was 0.95rem → 15px */
+  font-size: 15px;
   background: var(--input-bg);
   color: var(--text-primary);
   transition: all 0.2s;
@@ -81,7 +81,7 @@
   color: white;
   border: none;
   border-radius: 12px;
-  font-size: 16px;            /* was 1rem → 16px */
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -105,7 +105,7 @@
   padding: 10px;
   border-radius: 10px;
   margin: 16px 0;
-  font-size: 14px;            /* was 0.85rem → 14px */
+  font-size: 14px;
   border-left: 3px solid var(--danger);
 }
 
@@ -113,7 +113,7 @@
   margin-top: 24px;
   padding-top: 20px;
   border-top: 1px solid var(--border-color);
-  font-size: 14px;            /* was 0.85rem → 14px */
+  font-size: 14px;
   color: var(--text-muted);
 }
 
@@ -129,43 +129,8 @@
 
 .lp-copyright {
   margin-top: 20px;
-  font-size: 11px;            /* was 0.7rem → 11px */
+  font-size: 11px;
   color: var(--text-muted);
-}
-
-/* Responsive adjustments for very small screens */
-@media (max-width: 480px) {
-  .lp-card {
-    padding: 30px 20px;
-  }
-  .lp-logo h1 {
-    font-size: 24px;
-  }
-  .lp-form-group label {
-    font-size: 13px;
-  }
-  .lp-form-group input {
-    font-size: 14px;
-    padding: 10px;
-  }
-  .lp-btn {
-    font-size: 15px;
-    padding: 10px;
-  }
-  .lp-error {
-    font-size: 13px;
-  }
-  .lp-footer {
-    font-size: 13px;
-  }
-  .lp-copyright {
-    font-size: 10px;
-  }
-}
-
-/* Dark mode adjustments */
-[data-theme="dark"] .lp-btn {
-  background: var(--primary);
 }
 
 /* ===== PASSWORD TOGGLE & CAPS LOCK ===== */
@@ -176,7 +141,7 @@
 }
 
 .lp-password-wrapper input {
-  padding-right: 44px;   /* space for the eye button */
+  padding-right: 44px;
 }
 
 .lp-toggle-password {
@@ -212,4 +177,63 @@
 
 .lp-caps-warning i {
   font-size: 11px;
+}
+
+/* ===== FORGOT PASSWORD LINK ===== */
+.lp-forgot-link {
+  text-align: right;
+  margin: -12px 0 20px 0;
+}
+.lp-forgot-link a {
+  font-size: 13px;
+  color: var(--primary);
+  text-decoration: none;
+}
+.lp-forgot-link a:hover {
+  text-decoration: underline;
+}
+
+/* Success message style */
+.lp-success {
+  background: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary);
+  border-left-color: var(--primary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .lp-card {
+    padding: 30px 20px;
+  }
+  .lp-logo h1 {
+    font-size: 24px;
+  }
+  .lp-form-group label {
+    font-size: 13px;
+  }
+  .lp-form-group input {
+    font-size: 14px;
+    padding: 10px;
+  }
+  .lp-btn {
+    font-size: 15px;
+    padding: 10px;
+  }
+  .lp-error {
+    font-size: 13px;
+  }
+  .lp-footer {
+    font-size: 13px;
+  }
+  .lp-copyright {
+    font-size: 10px;
+  }
+  .lp-forgot-link a {
+    font-size: 12px;
+  }
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .lp-btn {
+  background: var(--primary);
 }
