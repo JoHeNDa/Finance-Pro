@@ -20,7 +20,7 @@ import AdminPanel from './pages/AdminPanel.jsx';
 import OrganizationSettings from './pages/OrganizationSettings.jsx';
 import UserProfile from './pages/UserProfile.jsx';
 import RecurringTransactions from './pages/RecurringTransactions.jsx';
-import AuthCallback from './pages/authcallback.jsx';
+import AuthCallback from './pages/AuthCallback.jsx';
 import SetPassword from './pages/SetPassword.jsx';
 
 import './styles/layout.css';
