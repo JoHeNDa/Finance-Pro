@@ -92,14 +92,18 @@ export default function AdminPanel() {
 
   try {
     // Call the deployed Edge Function
-    const { data, error: functionError } = await supabase.functions.invoke('invite-user', {
-      body: {
-        email: inviteEmail,
-        name: inviteName,
-        organization_id: userProfile.organization_id,
-        role: inviteRole,
-      },
-    });
+    const { data, error } = await supabase.functions.invoke('invite-user', {
+  body: {
+    email: inviteEmail,
+    name: inviteName,
+    organization_id: userProfile?.organization_id,
+    role: inviteRole,
+  },
+});
+
+if (error) {
+  console.log("Edge function error:", error);
+}
 
     if (functionError) {
       console.error('Function error:', functionError);
