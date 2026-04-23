@@ -1,23 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import { OrganizationProvider } from './context/OrganizationContext';
-import { ThemeProvider } from './context/ThemeContext'; // ✅ Import ThemeProvider
-import { BrandingProvider } from './context/BrandingContext';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Layout from './components/Layout';
-import Dashboard from './pages/Dashboard';
-import AddTransaction from './pages/AddTransaction';
-import ViewRecords from './pages/ViewRecords';
-import Reports from './pages/Reports';
-import Analytics from './pages/Analytics';
-import Budgets from './pages/Budgets';
-import AdminPanel from './pages/AdminPanel';
-import OrganizationSettings from './pages/OrganizationSettings';
-import UserProfile from './pages/UserProfile';
-import RecurringTransactions from './pages/RecurringTransactions';
+import { AuthProvider, useAuth } from './context/AuthContext.jsx';
+import { OrganizationProvider } from './context/OrganizationContext.jsx';
+import { ThemeProvider } from './context/ThemeContext.js'; // ✅ Import ThemeProvider
+import { BrandingProvider } from './context/BrandingContext.jsx';
+import Login from './pages/Login.jsx';
+import Signup from './pages/Signup.jsx';
+import Layout from './components/Layout.jsx';
+import Dashboard from './pages/Dashboard.jsx';
+import AddTransaction from './pages/AddTransaction.jsx';
+import ViewRecords from './pages/ViewRecords.jsx';
+import Reports from './pages/Reports.jsx';
+import Analytics from './pages/Analytics.jsx.';
+import Budgets from './pages/Budgets.jsx';
+import AdminPanel from './pages/AdminPanel.jsx';
+import OrganizationSettings from './pages/OrganizationSettings.jsx';
+import UserProfile from './pages/UserProfile.jsx';
+import RecurringTransactions from './pages/RecurringTransactions.jsx';
+import AuthCallback from './pages/authcallback.jsx';
+import SetPassword from './pages/SetPassword.jsx';
 
 import './styles/layout.css';
 import './styles/dashboard.css';
@@ -56,6 +58,8 @@ function AppRoutes() {
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="/recurring" element={<RecurringTransactions />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/set-password" element={<SetPassword />} />
       </Route>
       <Route path="*" element={<Navigate to="/dashboard" />} />
     </Routes>
