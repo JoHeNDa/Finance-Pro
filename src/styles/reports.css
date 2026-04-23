@@ -214,7 +214,7 @@
   width: 30px;
   height: 30px;
   font-size: 14px;
-  color: var(--text-primary);
+  color: white;
   background-color: var(--hover-bg);
 }
 .rp-kpi-grid-secondary .rp-kpi-content {
