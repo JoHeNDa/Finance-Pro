@@ -53,7 +53,7 @@ export function AuthProvider({ children }) {
           if (!profileError && profileData) {
             avatar_url = profileData.avatar_url;
           }
-        } catch (err) {
+        } catch (_err) {
           // ignore – table might not exist yet
         }
 
@@ -84,7 +84,9 @@ export function AuthProvider({ children }) {
         .eq('id', user.id)
         .maybeSingle();
       if (profileData) avatar_url = profileData.avatar_url;
-    } catch (err) {}
+    } catch (_err) {
+      // Ignore errors if user_profiles table does not exist
+    }
     setUserProfile({ ...userData, avatar_url });
   };
 

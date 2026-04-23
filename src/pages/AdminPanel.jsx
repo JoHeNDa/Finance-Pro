@@ -154,22 +154,22 @@ const handleInvite = async (e) => {
     setError('');
     
     try {
-      const { data, error: functionError } = await supabase.functions.invoke('delete-user', {
+      const { error: functionError } = await supabase.functions.invoke('delete-user', {
         body: { userId }
       });
-      
+
       if (functionError) {
         console.error('Function error:', functionError);
         throw new Error(functionError.message);
       }
-      
+
       const { error: deleteError } = await supabase
         .from('users')
         .delete()
         .eq('id', userId);
-      
+
       if (deleteError) throw deleteError;
-      
+
       setSuccess('User removed successfully');
       fetchUsers();
       fetchOrgStats();
@@ -239,7 +239,7 @@ const handleInvite = async (e) => {
           <h1> User Management</h1>
           <p className="ap-subtitle">Manage team members and their access permissions</p>
         </div>
-        <button className="ap-invite-btn" onClick={() => setShowInviteModal(true)}>
+        <button type='submit' className="ap-invite-btn" onClick={() => setShowInviteModal(true)}>
           <i className="fas fa-user-plus"></i> Invite User
         </button>
       </div>
@@ -366,7 +366,7 @@ const handleInvite = async (e) => {
                     <td>{new Date(user.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</td>
                     <td>
                       {user.id !== userProfile?.id && (
-                        <button
+                        <button type='submit'
                           className="ap-action-btn"
                           onClick={() => removeUser(user.id)}
                           title="Remove user"
