@@ -35,7 +35,7 @@ export default function ForgotPassword() {
       {toast.show && <div className={`lp-toast lp-toast-${toast.type}`}>{toast.text}</div>}
       <div className="lp-card">
         <div className="lp-logo">
-          <i className="fas fa-key" style={{ fontSize: '3rem', color: 'var(--primary)' }} />
+          
           <h1>Reset Password</h1>
         </div>
         <form onSubmit={handleSubmit} className="lp-form">
