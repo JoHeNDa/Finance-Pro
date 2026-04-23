@@ -12,94 +12,68 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const authHeader = req.headers.get('Authorization')
 
-    if (!authHeader) {
-      return new Response(JSON.stringify({ error: 'Missing auth' }), {
-        status: 401,
-        headers: corsHeaders,
-      })
-    }
-
-    const userClient = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_ANON_KEY')!,
-      {
-        global: {
-          headers: { Authorization: authHeader },
-        },
-      }
-    )
-
-    const { data: userData } = await userClient.auth.getUser()
-
-    const callerId = userData.user?.id
-    if (!callerId) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
-        headers: corsHeaders,
-      })
-    }
+    console.log("URL:", Deno.env.get('SUPABASE_URL'))
+console.log("SERVICE ROLE:", Deno.env.get('SUPABASE_SERVICE_ROLE_KEY'))
+    const { email, name, organization_id, role } = await req.json()
 
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     )
 
-    // check role
-    const { data: callerProfile } = await supabaseAdmin
-      .from('users')
-      .select('role, organization_id')
-      .eq('id', callerId)
-      .single()
-
-    if (!callerProfile || !['admin', 'owner'].includes(callerProfile.role)) {
-      return new Response(JSON.stringify({ error: 'Forbidden' }), {
-        status: 403,
-        headers: corsHeaders,
-      })
-    }
-
-    const { email, name, role } = await req.json()
-
-    const { data: authUser, error: authError } =
+    // STEP 1: create auth user safely
+    const { data: userData, error: authError } =
       await supabaseAdmin.auth.admin.createUser({
         email,
         email_confirm: true,
       })
 
     if (authError) {
-      return new Response(JSON.stringify({ error: authError.message }), {
+      return new Response(JSON.stringify(authError), {
         status: 400,
         headers: corsHeaders,
       })
     }
 
-    const userId = authUser.user?.id
+    const userId = userData.user?.id
 
-    const { error: dbError } = await supabaseAdmin.from('users').insert({
-      id: userId,
-      email,
-      name,
-      organization_id: callerProfile.organization_id,
-      role,
-    })
+    if (!userId) {
+      return new Response(
+        JSON.stringify({ error: 'User creation failed' }),
+        { status: 400, headers: corsHeaders }
+      )
+    }
+
+    // STEP 2: insert into users table (this is where most failures happen)
+    const { error: dbError } = await supabaseAdmin
+      .from('users')
+      .insert({
+        id: userId,
+        email,
+        name,
+        organization_id,
+        role,
+      })
 
     if (dbError) {
-      return new Response(JSON.stringify({ error: dbError.message }), {
-        status: 400,
-        headers: corsHeaders,
-      })
+      return new Response(
+        JSON.stringify(dbError),
+        { status: 400, headers: corsHeaders }
+      )
     }
 
-    return new Response(JSON.stringify({ success: true }), {
-      headers: corsHeaders,
-    })
+    return new Response(
+      JSON.stringify({ success: true, userId }),
+      { headers: corsHeaders }
+    )
 
-  } catch (err) {
-    return new Response(JSON.stringify({ error: String(err) }), {
-      status: 500,
-      headers: corsHeaders,
-    })
+  } catch (e) {
+    return new Response(
+      JSON.stringify({ error: String(e) }),
+      { status: 500,
+        headers: corsHeaders
+      }
+    )
   }
 })
