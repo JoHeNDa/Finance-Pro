@@ -78,7 +78,7 @@ export default function AdminPanel() {
     setLoading(false);
   };
 
- const handleInvite = async (e) => {
+const handleInvite = async (e) => {
   e.preventDefault();
   setError('');
   setSuccess('');
@@ -91,41 +91,36 @@ export default function AdminPanel() {
   }
 
   try {
-    // Call the deployed Edge Function
     const { data, error } = await supabase.functions.invoke('invite-user', {
-  body: {
-    email: inviteEmail,
-    name: inviteName,
-    organization_id: userProfile?.organization_id,
-    role: inviteRole,
-  },
-});
+      body: {
+        email: inviteEmail,
+        name: inviteName,
+        organization_id: userProfile?.organization_id,
+        role: inviteRole,
+      },
+    });
 
-const { data: sessionData } = await supabase.auth.getSession();
-console.log("SESSION:", sessionData);
+    const { data: sessionData } = await supabase.auth.getSession();
+    console.log("SESSION:", sessionData);
 
-if (error) {
-  console.log("Edge function error:", error);
-}
-
-
-
-    if (functionError) {
-      console.error('Function error:', functionError);
-      throw new Error(functionError.message || 'Failed to invite user');
+    if (error) {
+      console.error('Edge function error:', error);
+      throw new Error(error.message || 'Failed to invite user');
     }
 
     if (data?.error) {
       throw new Error(data.error);
     }
 
-    setSuccess(`User invited successfully! Temporary password: ${data.tempPassword}`);
+    setSuccess(`User invited successfully!`);
     setInviteEmail('');
     setInviteName('');
     setInviteRole('member');
     setShowInviteModal(false);
+
     fetchUsers();
     fetchOrgStats();
+
   } catch (err) {
     setError(err.message);
   } finally {
