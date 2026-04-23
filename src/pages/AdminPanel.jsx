@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../context/AuthContext';
-import { formatCurrency } from '../utils/formatting';
+import { supabase } from '../lib/supabase.js';
+import { useAuth } from '../context/AuthContext.jsx';
+import { formatCurrency } from '../utils/formatting.js';
 import '../styles/adminPanel.css';  // ✅ import external CSS
 
 export default function AdminPanel() {
