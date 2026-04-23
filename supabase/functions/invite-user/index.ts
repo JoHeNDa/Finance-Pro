@@ -7,6 +7,7 @@ const corsHeaders = {
 }
 
 Deno.serve(async (req) => {
+  // Handle preflight CORS
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -14,15 +15,21 @@ Deno.serve(async (req) => {
   try {
     const { email, name, organization_id, role } = await req.json()
 
+    if (!email || !name || !organization_id || !role) {
+      return new Response(
+        JSON.stringify({ error: 'Missing required fields' }),
+        { status: 400, headers: corsHeaders }
+      )
+    }
+
+    // Create Supabase admin client (CRITICAL: service role key)
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     )
 
-    // NO auth checks here (important)
-
-    const { data, error } =
-      await supabaseAdmin.auth.admin.inviteUserByEmail(email)
+    // Invite user via Supabase Auth Admin API
+    const { data, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(email)
 
     if (error) {
       return new Response(
@@ -33,6 +40,14 @@ Deno.serve(async (req) => {
 
     const userId = data.user?.id
 
+    if (!userId) {
+      return new Response(
+        JSON.stringify({ error: 'Failed to retrieve invited user ID' }),
+        { status: 400, headers: corsHeaders }
+      )
+    }
+
+    // Insert into your app users table
     const { error: dbError } = await supabaseAdmin
       .from('users')
       .insert({
@@ -51,16 +66,19 @@ Deno.serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ success: true }),
+      JSON.stringify({
+        success: true,
+        message: 'User invited successfully',
+      }),
       { headers: corsHeaders }
     )
 
   } catch (err: unknown) {
-  const message = err instanceof Error ? err.message : String(err)
+    const message = err instanceof Error ? err.message : String(err)
 
-  return new Response(
-    JSON.stringify({ error: message }),
-    { status: 500, headers: corsHeaders }
-  )
-}
+    return new Response(
+      JSON.stringify({ error: message }),
+      { status: 500, headers: corsHeaders }
+    )
+  }
 })
