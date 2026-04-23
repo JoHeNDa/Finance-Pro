@@ -44,8 +44,13 @@ function PrivateRoute({ children }) {
 function AppRoutes() {
   return (
     <Routes>
+      {/* Public routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
+      <Route path="/set-password" element={<SetPassword />} /> {/* ✅ MOVE HERE */}
+
+      {/* Protected routes */}
       <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/add" element={<AddTransaction />} />
@@ -56,11 +61,10 @@ function AppRoutes() {
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/settings" element={<OrganizationSettings />} />
         <Route path="/profile" element={<UserProfile />} />
-        <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="/recurring" element={<RecurringTransactions />} />
-        <Route path="/auth/callback" element={<AuthCallback />} />
-        <Route path="/set-password" element={<SetPassword />} />
+        <Route path="/" element={<Navigate to="/dashboard" />} />
       </Route>
+
       <Route path="*" element={<Navigate to="/dashboard" />} />
     </Routes>
   );
