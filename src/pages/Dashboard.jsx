@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../context/AuthContext';
-import { useOrganization } from '../context/OrganizationContext';
+import { supabase } from '../lib/supabase.js';
+import { useAuth } from '../context/AuthContext.jsx';
+import { useOrganization } from '../context/OrganizationContext.jsx';
 import Chart from 'chart.js/auto';
 import '../styles/dashboard.css';
 

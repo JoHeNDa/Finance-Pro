@@ -8,7 +8,7 @@ useEffect(() => {
     }
 
     if (data?.session) {
-      const params = new URLSearchParams(window.location.search)
+      const params = new URLSearchParams(globalThis.location.search)
       const type = params.get('type')
 
       console.log("Auth type:", type)

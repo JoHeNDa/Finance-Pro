@@ -5,7 +5,7 @@ import { formatCurrency } from '../utils/formatting.js';
 import '../styles/adminPanel.css';  // ✅ import external CSS
 
 export default function AdminPanel() {
-  const { user, userProfile } = useAuth();
+  const { userProfile } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [inviteEmail, setInviteEmail] = useState('');
