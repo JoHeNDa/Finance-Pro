@@ -14,7 +14,7 @@ import Dashboard from './pages/Dashboard.jsx';
 import AddTransaction from './pages/AddTransaction.jsx';
 import ViewRecords from './pages/ViewRecords.jsx';
 import Reports from './pages/Reports.jsx';
-import Analytics from './pages/Analytics.jsx.';
+import Analytics from './pages/Analytics.jsx';
 import Budgets from './pages/Budgets.jsx';
 import AdminPanel from './pages/AdminPanel.jsx';
 import OrganizationSettings from './pages/OrganizationSettings.jsx';
