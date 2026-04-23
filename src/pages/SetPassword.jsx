@@ -1,51 +1,91 @@
-import { useState } from 'react'
-import { supabase } from '../lib/supabase.js'
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react';
+import { supabase } from '../lib/supabase.js';
+import { useNavigate } from 'react-router-dom';
+import '../styles/login.css';
 
 export default function SetPassword() {
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const navigate = useNavigate()
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState({ show: false, type: '', text: '' });
+  const navigate = useNavigate();
+
+  const showToast = (type, text) => {
+    setToast({ show: true, type, text });
+    setTimeout(() => setToast({ show: false, type: '', text: '' }), 3000);
+  };
 
   const handleSetPassword = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+    e.preventDefault();
+    setLoading(true);
 
-    const { error } = await supabase.auth.updateUser({
-      password
-    })
+    const { error } = await supabase.auth.updateUser({ password });
 
     if (error) {
-      setError(error.message)
-      setLoading(false)
-      return
+      showToast('error', error.message);
+      setLoading(false);
+      return;
     }
 
-    // ✅ SUCCESS
-    navigate('/dashboard')
-  }
+    // Success
+    showToast('success', 'Password set successfully! Redirecting to dashboard...');
+    setTimeout(() => navigate('/dashboard'), 1500);
+  };
 
   return (
-    <div style={{ maxWidth: 400, margin: 'auto' }}>
-      <h2>Set Your Password</h2>
+    <div className="lp-container">
+      {/* Toast notification */}
+      {toast.show && (
+        <div className={`lp-toast lp-toast-${toast.type}`}>
+          {toast.text}
+        </div>
+      )}
 
-      <form onSubmit={handleSetPassword}>
-        <input
-          type="password"
-          placeholder="Enter new password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+      <div className="lp-card">
+        <div className="lp-logo">
+          <i className="fas fa-lock" style={{ fontSize: '3rem', color: 'var(--primary)' }} />
+          <h1>Set Your Password</h1>
+        </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Saving...' : 'Set Password'}
-        </button>
-      </form>
+        <form onSubmit={handleSetPassword} className="lp-form">
+          <div className="lp-form-group">
+            <label>New Password</label>
+            <div className="lp-password-wrapper">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="new-password"
+                placeholder="Enter your new password"
+              />
+              <button
+                type="button"
+                className="lp-toggle-password"
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex="-1"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} />
+              </button>
+            </div>
+          </div>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+          <button type="submit" className="lp-btn" disabled={loading}>
+            {loading ? 'Saving...' : 'Set Password'}
+          </button>
+        </form>
+
+        <div className="lp-footer">
+          <p>
+            Already have an account? <a href="/login" onClick={(e) => { e.preventDefault(); navigate('/login'); }}>Sign in</a>
+          </p>
+        </div>
+
+        <div className="lp-copyright">
+          © {new Date().getFullYear()} IUS Finance Pro. All rights reserved.
+        </div>
+      </div>
     </div>
-  )
+  );
 }

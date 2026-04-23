@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { useOrganization } from '../context/OrganizationContext';
+import { useAuth } from '../context/AuthContext.jsx';
+import { useOrganization } from '../context/OrganizationContext.jsx';
 import '../styles/signup.css';
 
 export default function Signup() {

@@ -5,12 +5,16 @@ import '../styles/login.css';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
-  const [message, setMessage] = useState({ type: '', text: '' });
+  const [toast, setToast] = useState({ show: false, type: '', text: '' });
   const [loading, setLoading] = useState(false);
+
+  const showToast = (type, text) => {
+    setToast({ show: true, type, text });
+    setTimeout(() => setToast({ show: false, type: '', text: '' }), 3000);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage({ type: '', text: '' });
     setLoading(true);
 
     try {
@@ -18,13 +22,10 @@ export default function ForgotPassword() {
         redirectTo: `${globalThis.location.origin}/update-password`,
       });
       if (error) throw error;
-      setMessage({
-        type: 'success',
-        text: 'Password reset link sent! Check your email.',
-      });
+      showToast('success', 'Password reset link sent! Check your email.');
       setEmail('');
     } catch (err) {
-      setMessage({ type: 'error', text: err.message });
+      showToast('error', err.message);
     } finally {
       setLoading(false);
     }
@@ -32,17 +33,18 @@ export default function ForgotPassword() {
 
   return (
     <div className="lp-container">
+      {/* Toast notification */}
+      {toast.show && (
+        <div className={`lp-toast lp-toast-${toast.type}`}>
+          {toast.text}
+        </div>
+      )}
+
       <div className="lp-card">
         <div className="lp-logo">
-          <i className="fas fa-key" style={{ fontSize: '3rem', color: 'var(--primary)' }}></i>
+          <i className="fas fa-key" style={{ fontSize: '3rem', color: 'var(--primary)' }} />
           <h1>Reset Password</h1>
         </div>
-
-        {message.text && (
-          <div className={`lp-error ${message.type === 'success' ? 'lp-success' : ''}`}>
-            {message.text}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="lp-form">
           <div className="lp-form-group">
