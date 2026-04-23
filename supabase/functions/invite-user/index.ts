@@ -7,47 +7,50 @@ const corsHeaders = {
 }
 
 Deno.serve(async (req) => {
-  // Handle preflight CORS
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
   try {
-    const { email, name, organization_id, role } = await req.json()
+    const body = await req.json()
+    const { email, name, organization_id, role } = body
 
     if (!email || !name || !organization_id || !role) {
       return new Response(
-        JSON.stringify({ error: 'Missing required fields' }),
+        JSON.stringify({ error: 'Missing fields' }),
         { status: 400, headers: corsHeaders }
       )
     }
 
-    // Create Supabase admin client (CRITICAL: service role key)
     const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     )
 
-    // Invite user via Supabase Auth Admin API
-    const { data, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(email)
+    // STEP 1: Create auth user (NOT invite yet - simpler & more reliable)
+    const { data: authUser, error: authError } =
+      await supabaseAdmin.auth.admin.createUser({
+        email,
+        email_confirm: true,
+      })
 
-    if (error) {
+    if (authError) {
       return new Response(
-        JSON.stringify({ error: error.message }),
+        JSON.stringify({ error: authError.message }),
         { status: 400, headers: corsHeaders }
       )
     }
 
-    const userId = data.user?.id
+    const userId = authUser.user?.id
 
     if (!userId) {
       return new Response(
-        JSON.stringify({ error: 'Failed to retrieve invited user ID' }),
+        JSON.stringify({ error: 'User creation failed' }),
         { status: 400, headers: corsHeaders }
       )
     }
 
-    // Insert into your app users table
+    // STEP 2: Insert into your app users table
     const { error: dbError } = await supabaseAdmin
       .from('users')
       .insert({
@@ -68,16 +71,16 @@ Deno.serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: true,
-        message: 'User invited successfully',
+        userId,
       }),
-      { headers: corsHeaders }
+      { status: 200, headers: corsHeaders }
     )
 
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : String(err)
-
+  } catch (err) {
     return new Response(
-      JSON.stringify({ error: message }),
+      JSON.stringify({
+        error: err instanceof Error ? err.message : String(err),
+      }),
       { status: 500, headers: corsHeaders }
     )
   }
