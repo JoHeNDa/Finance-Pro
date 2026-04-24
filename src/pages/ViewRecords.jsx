@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../context/AuthContext';
-import { useOrganization } from '../context/OrganizationContext';
-import { formatCurrency } from '../utils/formatting';
-import { useDebounce } from '../hooks/useDebounce';
+import { supabase } from '../lib/supabase.js';
+import { useAuth } from '../context/AuthContext.jsx';
+import { useOrganization } from '../context/OrganizationContext.jsx';
+import { formatCurrency } from '../utils/formatting.js';
+import { useDebounce } from '../hooks/useDebounce.js';
 import '../styles/viewRecords.css';
 
 export default function ViewRecords() {

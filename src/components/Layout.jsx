@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { useOrganization } from '../context/OrganizationContext';
+import { useAuth } from '../context/AuthContext.jsx';
+import { useOrganization } from '../context/OrganizationContext.jsx';
 import '../styles/layout.css';
 
 export default function Layout() {
