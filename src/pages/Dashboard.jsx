@@ -29,18 +29,27 @@ export default function Dashboard() {
   const [paymentModes, setPaymentModes] = useState({});
 
   const currencySymbol = organization?.currency_symbol || '£';
+  
   const formatCurrency = (amount) =>
     `${currencySymbol} ${Number(amount).toLocaleString(undefined, {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     })}`;
 
+  const formatNumberOnly = (amount) => {
+    const num = Number(amount);
+    if (Math.abs(num) < 0.001) return '';
+    return num.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
+
   const trendChartRef = useRef(null);
   const categoryChartRef = useRef(null);
   const paymentChartRef = useRef(null);
   const chartInstances = useRef({});
 
-  // ---------- Expanded color palettes ----------
   const categoryColors = [
     '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
     '#FF6384', '#C9CBCF', '#7B1FA2', '#E91E63', '#009688', '#FF5722',
@@ -51,9 +60,17 @@ export default function Dashboard() {
     '#ffb300', '#5e35b1', '#43a047', '#e53935', '#1e88e5', '#fb8c00'
   ];
 
-  // Helper to assign colors cyclically
   const getColors = (dataLength, baseColors) => {
     return Array.from({ length: dataLength }, (_, i) => baseColors[i % baseColors.length]);
+  };
+
+  const normalizeCategoryName = (name) => {
+    if (!name) return 'Uncategorized';
+    return name
+      .toLowerCase()
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   };
 
   useEffect(() => {
@@ -92,9 +109,10 @@ export default function Dashboard() {
         if (!monthlyAgg[monthYear]) monthlyAgg[monthYear] = { Revenue: 0, Expense: 0 };
         monthlyAgg[monthYear].Revenue += tx.amount;
       } else {
+        const normalizedCat = normalizeCategoryName(tx.particular);
+        categoryData[normalizedCat] = (categoryData[normalizedCat] || 0) + tx.amount;
         totalExpenses += tx.amount;
         expenseCount++;
-        categoryData[tx.particular] = (categoryData[tx.particular] || 0) + tx.amount;
         if (!monthlyAgg[monthYear]) monthlyAgg[monthYear] = { Revenue: 0, Expense: 0 };
         monthlyAgg[monthYear].Expense += tx.amount;
       }
@@ -123,7 +141,6 @@ export default function Dashboard() {
     setLoading(false);
   };
 
-  // ========== CHART CREATION ==========
   useEffect(() => {
     if (loading) return;
 
@@ -135,7 +152,6 @@ export default function Dashboard() {
     const revenueData = months.map(m => monthlyData[m]?.Revenue || 0);
     const expenseData = months.map(m => monthlyData[m]?.Expense || 0);
 
-    // ----- Line Chart (vertical grid lines restored, both axes same font) -----
     if (trendChartRef.current && months.length) {
       chartInstances.current.trend = new Chart(trendChartRef.current, {
         type: 'line',
@@ -154,23 +170,15 @@ export default function Dashboard() {
             tooltip: { bodyFont: { size: 10 }, titleFont: { size: 11 } }
           },
           scales: {
-            x: {
-              ticks: { font: { size: 10 } },
-              grid: { display: true, color: 'rgba(0,0,0,0.05)' }
-            },
-            y: {
-              ticks: { font: { size: 10 } },
-              grid: { color: 'rgba(0,0,0,0.05)' }
-            }
+            x: { ticks: { font: { size: 10 } }, grid: { display: true, color: 'rgba(0,0,0,0.05)' } },
+            y: { ticks: { font: { size: 10 } }, grid: { color: 'rgba(0,0,0,0.05)' } }
           },
-          layout: {
-            padding: { top: 8, bottom: 4, left: 4, right: 4 }
-          }
+          layout: { padding: { top: 8, bottom: 4, left: 4, right: 4 } }
         }
       });
     }
 
-    // ----- Expense Categories Doughnut (expanded colors, legend 10px, tooltip %) -----
+    // Expense Categories Doughnut – borderWidth: 0 removes white strokes
     const catNames = Object.keys(categories);
     const catValues = catNames.map(c => categories[c]);
     if (categoryChartRef.current && catNames.length && catValues.some(v => v > 0)) {
@@ -181,7 +189,9 @@ export default function Dashboard() {
           labels: catNames,
           datasets: [{
             data: catValues,
-            backgroundColor: catColorSet
+            backgroundColor: catColorSet,
+            borderWidth: 0,
+            hoverBorderWidth: 0,
           }]
         },
         options: {
@@ -206,7 +216,7 @@ export default function Dashboard() {
       });
     }
 
-    // ----- Payment Methods Pie (expanded colors, legend 10px, tooltip %) -----
+    // Payment Methods Pie – borderWidth: 0 removes white strokes
     const modeNames = Object.keys(paymentModes).filter(m => paymentModes[m] > 0);
     const modeValues = modeNames.map(m => paymentModes[m]);
     if (paymentChartRef.current && modeNames.length) {
@@ -217,7 +227,9 @@ export default function Dashboard() {
           labels: modeNames,
           datasets: [{
             data: modeValues,
-            backgroundColor: modeColorSet
+            backgroundColor: modeColorSet,
+            borderWidth: 0,
+            hoverBorderWidth: 0,
           }]
         },
         options: {
@@ -254,7 +266,7 @@ export default function Dashboard() {
 
   return (
     <div className="db-page">
-      {/* Summary Cards (unchanged) */}
+      {/* Summary Cards – REORDERED: Gross Revenue → VAT → Net Revenue → Expenses → Net Income → Net Margin */}
       <div className="db-summary-grid">
         <div className="db-summary-card db-gross-revenue">
           <div className="db-card-icon"><i className="fas fa-coins"></i></div>
@@ -264,16 +276,6 @@ export default function Dashboard() {
             <span className="db-card-trend db-positive"><i className="fas fa-arrow-up"></i> Before VAT</span>
           </div>
         </div>
-
-        <div className="db-summary-card db-net-revenue">
-          <div className="db-card-icon"><i className="fas fa-arrow-down"></i></div>
-          <div className="db-card-content">
-            <p className="db-card-label">Total Net Revenue</p>
-            <span className="db-card-value">{formatCurrency(summary.totalNetRevenue)}</span>
-            <span className="db-card-trend db-positive"><i className="fas fa-arrow-up"></i> After VAT(20%)</span>
-          </div>
-        </div>
-
         <div className="db-summary-card db-vat">
           <div className="db-card-icon"><i className="fas fa-calculator"></i></div>
           <div className="db-card-content">
@@ -282,7 +284,14 @@ export default function Dashboard() {
             <span className="db-card-trend">collected</span>
           </div>
         </div>
-
+        <div className="db-summary-card db-net-revenue">
+          <div className="db-card-icon"><i className="fas fa-arrow-down"></i></div>
+          <div className="db-card-content">
+            <p className="db-card-label">Total Net Revenue</p>
+            <span className="db-card-value">{formatCurrency(summary.totalNetRevenue)}</span>
+            <span className="db-card-trend db-positive"><i className="fas fa-arrow-up"></i> After VAT(20%)</span>
+          </div>
+        </div>
         <div className="db-summary-card db-expense">
           <div className="db-card-icon"><i className="fas fa-arrow-up"></i></div>
           <div className="db-card-content">
@@ -291,7 +300,6 @@ export default function Dashboard() {
             <span className="db-card-trend db-negative"><i className="fas fa-arrow-down"></i> outflow</span>
           </div>
         </div>
-
         <div className="db-summary-card db-profit">
           <div className="db-card-icon"><i className="fas fa-chart-line"></i></div>
           <div className="db-card-content">
@@ -300,7 +308,6 @@ export default function Dashboard() {
             <span className="db-card-trend">{summary.profitMargin.toFixed(1)}%</span>
           </div>
         </div>
-
         <div className="db-summary-card db-margin">
           <div className="db-card-icon"><i className="fas fa-percent"></i></div>
           <div className="db-card-content">
@@ -350,7 +357,6 @@ export default function Dashboard() {
             <canvas ref={trendChartRef}></canvas>
           </div>
         </div>
-
         <div className="db-chart-card">
           <div className="db-chart-header">
             <h3><i className="fas fa-chart-pie"></i> Expense Categories</h3>
@@ -359,7 +365,6 @@ export default function Dashboard() {
             <canvas ref={categoryChartRef}></canvas>
           </div>
         </div>
-
         <div className="db-chart-card">
           <div className="db-chart-header">
             <h3><i className="fas fa-credit-card"></i> Payment Methods</h3>
@@ -385,24 +390,30 @@ export default function Dashboard() {
                 <th>Date</th>
                 <th>Type</th>
                 <th>Particular</th>
-                <th>Amount</th>
+                <th>Amount ({currencySymbol})</th>
               </tr>
             </thead>
             <tbody>
-              {recentTransactions.map(tx => (
-                <tr key={tx.id}>
-                  <td>{new Date(tx.date).toLocaleDateString()}</td>
-                  <td>
-                    <span className={`db-badge ${tx.type === 'Revenue' ? 'db-badge-income' : 'db-badge-expense'}`}>
-                      {tx.type}
-                    </span>
-                  </td>
-                  <td>{tx.particular}</td>
-                  <td className={tx.type === 'Revenue' ? 'db-income-text' : 'db-expense-text'}>
-                    {formatCurrency(tx.amount)}
-                  </td>
-                </tr>
-              ))}
+              {recentTransactions.map(tx => {
+                const grossAmount = tx.type === 'Revenue' 
+                  ? tx.amount + (tx.vat_amount || 0) 
+                  : tx.amount;
+                const amountColor = tx.type === 'Revenue' ? '#2e7d32' : '#c62828';
+                return (
+                  <tr key={tx.id}>
+                    <td>{new Date(tx.date).toLocaleDateString()}</td>
+                    <td>
+                      <span className={`db-badge ${tx.type === 'Revenue' ? 'db-badge-income' : 'db-badge-expense'}`}>
+                        {tx.type}
+                      </span>
+                    </td>
+                    <td>{tx.particular}</td>
+                    <td style={{ color: amountColor, fontWeight: 600 }}>
+                      {formatNumberOnly(grossAmount)}
+                    </td>
+                  </tr>
+                );
+              })}
               {recentTransactions.length === 0 && (
                 <tr>
                   <td colSpan="4" className="db-empty-state">No recent transactions</td>

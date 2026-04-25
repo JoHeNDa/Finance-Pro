@@ -1,8 +1,8 @@
 /* ==================== ADD TRANSACTION – tx- PREFIX ==================== */
 .tx-page {
-  max-width: 1140px;        /* was 1200px → 5% smaller */
+  max-width: 1140px;
   margin: 0 auto;
-  padding: 2px 8px;
+  padding: 0px 2px;
   animation: tx-fadeSlideUp 0.4s ease;
 }
 
@@ -15,24 +15,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 19px;      /* was 20px → ~5% smaller */
-  padding: 0 0 11px 0;      /* was 12px → 5% smaller */
+  margin-bottom: 19px;
+  padding: 0 0 11px 0;
   border-bottom: 2px solid rgba(var(--primary-rgb), 0.15);
   flex-wrap: wrap;
-  gap: 11px;                /* was 12px */
+  gap: 11px;
 }
 
 .tx-subtitle {
   color: var(--text-muted);
   margin: 0;
-  font-size: 12px;          /* was 13px → 5% smaller (rounded) */
+  font-size: 12px;
 }
 
 .tx-header-stats .tx-stat-badge {
   background: var(--hover-bg);
-  padding: 6px 15px;        /* was 6px 16px → 15px */
-  border-radius: 38px;      /* was 40px → ~5% */
-  font-size: 13px;          /* was 14px → 5% smaller */
+  padding: 6px 15px;
+  border-radius: 38px;
+  font-size: 13px;
   color: var(--text-primary);
   display: flex;
   align-items: center;
@@ -42,14 +42,14 @@
 
 .tx-stat-badge i {
   color: var(--secondary);
-  font-size: 16px;          /* was 17px → ~5% smaller */
+  font-size: 16px;
 }
 
-/* ========== TWO‑COLUMN LAYOUT (equal height) ========== */
+/* ========== TWO‑COLUMN LAYOUT ========== */
 .tx-two-columns {
   display: grid;
-  grid-template-columns: 1fr 342px;  /* was 360px → 5% smaller */
-  gap: 19px;                        /* was 20px */
+  grid-template-columns: 1fr 342px;
+  gap: 19px;
   align-items: stretch;
 }
 
@@ -65,7 +65,7 @@
 }
 
 .tx-right-col {
-  gap: 27px;               /* was 28px → ~5% */
+  gap: 27px;
 }
 
 .tx-right-col .tx-card:first-child {
@@ -76,10 +76,10 @@
   flex: 1;
 }
 
-/* Cards – base styles */
+/* Cards */
 .tx-card {
   background: var(--card-bg);
-  border-radius: 15px;      /* was 16px → ~5% */
+  border-radius: 15px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   border: 1px solid var(--border-color);
   overflow: hidden;
@@ -87,13 +87,13 @@
 
 .tx-card-header {
   background: var(--hover-bg);
-  padding: 10px 19px;       /* was 10px 20px → 19px */
+  padding: 10px 19px;
   border-bottom: 1px solid var(--border-color);
 }
 
 .tx-card-header h3 {
   margin: 0;
-  font-size: 13px;          /* was 14px → ~5% */
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
   display: flex;
@@ -103,21 +103,21 @@
 
 .tx-card-header h3 i {
   color: var(--secondary);
-  font-size: 15px;          /* was 16px → ~5% */
+  font-size: 15px;
 }
 
-/* Form card (left) */
+/* Left column – form grid */
 .tx-form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 19px;                /* was 20px */
-  padding: 19px;            /* was 20px */
+  gap: 19px;
+  padding: 19px;
 }
 
 .tx-form-column {
   display: flex;
   flex-direction: column;
-  gap: 15px;                /* was 16px */
+  gap: 15px;
 }
 
 .tx-input-group {
@@ -127,7 +127,7 @@
 }
 
 .tx-input-group label {
-  font-size: 11px;          /* was 12px → ~5% */
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -142,9 +142,9 @@
 
 .tx-input-icon i {
   position: absolute;
-  left: 11px;               /* was 12px → ~5% */
+  left: 11px;
   color: var(--text-muted);
-  font-size: 11px;          /* was 12px → ~5% */
+  font-size: 11px;
   pointer-events: none;
 }
 
@@ -152,10 +152,10 @@
 .tx-input-icon textarea,
 .tx-input-icon select {
   width: 100%;
-  padding: 8px 11px 8px 32px;  /* was 8px 12px 8px 34px → adjusted */
+  padding: 8px 11px 8px 32px;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  font-size: 12px;              /* was 13px → ~5% */
+  font-size: 12px;
   background: var(--input-bg);
   color: var(--text-secondary);
   font-family: inherit;
@@ -171,7 +171,7 @@
 
 .tx-input-icon textarea {
   resize: vertical;
-  min-height: 67px;         /* was 70px → ~5% */
+  min-height: 67px;
 }
 
 .tx-type-toggle {
@@ -187,12 +187,12 @@
   gap: 6px;
   padding: 8px;
   border: 1px solid var(--border-color);
-  border-radius: 12px;      /* was 13px → ~5% */
+  border-radius: 12px;
   background: var(--card-bg);
   color: var(--text-secondary);
   font-weight: 500;
   cursor: pointer;
-  font-size: 11px;          /* was 12px → ~5% */
+  font-size: 11px;
   transition: all 0.2s;
 }
 
@@ -223,31 +223,36 @@
 .tx-amount-vat-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 19px;                /* was 20px */
-  padding: 0 19px 19px;     /* was 0 20px 20px */
+  gap: 19px;
+  padding: 0 19px 19px;
 }
 
 .tx-vat-calculator {
-  padding: 0 19px 19px;     /* was 0 20px 20px */
+  padding: 0 19px 19px;
 }
 
 .tx-vat-info {
-  font-size: 10px;          /* unchanged (already small) */
-  margin: 4px 0 0 19px;     /* was 20px */
+  font-size: 10px;
+  margin: 4px 0 0 19px;
   color: var(--text-muted);
 }
 
-/* Attachment card */
+/* ===== ATTACHMENT SECTION – FIXED REMOVE BUTTON ===== */
 .tx-file-area {
+  width: 100%;
+}
+
+.tx-file-dropzone {
   position: relative;
-  min-height: 95px;         /* was 100px */
+  min-height: 95px;
   border: 1px dashed var(--border-color);
   background: var(--hover-bg);
-  margin: 19px;             /* was 20px */
+  margin: 19px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 11px;      /* was 12px */
+  border-radius: 11px;
+  cursor: pointer;
 }
 
 .tx-file-input {
@@ -266,31 +271,51 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 13px;            /* was 14px */
+  padding: 13px;
   text-align: center;
+  pointer-events: none;
+  position: relative;
+  z-index: 5;
 }
 
 .tx-file-content i {
-  font-size: 23px;          /* was 24px → ~5% */
+  font-size: 23px;
   color: var(--secondary);
   margin-bottom: 4px;
 }
 
+/* File preview list – separate from dropzone, so not covered by overlay */
+.tx-files-preview-list {
+  margin: 0 19px 19px 19px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .tx-file-preview {
   background: var(--card-bg);
-  margin: 8px;
-  padding: 6px 11px;        /* was 6px 12px */
-  border-radius: 29px;      /* was 30px */
+  border: 1px solid var(--border-color);
+  border-radius: 29px;
+  padding: 6px 11px;
   display: flex;
   align-items: center;
   gap: 8px;
-  border: 1px solid var(--border-color);
+  position: relative;
+  z-index: 20;
+}
+
+.tx-file-preview i {
+  color: var(--primary);
+  font-size: 14px;
 }
 
 .tx-file-name {
   flex: 1;
-  font-size: 10px;          /* was 11px → ~5% */
+  font-size: 11px;
   color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tx-remove-file {
@@ -298,40 +323,56 @@
   border: none;
   color: var(--danger);
   cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+  position: relative;
+  z-index: 25;
+}
+
+.tx-remove-file:hover {
+  background: rgba(var(--danger-rgb), 0.15);
+  transform: scale(1.05);
 }
 
 .tx-upload-progress {
-  position: relative;
-  width: 67px;              /* was 70px */
-  height: 4px;
-  background: var(--border-color);
-  border-radius: 4px;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .tx-progress-bar {
-  height: 100%;
+  width: 100%;
+  height: 4px;
   background: var(--primary);
+  border-radius: 4px;
   transition: width 0.3s ease;
 }
 
 /* Summary card */
 .tx-summary {
   background: var(--hover-bg);
-  padding: 15px 19px;       /* was 16px 20px */
-  border-radius: 11px;      /* was 12px */
-  margin: 19px;             /* was 20px */
+  padding: 15px 19px;
+  border-radius: 11px;
+  margin: 19px;
   display: flex;
   flex-direction: column;
-  gap: 11px;                /* was 12px */
+  gap: 11px;
 }
 
 .tx-summary-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 13px;          /* was 14px → ~5% */
-  gap: 11px;                /* was 12px */
+  font-size: 13px;
+  gap: 11px;
 }
 
 .tx-summary-item span {
@@ -341,9 +382,9 @@
 
 .tx-summary-item strong {
   background: var(--card-bg);
-  padding: 4px 11px;        /* was 4px 12px */
-  border-radius: 29px;      /* was 30px */
-  font-size: 11px;          /* was 12px → ~5% */
+  padding: 4px 11px;
+  border-radius: 29px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-primary);
   border: 1px solid var(--border-color);
@@ -351,22 +392,22 @@
 
 .tx-actions {
   display: flex;
-  gap: 11px;                /* was 12px */
-  margin-top: 11px;         /* was 12px */
+  gap: 11px;
+  margin-top: 11px;
 }
 
-/* ===== BUTTONS ===== */
+/* Buttons */
 .tx-btn-primary,
 .tx-btn-secondary {
-  padding: 8px 15px;        /* was 8px 16px */
-  border-radius: 12px;      /* was 13px */
+  padding: 8px 15px;
+  border-radius: 12px;
   font-weight: 700;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-size: 13px;          /* was 14px → ~5% */
+  font-size: 13px;
   transition: all 0.2s;
 }
 
@@ -410,10 +451,10 @@
   position: fixed;
   top: 20px;
   right: 20px;
-  padding: 10px 17px;       /* was 10px 18px */
+  padding: 10px 17px;
   border-radius: 8px;
   font-weight: 500;
-  font-size: 12px;          /* was 13px → ~5% */
+  font-size: 12px;
   z-index: 10000;
   animation: tx-slideIn 0.3s ease;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -434,18 +475,18 @@
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* ========== RECENT TRANSACTIONS TABLE ========== */
+/* Recent transactions table */
 .tx-recent-card {
-  margin-top: 19px;         /* was 20px */
+  margin-top: 19px;
   background: var(--card-bg);
-  border-radius: 11px;      /* was 12px */
+  border-radius: 11px;
   border: 1px solid var(--border-color);
   overflow: hidden;
 }
 
 .tx-recent-card .tx-card-header {
   background: var(--hover-bg);
-  padding: 10px 19px;       /* was 10px 20px */
+  padding: 10px 19px;
   border-bottom: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
@@ -454,7 +495,7 @@
 
 .tx-recent-card .tx-card-header h3 {
   margin: 0;
-  font-size: 13px;          /* was 14px → ~5% */
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
   display: flex;
@@ -469,7 +510,7 @@
 .tx-view-all-link {
   color: var(--primary);
   text-decoration: none;
-  font-size: 12px;          /* was 13px → ~5% */
+  font-size: 12px;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -481,7 +522,7 @@
   padding: 5px 5px;
   transform: translateX(2px);
   background-color: rgba(var(--primary-rgb), 0.2);
-  border-radius: 15px;      /* was 16px */
+  border-radius: 15px;
 }
 
 .tx-recent-table-wrapper {
@@ -500,34 +541,25 @@
   border-bottom: 1px solid var(--border-color);
   background: transparent;
   font-weight: 600;
-  font-size: 10px;          /* was 11px → ~5% */
+  font-size: 10px;
   text-transform: uppercase;
   color: var(--text-muted);
   letter-spacing: 0.5px;
 }
 
 .tx-recent-table td {
-  padding: 7px 11px;        /* was 7px 12px */
+  padding: 7px 11px;
   text-align: left;
   border-bottom: 1px solid var(--border-color);
   background: transparent;
-  font-size: 11px;          /* was 12px → ~5% */
+  font-size: 11px;
   color: var(--text-primary);
 }
 
 .tx-recent-table tr:last-child td {
   border-bottom: none;
-
 }
 
-.tx-recent-table td:nth-child(4){
-  white-space: normal;
-  word-break: break-word;
-  min-width: 70px;
-}
-
-
-/* Income/expense text colours */
 .tx-recent-table td.tx-income-text {
   color: var(--primary);
   font-weight: 600;
@@ -538,14 +570,14 @@
   font-weight: 600;
 }
 
-/* ========== RESPONSIVE SCALING (already proportionally adjusted) ========== */
+/* ========== RESPONSIVE ========== */
 @media (max-width: 1024px) {
   .tx-two-columns {
-    grid-template-columns: 1fr 304px;  /* was 320px → 5% smaller */
-    gap: 15px;                         /* was 16px */
+    grid-template-columns: 1fr 304px;
+    gap: 15px;
   }
   .tx-right-col {
-    gap: 23px;                         /* was 24px */
+    gap: 23px;
   }
 }
 
@@ -568,56 +600,56 @@
   }
   .tx-form-grid {
     grid-template-columns: 1fr;
-    gap: 13px;               /* was 14px */
-    padding: px;           /* was 14px */
+    gap: 13px;
+    padding: 14px;
   }
   .tx-page {
-    padding: 40px;           /* was 12px */
+    padding: 40px;
   }
   .tx-subtitle {
-    font-size: 11px;         /* was 12px */
+    font-size: 11px;
   }
   .tx-card-header h3 {
-    font-size: 13px;         /* was 14px */
+    font-size: 13px;
   }
   .tx-card-header h3 i {
     font-size: 13px;
   }
   .tx-input-group label {
-    font-size: 11px;         /* was 12px */
+    font-size: 11px;
   }
   .tx-input-icon input,
   .tx-input-icon textarea,
   .tx-input-icon select {
-    font-size: 12px;         /* was 13px */
+    font-size: 12px;
     padding: 10px 11px 10px 32px;
   }
   .tx-type-option {
-    font-size: 11px;         /* was 12px */
+    font-size: 11px;
     padding: 7px;
   }
   .tx-summary-item {
-    font-size: 11px;         /* was 12px */
+    font-size: 11px;
   }
   .tx-summary-item strong {
-    font-size: 11px;         /* was 12px */
+    font-size: 11px;
   }
   .tx-btn-primary,
   .tx-btn-secondary {
-    font-size: 15px;         /* was 16px */
-    padding: 9px 19px;       /* was 10px 20px */
+    font-size: 15px;
+    padding: 9px 19px;
   }
   .tx-file-content i {
-    font-size: 25px;         /* was 26px */
+    font-size: 25px;
   }
   .tx-file-name {
-    font-size: 11px;         /* was 12px */
+    font-size: 11px;
   }
   .tx-recent-table th {
-    font-size: 9px;          /* was 10px */
+    font-size: 9px;
   }
   .tx-recent-table td {
-    font-size: 12px;         /* was 13px */
+    font-size: 12px;
   }
 }
 
@@ -626,71 +658,51 @@
     padding: 8px;
   }
   .tx-subtitle {
-    font-size: 12px;         /* was 13px */
+    font-size: 12px;
   }
   .tx-card-header h3 {
-    font-size: 12px;         /* was 13px */
+    font-size: 12px;
   }
   .tx-input-group label {
-    font-size: 10px;         /* was 11px */
+    font-size: 10px;
   }
   .tx-input-icon input,
   .tx-input-icon textarea,
   .tx-input-icon select {
-    font-size: 12px;         /* was 13px */
+    font-size: 12px;
     padding: 7px 9px 7px 30px;
   }
   .tx-type-option {
-    font-size: 10px;         /* was 11px */
+    font-size: 10px;
   }
   .tx-summary-item {
-    font-size: 12px;         /* was 13px */
+    font-size: 12px;
   }
   .tx-summary-item strong {
-    font-size: 11px;         /* was 12px */
+    font-size: 11px;
   }
   .tx-btn-primary,
   .tx-btn-secondary {
-    font-size: 13px;         /* was 14px */
+    font-size: 13px;
     padding: 7px 15px;
   }
   .tx-notification {
-    font-size: 11px;         /* was 12px */
+    font-size: 11px;
     top: 10px;
     right: 10px;
     left: 10px;
     text-align: center;
   }
-
-
-.tx-recent-table tr:last-child td {
-  border-bottom: none;
-  
+  .tx-recent-table td:nth-child(4) {
+    white-space: normal;
+    word-break: break-word;
+    min-width: 200px;
+  }
+  .tx-recent-table td:nth-child(5),
+  .tx-recent-table td:nth-child(6),
+  .tx-recent-table td:nth-child(7) {
+    white-space: normal;
+    word-break: break-word;
+    min-width: 100px;
+  }
 }
-
-.tx-recent-table td:nth-child(4){
-  white-space: normal;
-  word-break: break-word;
-  min-width: 200px;
-}
-
-.tx-recent-table td:nth-child(5){
-  white-space: normal;
-  word-break: break-word;
-  min-width: 100px;
-}
-
-.tx-recent-table td:nth-child(6){
-  white-space: normal;
-  word-break: break-word;
-  min-width: 100px;
-}
-
-.tx-recent-table td:nth-child(7){
-  white-space: normal;
-  word-break: break-word;
-  min-width: 100px;
-}
-
-}
-

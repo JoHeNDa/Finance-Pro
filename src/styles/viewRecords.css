@@ -447,9 +447,7 @@
   background: linear-gradient(135deg, var(--gray-800) 0%, var(--gray-700) 100%);
   background-color: var(--gray-700);
 }
-.records-table th:nth-child(2) {
-  text-transform: none;
-}
+
 .records-table th i {
   margin-left: 4px;
   font-size: 10px;
@@ -473,11 +471,12 @@
   padding: 3px 10px;
 }
 .records-table td:nth-child(3) {
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-primary);
   white-space: normal;
   word-break: break-word;
   min-width: 150px;
+  text-transform: capitalize;
 }
 .records-table td:nth-child(4) {
   white-space: normal;
@@ -1217,4 +1216,342 @@
   cursor: pointer;
   color: var(--text-muted);
   padding: 0 8px;
+}
+
+/* ===== PERFECT CENTERING FOR ALL CARD ACTION BUTTONS (edit, delete, receipt) ===== */
+.card-action-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  line-height: 1;
+  padding: 0;
+  text-decoration: none;    /* remove underline from receipt link */
+}
+
+
+
+.card-action-btn[href]:hover {
+   background: rgba(2, 136, 209, 0.1);
+  color: #0288d1;
+  transform: scale(1.05);
+}
+
+
+
+/* ===== EDIT MODAL ATTACHMENT – PREVIEW INSIDE DROPZONE, REPLACES PROMPT ===== */
+.file-upload-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.file-upload-section .file-upload-area {
+  position: relative;
+  min-height: 120px;
+  border: 2px dashed var(--border-color);
+  border-radius: 16px;
+  background: var(--hover-bg);
+  transition: all 0.2s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.file-upload-section .file-upload-area:hover {
+  border-color: var(--primary);
+  background: rgba(var(--primary-rgb), 0.05);
+}
+
+/* The hidden file input covers the whole dropzone */
+.file-upload-section .file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* Drag‑and‑drop prompt – hidden when files are present */
+.file-upload-section .file-upload-content {
+  text-align: center;
+  padding: 20px;
+  pointer-events: none;
+  position: relative;
+  z-index: 5;
+}
+
+/* Preview list appears inside the same dropzone, replacing the prompt */
+.file-upload-section .file-preview-list {
+  margin: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  position: relative;
+  z-index: 15;
+}
+
+/* Individual file preview card */
+.file-upload-section .file-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 40px;
+  padding: 6px 12px;
+  position: relative;
+  z-index: 20;
+}
+
+.file-upload-section .file-preview i {
+  font-size: 16px;
+  color: var(--primary);
+}
+
+.file-upload-section .file-preview .file-name {
+  flex: 1;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-primary);
+}
+
+/* Remove button – must be clickable, with higher z-index */
+.file-upload-section .remove-file {
+  background: none;
+  border: none;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  position: relative;
+  z-index: 25;
+}
+
+.file-upload-section .remove-file:hover {
+  background: rgba(var(--danger-rgb), 0.15);
+  transform: scale(1.05);
+}
+
+/* Ensure existing receipts (Current Receipts) also have working remove buttons */
+.current-receipt-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--hover-bg);
+  padding: 6px 12px;
+  border-radius: 32px;
+  margin-bottom: 8px;
+}
+
+.remove-existing-receipt {
+  background: none;
+  border: none;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  position: relative;
+  z-index: 25;
+}
+
+.remove-existing-receipt:hover {
+  background: rgba(var(--danger-rgb), 0.15);
+  transform: scale(1.05);
+}
+
+
+/* Fix vertical stacking for drag-and-drop content */
+.file-upload-section .file-upload-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center;
+  gap: 4px;
+}
+.file-upload-section .file-upload-content i {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+.file-upload-section .file-upload-content p {
+  margin: 0;
+}
+.file-upload-section .file-upload-content small {
+  margin-top: 2px;
+}
+
+/* Ensure file preview list is also inside the dropzone and scrollable if needed */
+.file-upload-section .file-preview-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+/* File preview item styling */
+.file-upload-section .file-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 40px;
+  padding: 6px 12px;
+}
+
+.file-upload-section .file-preview i {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+.file-upload-section .file-preview .file-name {
+  flex: 1;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-upload-section .file-preview .file-size {
+  font-size: 10px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.file-upload-section .remove-file {
+  background: none;
+  border: none;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  position: relative;
+  z-index: 25;
+}
+
+.file-upload-section .remove-file:hover {
+  background: rgba(var(--danger-rgb), 0.15);
+  transform: scale(1.05);
+}
+
+/* Card grid – fills width, wraps, max 4 columns on large screens */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+/* On large screens, cap at exactly 4 columns */
+@media (min-width: 1200px) {
+  .cards-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Remove any height restrictions on the card container */
+.view-container {
+  overflow: visible !important;
+}
+
+
+/* Make card view scrollable so pagination stays visible */
+.card-view {
+  max-height: calc(100vh - 260px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+}
+
+/* Optional scrollbar styling */
+.card-view::-webkit-scrollbar {
+  width: 6px;
+}
+.card-view::-webkit-scrollbar-track {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+.card-view::-webkit-scrollbar-thumb {
+  background: var(--gray-500);
+  border-radius: 3px;
+}
+.card-view::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-600);
+}
+
+
+/* Ensure the page container does not overflow unnecessarily */
+.view-records-page {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: auto;
+  min-height: 100vh;
+}
+
+/* When card view is active, make the card container take the remaining space and scroll */
+.view-container.card-view {
+  display: block !important;
+  max-height: calc(100vh - 280px);
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  margin-bottom: 16px;
+  padding-right: 6px;
+}
+
+/* Remove any conflicting overflow settings from other rules */
+.view-container {
+  overflow: visible;
+}
+
+/* Ensure pagination footer is not overlapped */
+.table-footer {
+  position: relative;
+  background: var(--card-bg);
+  z-index: 2;
+}
+
+/* Optional: style the scrollbar inside card view */
+.view-container.card-view::-webkit-scrollbar {
+  width: 6px;
+}
+.view-container.card-view::-webkit-scrollbar-track {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+.view-container.card-view::-webkit-scrollbar-thumb {
+  background: var(--gray-500);
+  border-radius: 3px;
 }

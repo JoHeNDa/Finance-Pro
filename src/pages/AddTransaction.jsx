@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../context/AuthContext';
-import { useOrganizationSettings } from '../hooks/useOrganizationSettings';
-import { formatCurrency } from '../utils/formatting';
-import { logAuditEvent } from '../lib/audit';
+import { supabase } from '../lib/supabase.js';
+import { useAuth } from '../context/AuthContext.jsx';
+import { useOrganizationSettings } from '../hooks/useOrganizationSettings.js';
+import { formatCurrency } from '../utils/formatting.js';
+import { logAuditEvent } from '../lib/audit.js';
 import '../styles/addTransaction.css';
 
 export default function AddTransaction() {
@@ -21,7 +21,7 @@ export default function AddTransaction() {
     vatAmount: 0,
     paymentMode: 'Cash',
   });
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -31,7 +31,16 @@ export default function AddTransaction() {
   const [rawDigits, setRawDigits] = useState('');
   const [recentTransactions, setRecentTransactions] = useState([]);
 
-  // Fetch recent transactions based on timestamp (only the most recent record)
+  const getFileIcon = (fileName) => {
+    const ext = fileName.split('.').pop().toLowerCase();
+    if (ext === 'pdf') return 'fas fa-file-pdf';
+    if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext)) return 'fas fa-file-image';
+    if (['doc', 'docx'].includes(ext)) return 'fas fa-file-word';
+    if (['xls', 'xlsx'].includes(ext)) return 'fas fa-file-excel';
+    if (ext === 'txt') return 'fas fa-file-alt';
+    return 'fas fa-file';
+  };
+
   const fetchRecentTransactions = async () => {
     if (!userProfile?.organization_id) return;
     try {
@@ -39,18 +48,10 @@ export default function AddTransaction() {
         .from('transactions')
         .select('*')
         .eq('organization_id', userProfile.organization_id)
-        .order('timestamp', { ascending: false }) // Order by timestamp instead of date
-        .limit(1); // Only get 1 transaction
-      
-      if (!error && data) {
-        console.log('Fetched transactions:', data.length);
-        setRecentTransactions(data);
-      } else if (error) {
-        console.error('Error fetching recent transactions:', error);
-      }
-    } catch (err) {
-      console.error('Failed to fetch recent transactions:', err);
-    }
+        .order('timestamp', { ascending: false })
+        .limit(1);
+      if (!error && data) setRecentTransactions(data);
+    } catch (err) { console.error(err); }
   };
 
   useEffect(() => {
@@ -74,17 +75,9 @@ export default function AddTransaction() {
   }, [userProfile]);
 
   useEffect(() => {
-    if (successMessage) {
-      const timer = setTimeout(() => setSuccessMessage(''), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [successMessage]);
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => setError(''), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [error]);
+    if (successMessage) setTimeout(() => setSuccessMessage(''), 3000);
+    if (error) setTimeout(() => setError(''), 3000);
+  }, [successMessage, error]);
 
   const canAddTransaction = userProfile && ['owner', 'admin', 'manager'].includes(userProfile.role);
   if (!canAddTransaction) {
@@ -97,7 +90,6 @@ export default function AddTransaction() {
     );
   }
 
-  // ---------- Handlers ----------
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -118,9 +110,8 @@ export default function AddTransaction() {
     const input = e.target.value;
     const digits = input.replace(/\D/g, '');
     let newRaw = digits;
-    if (digits.length < rawDigits.length) {
-      newRaw = digits;
-    } else {
+    if (digits.length < rawDigits.length) newRaw = digits;
+    else {
       const lastChar = digits.slice(-1);
       newRaw = rawDigits + lastChar;
     }
@@ -153,38 +144,51 @@ export default function AddTransaction() {
     e.target.value = num.toFixed(2);
     setFormData(prev => ({ ...prev, amount: num }));
   };
-  const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const selectedFile = e.target.files[0];
-      if (selectedFile.size > 5 * 1024 * 1024) {
-        setError('File size must be less than 5MB');
+
+  const handleFilesChange = (e) => {
+    if (e.target.files && e.target.files.length) {
+      const selectedFiles = Array.from(e.target.files);
+      if (selectedFiles.length > 5) {
+        setError('You can upload up to 5 files');
         return;
       }
-      setFile(selectedFile);
+      for (const file of selectedFiles) {
+        if (file.size > 5 * 1024 * 1024) {
+          setError(`File "${file.name}" is larger than 5MB`);
+          return;
+        }
+      }
+      setFiles(prev => [...prev, ...selectedFiles]);
       setError('');
     }
   };
-  const handleRemoveFile = () => {
-    setFile(null);
-    setUploadProgress(0);
-    const fileInput = document.getElementById('txReceiptFile');
-    if (fileInput) fileInput.value = '';
+
+  const removeFile = (indexToRemove) => {
+    setFiles(prev => prev.filter((_, idx) => idx !== indexToRemove));
   };
-  const uploadFile = async (file) => {
-    if (!file) return null;
-    const fileName = `${userProfile.organization_id}/${Date.now()}_${file.name}`;
-    const { error: uploadError } = await supabase.storage
-      .from('receipts')
-      .upload(fileName, file);
-    if (uploadError) {
-      console.error('Upload error:', uploadError);
-      throw uploadError;
-    }
-    const { data: publicUrl } = supabase.storage
-      .from('receipts')
-      .getPublicUrl(fileName);
-    return publicUrl.publicUrl;
+
+  // ========== PARALLEL UPLOADS (much faster) ==========
+  const uploadMultipleFiles = async (fileList) => {
+    const total = fileList.length;
+    let completed = 0;
+    
+    const uploadPromises = fileList.map(async (file) => {
+      const fileName = `${userProfile.organization_id}/${Date.now()}_${file.name}`;
+      const { error: uploadError } = await supabase.storage
+        .from('receipts')
+        .upload(fileName, file);
+      if (uploadError) throw uploadError;
+      const { data: publicUrl } = supabase.storage
+        .from('receipts')
+        .getPublicUrl(fileName);
+      completed++;
+      setUploadProgress(Math.round((completed / total) * 100));
+      return publicUrl.publicUrl;
+    });
+    
+    return await Promise.all(uploadPromises);
   };
+
   const resetForm = () => {
     setFormData({
       date: new Date().toISOString().split('T')[0],
@@ -195,12 +199,13 @@ export default function AddTransaction() {
       vatAmount: 0,
       paymentMode: 'Cash',
     });
-    setFile(null);
+    setFiles([]);
     setRawDigits('');
     setUploadProgress(0);
     const fileInput = document.getElementById('txReceiptFile');
     if (fileInput) fileInput.value = '';
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.particular.trim()) {
@@ -208,10 +213,12 @@ export default function AddTransaction() {
       return;
     }
     setSubmitting(true);
+    setUploading(true);
     try {
-      let receiptUrl = null;
-      if (enableReceipts && file) {
-        receiptUrl = await uploadFile(file);
+      let receiptUrls = null;
+      if (enableReceipts && files.length > 0) {
+        const uploadedUrls = await uploadMultipleFiles(files);
+        receiptUrls = uploadedUrls.join('|');
       }
       const { data: insertedData, error: insertError } = await supabase
         .from('transactions')
@@ -225,7 +232,7 @@ export default function AddTransaction() {
           amount: formData.amount,
           vat_amount: formData.type === 'Revenue' && enableVAT ? formData.vatAmount : 0,
           payment_mode: formData.paymentMode,
-          receipt_url: receiptUrl,
+          receipt_url: receiptUrls,
           timestamp: new Date().toISOString(),
         })
         .select();
@@ -238,6 +245,7 @@ export default function AddTransaction() {
       console.error(err);
       setError('Failed to add transaction. Please try again.');
     } finally {
+      setUploading(false);
       setSubmitting(false);
     }
   };
@@ -292,7 +300,7 @@ export default function AddTransaction() {
                     <label htmlFor="txParticular">Particular / Category</label>
                     <div className="tx-input-icon">
                       <i className="fas fa-tag"></i>
-                      <input type="text" id="txParticular" name="particular" placeholder="e.g., Scan Payment, Rent, Fuel" value={formData.particular} onChange={handleChange} required />
+                      <input type="text" id="txParticular" name="particular" placeholder="e.g., Scan services, Accommodation, Transport, Welfare, Rent, Fuel" value={formData.particular} onChange={handleChange} required />
                     </div>
                   </div>
                 </div>
@@ -369,26 +377,35 @@ export default function AddTransaction() {
             {enableReceipts && (
               <div className="tx-card">
                 <div className="tx-card-header">
-                  <h3><i className="fas fa-paperclip"></i> Attachment (Optional)</h3>
+                  <h3><i className="fas fa-paperclip"></i> Attachments (Optional, max 5)</h3>
                 </div>
                 <div className="tx-file-area">
-                  <input type="file" id="txReceiptFile" accept="image/*,.pdf" className="tx-file-input" onChange={handleFileChange} />
-                  <div className="tx-file-content" style={{ display: file ? 'none' : 'flex' }}>
-                    <i className="fas fa-cloud-upload-alt"></i>
-                    <p>Drag & drop or <span>browse</span> to upload</p>
-                    <small>Images, PDF (Max 5MB)</small>
+                  <div className="tx-file-dropzone">
+                    <input type="file" id="txReceiptFile" accept="image/*,.pdf" multiple className="tx-file-input" onChange={handleFilesChange} />
+                    <div className="tx-file-content" style={{ display: files.length ? 'none' : 'flex' }}>
+                      <i className="fas fa-cloud-upload-alt"></i>
+                      <p>Drag & drop or <span>browse</span> to upload</p>
+                      <small>Images, PDF (Max 5MB each, up to 5 files)</small>
+                    </div>
                   </div>
-                  {file && (
-                    <div className="tx-file-preview">
-                      <i className="fas fa-file-pdf"></i>
-                      <span className="tx-file-name">{file.name}</span>
+                  {files.length > 0 && (
+                    <div className="tx-files-preview-list">
+                      {files.map((file, idx) => (
+                        <div key={idx} className="tx-file-preview">
+                          <i className={getFileIcon(file.name)}></i>
+                          <span className="tx-file-name">{file.name}</span>
+                          <span className="tx-file-size">{(file.size / 1024).toFixed(1)} KB</span>
+                          <button type="button" className="tx-remove-file" onClick={(e) => { e.stopPropagation(); removeFile(idx); }}>
+                            <i className="fas fa-times"></i>
+                          </button>
+                        </div>
+                      ))}
                       {uploading && (
                         <div className="tx-upload-progress">
                           <div className="tx-progress-bar" style={{ width: `${uploadProgress}%` }}></div>
                           <span>{uploadProgress}%</span>
                         </div>
                       )}
-                      <button type="button" className="tx-remove-file" onClick={handleRemoveFile}><i className="fas fa-times"></i></button>
                     </div>
                   )}
                 </div>
@@ -405,7 +422,7 @@ export default function AddTransaction() {
                   <strong>{formData.type}</strong>
                 </div>
                 <div className="tx-summary-item">
-                  <span>Amount:</span>
+                  <span>Net Amount:</span>
                   <strong>{formatCurrency(formData.amount, currencySymbol)}</strong>
                 </div>
                 {enableVAT && formData.type === 'Revenue' && (
@@ -423,9 +440,9 @@ export default function AddTransaction() {
                     <i className="fas fa-undo"></i> Reset
                   </button>
                   <button type="submit" className="tx-btn-primary" disabled={submitting || uploading}>
-  <i className="fas fa-save"></i>
-  {uploading ? ` Uploading... ${uploadProgress}%` : (submitting ? ' Saving...' : ' Save')}
-</button>
+                    <i className="fas fa-save"></i>
+                    {uploading ? ` Uploading... ${uploadProgress}%` : (submitting ? ' Saving...' : ' Save')}
+                  </button>
                 </div>
               </div>
             </div>
@@ -433,7 +450,7 @@ export default function AddTransaction() {
         </div>
       </form>
 
-      {/* Recent Transactions Section - Now showing only the most recent transaction based on timestamp */}
+      {/* Recent Transactions */}
       {recentTransactions.length > 0 && (
         <div className="tx-recent-card">
           <div className="tx-card-header">
